@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchFormDetails } from "../../Services/surveyService";
 import "./style.css"; 
+import { Post } from "../../Services/Post";
 
 const FormDetails = () => {
   const { id } = useParams();
@@ -46,10 +47,7 @@ const FormDetails = () => {
     });
   };
 
-  const handleSubmit = () => {
-    console.log("Respuestas enviadas:", responses);
-    alert("Respuestas enviadas correctamente");
-  };
+ 
 
   return (
     <div className="container">
@@ -119,7 +117,7 @@ const FormDetails = () => {
                 )}
               </div>
             ))}
-            <button type="button" onClick={handleSubmit}>
+            <button type="button" onClick={() => Post(responses)}>
               Enviar respuestas
             </button>
           </form>
