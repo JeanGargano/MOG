@@ -1,4 +1,4 @@
-const BASE_URL = "https://script.google.com/macros/s/AKfycbyMgIqAy6HH0MVhXGGAKQOvPYs4OU7zt2qDsfDR--kfap7DVAr5xnxoWC-aoiihPUfVhg/exec"; // Reemplaza con tu URL del script
+const BASE_URL = "https://script.google.com/macros/s/AKfycbyMgIqAy6HH0MVhXGGAKQOvPYs4OU7zt2qDsfDR--kfap7DVAr5xnxoWC-aoiihPUfVhg/exec"; 
 
 // Obtiene la lista de formularios
 export const fetchForms = async () => {
@@ -7,10 +7,24 @@ export const fetchForms = async () => {
     if (!response.ok) {
       throw new Error("Error al obtener la lista de formularios");
     }
-    return await response.json();
+    
+    const data = await response.json();
+    
+    // Guardar en localStorage
+    localStorage.setItem("cachedForms", JSON.stringify(data));
+    
+    return data;
   } catch (error) {
     console.error("Error en fetchForms:", error);
-    throw error;
+
+    // Intentar recuperar desde localStorage
+    const cachedData = localStorage.getItem("cachedForms");
+    if (cachedData) {
+      console.warn("Modo offline: usando datos guardados.");
+      return JSON.parse(cachedData);
+    } else {
+      throw new Error("No se pudieron obtener los formularios y no hay datos en caché.");
+    }
   }
 };
 
@@ -21,9 +35,23 @@ export const fetchFormDetails = async (formId) => {
     if (!response.ok) {
       throw new Error(`Error al obtener detalles del formulario ${formId}`);
     }
-    return await response.json();
+    
+    const data = await response.json();
+    
+    // Guardar en localStorage con clave única por ID
+    localStorage.setItem(`cachedForm_${formId}`, JSON.stringify(data));
+    
+    return data;
   } catch (error) {
     console.error("Error en fetchFormDetails:", error);
-    throw error;
+
+    // Intentar recuperar desde localStorage
+    const cachedData = localStorage.getItem(`cachedForm_${formId}`);
+    if (cachedData) {
+      console.warn(`Modo offline: usando detalles guardados del formulario ${formId}.`);
+      return JSON.parse(cachedData);
+    } else {
+      throw new Error(`No se pudo obtener el formulario ${formId} y no hay datos en caché.`);
+    }
   }
 };

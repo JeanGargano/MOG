@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchFormDetails } from "../../Services/surveyService";
-import "./style.css";  // Asegúrate de que la ruta sea correcta
+import "./style.css"; 
 
 const FormDetails = () => {
   const { id } = useParams();

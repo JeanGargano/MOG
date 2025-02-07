@@ -11,7 +11,6 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/formList" element={<FormList />} />
       <Route path="/responseList" element={<ResponseList />} />
-      {/* Ruta para los detalles del formulario, con el ID como parámetro */}
       <Route path="/form/:id" element={<FormDetails />} />
     </Routes>
   );
