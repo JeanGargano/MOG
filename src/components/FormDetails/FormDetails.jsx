@@ -117,9 +117,13 @@ const FormDetails = () => {
                 )}
               </div>
             ))}
-            <button type="button" onClick={() => Post(responses)}>
-              Enviar respuestas
+            <button 
+                type="button" 
+                onClick={() => Post(formDetails.title, responses)}
+                      >
+                  Enviar respuestas
             </button>
+
           </form>
         </>
       )}
