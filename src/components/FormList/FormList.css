@@ -78,7 +78,7 @@
 }
 
 .form-item:hover {
-    background-color: #7cb518; /* Verde lima al pasar el mouse */
+    background-color: #7cb518; 
     transform: scale(1.05);
 }
 
