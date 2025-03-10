@@ -1,9 +1,9 @@
+//Lista de Encuestas
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchForms } from "../../Services/surveyService";
-import "./FormList.css";
+import { fetchForms } from "../Services/Get";
 
-const FormList = () => {
+const Encuestas = () => {
   const [forms, setForms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -29,7 +29,6 @@ const FormList = () => {
 
   return (
     <div className="page-container">
-      <header className="form-header">Movements of Grace</header>
       <div className="form-container">
         {loading && <p className="form-message">Cargando...</p>}
         {error && <p className="form-error">{error}</p>}
@@ -52,4 +51,4 @@ const FormList = () => {
   );
 };
 
-export default FormList;
+export default Encuestas;

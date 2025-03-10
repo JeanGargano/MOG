@@ -1,8 +1,9 @@
+//Formulario con sus detalles(preguntas y campos)
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchFormDetails } from "../../Services/surveyService";
+import { fetchForms } from "../../Encuestas/Services/Get";
 import "./style.css"; 
-import { Post } from "../../Services/Post";
+import { Post } from "../Services/Post";
 
 const FormDetails = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const FormDetails = () => {
   useEffect(() => {
     const loadFormDetails = async () => {
       try {
-        const data = await fetchFormDetails(id);
+        const data = await fetchForms(id);
         setFormDetails(data);
 
         const initialResponses = data.fields.reduce((acc, field) => {
