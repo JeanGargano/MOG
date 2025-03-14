@@ -1,39 +1,28 @@
-export const fetchForms = async () => {
-  const callbackName = "handleJsonpResponse"; // Nombre de la función de callback
-  const script = document.createElement("script");
+import axios from "axios";
 
-  return new Promise((resolve, reject) => {
-    // Definir la función de callback global
-    window[callbackName] = (data) => {
-      // Limpiar el script y la función de callback
-      document.body.removeChild(script);
-      delete window[callbackName];
+export const get = async () => {
+  try {
+    // Hacer la solicitud GET al servidor
+    const response = await axios.get(
+      "https://script.google.com/macros/s/AKfycbwho6oeZEaKXqFLZ0eTGqm9AruQCrxvYno_t4M-cgMc7qT-K0H9QP7i9n3KipeYJ8LmiA/exec"
+    );
 
-      // Guardar en caché y resolver la promesa
-      localStorage.setItem("cachedForms", JSON.stringify(data));
-      resolve(data);
-    };
+    // Guardar los datos en localStorage para uso futuro
+    localStorage.setItem("cachedForms", JSON.stringify(response.data));
+    console.warn("Se han obtenido los datos")
 
-    // Manejar errores
-    script.onerror = () => {
-      document.body.removeChild(script);
-      delete window[callbackName];
+    // Devolver los datos obtenidos
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener los formularios:", error);
 
-      // Intentar usar datos en caché
-      const cachedData = localStorage.getItem("cachedForms");
-      if (cachedData) {
-        console.warn("Modo offline: usando datos guardados.");
-        resolve(JSON.parse(cachedData));
-      } else {
-        reject(new Error("No se pudieron obtener los formularios y no hay datos en caché."));
-      }
-    };
-
-    // Configurar el script para hacer la solicitud JSONP
-    script.src = `https://script.google.com/macros/s/AKfycbwho6oeZEaKXqFLZ0eTGqm9AruQCrxvYno_t4M-cgMc7qT-K0H9QP7i9n3KipeYJ8LmiA/exec?callback=${callbackName}`;
-    document.body.appendChild(script);
-
-  });
-
+    // Intentar usar datos en caché si la solicitud falla
+    const cachedData = localStorage.getItem("cachedForms");
+    if (cachedData) {
+      console.warn("Modo offline: usando datos guardados.");
+      return JSON.parse(cachedData);
+    } else {
+      throw new Error("No se pudieron obtener los formularios y no hay datos en caché.");
+    }
+  }
 };
-

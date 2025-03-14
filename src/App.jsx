@@ -1,3 +1,4 @@
+//Rutas de la aplicación
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./Home/Components/Home";
@@ -14,7 +15,7 @@ const App = () => {
                 <Route path="/registro" element={<Register />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/encuestas" element={<Encuestas />} />
-                <Route path="/detalles" element={<FormDetails />} />
+                <Route path="/form/:id" element={<FormDetails />} />
             </Routes>
         </Router>
     );

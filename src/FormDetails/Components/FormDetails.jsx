@@ -1,9 +1,8 @@
-//Formulario con sus detalles(preguntas y campos)
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchForms } from "../../Encuestas/Services/Get";
-import "./style.css"; 
+import "./style.css";
 import { Post } from "../Services/Post";
+import { get_by_id } from "../Services/Get_by_id";
 
 const FormDetails = () => {
   const { id } = useParams();
@@ -16,11 +15,11 @@ const FormDetails = () => {
   useEffect(() => {
     const loadFormDetails = async () => {
       try {
-        const data = await fetchForms(id);
+        const data = await get_by_id(id);
         setFormDetails(data);
 
         const initialResponses = data.fields.reduce((acc, field) => {
-          acc[field.title] = field.type === "CHECKBOX" ? [] : ""; // Inicializar array para checkboxes
+          acc[field.title] = field.type === "CHECKBOX" ? [] : "";
           return acc;
         }, {});
         setResponses(initialResponses);
@@ -40,48 +39,49 @@ const FormDetails = () => {
         return {
           ...prev,
           [fieldTitle]: currentValues.includes(value)
-            ? currentValues.filter((val) => val !== value) // Desmarcar si ya está seleccionado
-            : [...currentValues, value], // Marcar si no está seleccionado
+            ? currentValues.filter((val) => val !== value)
+            : [...currentValues, value],
         };
       }
       return { ...prev, [fieldTitle]: value };
     });
   };
 
- 
-
   return (
-    <div className="container">
-      <button onClick={() => navigate("/")}>Volver</button>
-      {loading && <p>Cargando...</p>}
-      {error && <p>{error}</p>}
-      {!loading && formDetails && (
+    <div className="container mt-4">
+      <button className="btn btn-secondary mb-3" onClick={() => navigate(-1)}>
+        Volver
+      </button>
+
+      {loading && <div className="alert alert-info">Cargando...</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {!loading && formDetails && formDetails.fields && (
         <>
-          <h1>{formDetails.title}</h1>
-          <form onSubmit={(e) => e.preventDefault()}>
+          <h1 className="mb-4">{formDetails.title}</h1>
+          <form onSubmit={(e) => e.preventDefault()} className="border p-4 rounded shadow bg-light">
             {formDetails.fields.map((field, index) => (
-              <div key={index} style={{ marginBottom: "15px" }}>
-                <label>{index + 1}. {field.title} ({field.type})</label>
-                <br />
+              <div key={index} className="mb-3">
+                <label className="form-label">
+                  {index + 1}. {field.title} ({field.type})
+                </label>
+
                 {field.type === "CHECKBOX" ? (
                   field.choices.map((choice, idx) => (
-                    <div key={idx}>
-                      <label>
-                        <input
-                          type="checkbox"
-                          value={choice}
-                          checked={responses[field.title].includes(choice)}
-                          onChange={(e) =>
-                            handleResponseChange(field.title, e.target.value, true)
-                          }
-                        />
-                        {choice}
-                      </label>
+                    <div key={idx} className="form-check">
+                      <input
+                        type="checkbox"
+                        value={choice}
+                        checked={responses[field.title].includes(choice)}
+                        className="form-check-input"
+                        onChange={(e) => handleResponseChange(field.title, e.target.value, true)}
+                      />
+                      <label className="form-check-label">{choice}</label>
                     </div>
                   ))
                 ) : field.type === "GRID" ? (
-                  <table>
-                    <thead>
+                  <table className="table table-bordered mt-2">
+                    <thead className="table-light">
                       <tr>
                         <th></th>
                         {field.columns.map((col, idx) => (
@@ -99,6 +99,7 @@ const FormDetails = () => {
                                 type="radio"
                                 name={`${field.title}-${rowIdx}`}
                                 value={col}
+                                className="form-check-input"
                                 onChange={(e) =>
                                   handleResponseChange(`${field.title}-${row}`, e.target.value)
                                 }
@@ -113,16 +114,15 @@ const FormDetails = () => {
                   <input
                     type="text"
                     value={responses[field.title]}
+                    className="form-control"
                     onChange={(e) => handleResponseChange(field.title, e.target.value)}
                   />
                 )}
               </div>
             ))}
-            <button 
-                type="button" 
-                onClick={() => Post(formDetails.title, responses)}
-                      >
-                  Enviar respuestas
+
+            <button type="button" className="btn btn-primary" onClick={() => Post(formDetails.id, formDetails.title, responses)}>
+              Enviar respuestas
             </button>
 
           </form>

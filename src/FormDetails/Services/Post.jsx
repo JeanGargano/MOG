@@ -1,28 +1,23 @@
-export const Post = async (formTitle, responses) => {
+//Servicio de Post para subir respuestas
+import axios from "axios";
+
+export const Post = async (formId, formTitle, responses) => {
     try {
         const responsesWithTitle = {
+            formId, 
             formTitle,  
             ...responses
         };
 
-        const response = await fetch("https://script.google.com/macros/s/AKfycbzeP2NhZHafitFk6EZZvya-MpsJIca_eL0RjJ44UWEOMc1N7OwthKd9uTk_57OFw9XKAg/exec", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(responsesWithTitle),
-            mode: "cors", // Se asegura de permitir solicitudes entre dominios
-        });
+        const response = await axios.post(
+            "https://script.google.com/macros/s/AKfycbzMXmW-XbpWcFJ5MEOTwP6nVdNEYjFFk1cV2XcnvG0XKZYLoKFNkTF7uQ2mQQKLUyy0fA/exec",
+            responsesWithTitle
+        );
 
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Respuestas enviadas correctamente");
-        } else {
-            alert(`Error: ${data.error || "No se pudo enviar la respuesta"}`);
-        }
+        alert("Respuestas enviadas correctamente");
+        return response.data;
     } catch (error) {
-        console.error("Error:", error);
-        alert("No se pudo enviar la respuesta");
+        console.error("Error al enviar las respuestas:", error);
+        alert(`No se pudo enviar la respuesta: ${error.response?.data?.error || error.message}`);
     }
 };
