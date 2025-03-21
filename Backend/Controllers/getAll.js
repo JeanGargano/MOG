@@ -1,8 +1,9 @@
+//Servicio Para obtener todos los formularios
 import axios from "axios";
 
-export const get = async () => {
+export const getAll = async () => {
   try {
-    // Hacer la solicitud GET al servidor
+    
     const response = await axios.get(
       "https://script.google.com/macros/s/AKfycbwho6oeZEaKXqFLZ0eTGqm9AruQCrxvYno_t4M-cgMc7qT-K0H9QP7i9n3KipeYJ8LmiA/exec"
     );

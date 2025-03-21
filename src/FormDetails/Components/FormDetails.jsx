@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./style.css";
-import { Post } from "../Services/Post";
-import { get_by_id } from "../Services/Get_by_id";
+import { getFormById } from "../../Services/Services";
 
 const FormDetails = () => {
   const { id } = useParams();
@@ -15,7 +14,7 @@ const FormDetails = () => {
   useEffect(() => {
     const loadFormDetails = async () => {
       try {
-        const data = await get_by_id(id);
+        const data = await getFormById(id);
         setFormDetails(data);
 
         const initialResponses = data.fields.reduce((acc, field) => {

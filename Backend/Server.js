@@ -1,14 +1,21 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
+import cors from "cors";
+import connectDB from "./DataBase/db.js";
+import routes from "./Routes/routes.js";
+
+connectDB();
 
 const app = express();
-const PORT = 5000;
+const PORT = 5001;
 
-app.use(cors()); // Permitir peticiones desde el frontend
-app.use(express.json()); // Para manejar JSON
 
-app.get('/', (req, res) => {
-    res.send({ message: '¡Servidor Express en funcionamiento!' });
+app.use(cors()); 
+app.use(express.json()); // Middleware para manejar JSON
+
+app.use("/", routes);
+
+app.get("/", (req, res) => {
+    res.send({ message: "¡Servidor Express en funcionamiento!" });
 });
 
 app.listen(PORT, () => {

@@ -1,7 +1,7 @@
 //Lista de Encuestas
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { get } from "../Services/Get";
+import { getAll } from "../../Services/Services";
 
 const Encuestas = () => {
   const [forms, setForms] = useState([]);
@@ -12,7 +12,7 @@ const Encuestas = () => {
   useEffect(() => {
     const loadForms = async () => {
       try {
-        const data = await get();
+        const data = await getAll();
         setForms(data);
       } catch (err) {
         setError("Error al cargar los formularios");
