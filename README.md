@@ -1,2 +1,2 @@
-# MOG_Frontend
-Frontend of the application developed for the Foundation Movements of Grace.
+# MOG Aplication
+Backend an Frontend of the application developed for the Foundation Movements of Grace.
