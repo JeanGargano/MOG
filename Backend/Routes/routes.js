@@ -1,8 +1,8 @@
 //Rutas de los endpoints de la aplicación
 import express from "express";
-import { getAll } from "../Controllers/getAll";
-import { get_by_id } from "../Controllers/Get_by_id";
-import { post } from "../Controllers/Post";
+import { getAll } from "../Controllers/getAll.js";
+import { get_by_id } from "../Controllers/get_by_id.js"
+import { post } from "../Controllers/Post.js";
 
 
 const router = express.Router();

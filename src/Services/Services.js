@@ -25,7 +25,7 @@ export const getFormById = async (id) => {
 };
 
 // Guardar una nueva respuesta
-export const createForm = async (formData) => {
+export const createAnswer = async (formData) => {
   try {
     const response = await axios.post(`${backend}/createForm`, formData);
     return response.data;
