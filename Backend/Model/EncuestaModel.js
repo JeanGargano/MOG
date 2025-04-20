@@ -1,5 +1,4 @@
-//Modelo de datos para encuesta
-
+// Modelo de datos para encuesta
 import mongoose from 'mongoose';
 
 const EncuestaSchema = new mongoose.Schema({
@@ -19,8 +18,9 @@ const EncuestaSchema = new mongoose.Schema({
       respuesta: { type: String }
     }]
   }]
+}, {
+  collection: 'Encuesta' // 👈 Fuerza el uso de la colección existente
 });
 
 const EncuestaModel = mongoose.model('Encuesta', EncuestaSchema);
 export default EncuestaModel;
-
