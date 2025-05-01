@@ -1,26 +1,31 @@
 //Endpoints de la Aplicación
 import express from "express";
-import EncuestaController from "../Controller/EncuestaController.js";
-import EncargadoController from "../Controller/EncargadoController.js";
+import { encargadoController, encuestaController } from "../Container.js";
 
 //Enrutador
 const router = express.Router();
 
-//Endpoint Para obtener formulario
+//Endpoints Para Formulario
 router.get('/getForm', async (req, res) => {
     const name = req.query.name;
-    const data = await EncuestaController.getForm(name);
+    const data = await encuestaController.getForm(name);
     res.json(data);
 });
 
-//Endpoint para obtener Encargado
-router.get('/getEncargado', EncargadoController.getEncargado);
+router.get('/getFormFromCache', async(req, res) => {
+    const name = req.query.name;
+    const data = await encuestaController.getFormFromCache(name);
+    res.json(data);
+});
 
-//Endpoint para escribir respuestas en archivo
-router.post("/writeData", EncuestaController.writeData);
+router.post("/writeData", (req, res) => encuestaController.writeData(req, res));
+router.post("/migrateData", (req, res) => encuestaController.migrateData(req,res));
 
-//Endpoint para migrar respuestas a la base de datos
-router.post("/postData", EncuestaController.postData);
+
+//Endpoints Para Encargado
+router.get('/getEncargado', (req, res) => encargadoController.getEncargado(req, res));
+router.post('/crearEncargado', (req, res) => encargadoController.postEncargado(req, res));
+
 
 
 export default router
