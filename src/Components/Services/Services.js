@@ -13,6 +13,16 @@ export const getAll = async () => {
   }
 };
 
+// Obtener un formulario por ID
+export const getFormById = async (id) => {
+  try {
+    const response = await axios.get(`${backend}/getById/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener el formulario ${id}:`, error);
+    throw error;
+  }
+};
 
 // Guardar una nueva respuesta
 export const createAnswer = async (formData) => {
