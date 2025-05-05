@@ -18,7 +18,7 @@ router.get('/getFormFromCache', async(req, res) => {
     res.json(data);
 });
 
-router.post("/writeData", (req, res) => encuestaController.writeData(req, res));
+router.post("/guardarRespuestaEnArchivo", (req, res) => encuestaController.guardarRespuestasEnArchivo(req, res));
 router.post("/migrateData", (req, res) => encuestaController.migrateData(req,res));
 
 

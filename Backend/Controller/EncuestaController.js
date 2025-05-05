@@ -35,7 +35,7 @@ export class EncuestaController {
     
 
     //Escribir respuestas en archivo
-    async writeData(req, res) {
+    async guardarRespuestasEnArchivo(req, res) {
         try{
             const result = await this.encuestaService.guardarRespuestasEnArchivo(req.body);
             if (result.error){
