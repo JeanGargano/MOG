@@ -1,0 +1,105 @@
+body,
+html {
+  background-color: #217ca3;
+}
+.tittleAndCounter {
+  padding-top: 10px;
+  margin: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  font-family: "Lato";
+  font-weight: bold;
+}
+
+.mainTitle {
+  font-size: 50px;
+  color: #e29930;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.counter {
+  font-size: 20px;
+  color: #e29930;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.container {
+  display: flex; /* Usar flexbox */
+  flex-direction: column; /* Colocar los elementos en columna */
+  align-items: center; /* Centrar los elementos horizontalmente */
+  justify-content: center; /* Centrar los elementos verticalmente */
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: "Lato";
+  font-weight: bold;
+  background-color: #32384d;
+}
+
+.emptyMessage {
+  color: #6c757d;
+}
+
+.formList {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  width: 100%; /* Asegurarse de que ocupe el 100% del contenedor padre */
+}
+
+.formItem {
+  background: #e29930;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #32384d;
+}
+
+.viewButton {
+  background-color: #217ca3;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.viewButton:hover {
+  background-color: #32384d;
+}
+
+/* Botón fuera del container */
+.uploadContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.uploadButton {
+  background-color: #e29930;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 50px;
+  text-transform: uppercase;
+}
+
+.uploadButton:hover {
+  background-color: #32384d;
+  color: #e29930;
+}

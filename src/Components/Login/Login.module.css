@@ -1,0 +1,71 @@
+/* Estilos para la página de login */
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #217ca3;
+  font-family: "Lato";
+  font-weight: bold;
+}
+
+/* Tarjeta de login */
+.loginCard {
+  background-color: #32384d; /* Cerulean Blue */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  text-align: center;
+}
+
+/* Título del formulario */
+.loginTitle {
+  color: #e29930; /* Mustard */
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Inputs de correo y contraseña */
+.inputField {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #211f30; /* Shadow */
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Botón de inicio de sesión */
+.loginButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #e29930; /* Shadow */
+  border: none;
+  color: #32384d; /* Mustard */
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  text-transform: uppercase;
+}
+
+.loginButton:hover {
+  background-color: #217ca3; /* Mustard */
+  color: #e29930; /* Shadow */
+}
+
+/* Enlace de recuperación de contraseña */
+.forgotPassword {
+  display: block;
+  margin-top: 10px;
+  color: #e29930; /* Asphalt */
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgotPassword:hover {
+  text-decoration: underline;
+}
