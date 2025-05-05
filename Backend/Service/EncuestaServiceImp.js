@@ -17,19 +17,6 @@ export class EncuestaService {
     this.encuestaRepository = encuestaRepository;
   }
 
-  //Metodo para escribir respuestas en archivo
-  async guardarRespuestasEnArchivo(data) {
-    try {
-      const linea = JSON.stringify(data) + "\n"; // Agrega salto de línea para JSONL
-      await appendFile(archivoRespuestas, linea);
-      console.log("✅ Respuesta guardada como línea individual");
-      return { success: true };
-    } catch (err) {
-      console.error("❌ Error al guardar en archivo:", err.message);
-      throw err;
-    }
-  }
-
     //Metodo para guardar respuestas en archivo
     async guardarRespuestasEnArchivo(nuevoEncuestado) {
       try {
@@ -135,27 +122,6 @@ export class EncuestaService {
       }
     }
        
-    //Metodo para escribir encuesta en archivos
-    async writeData(data) {
-      try {
-        const linea = JSON.stringify(data) + '\n';
-        await appendFile(archivoFormularios, linea);
-        console.log("Formulario guardado con éxito");
-        return { success: true };
-      } catch (err) {
-        console.error("Error al guardar el formulario", err.message);
-        throw err;
-      }
-      // Limpia el archivo después de migrar
-      await writeFile(archivoRespuestas, "");
-      console.log(
-        `✅ ${resultados.length} encuestas migradas y archivo limpio`,
-      );
-      return { status: "Migración completada", cantidad: resultados.length };
-    } catch (err) {
-      console.error("❌ Error al migrar encuestas:", err.message);
-      throw err;
-    }
 
   //Metodo para cargar los Formularios desde el archivo
   async loadData() {
