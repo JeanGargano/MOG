@@ -1,0 +1,67 @@
+/* Estilos generales para la página */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #217ca3; /* Cerulean Blue */
+  padding: 20px;
+  padding-bottom: 80px;
+  font-family: "Lato";
+  font-weight: bold;
+}
+
+.title {
+  color: #e29930; /* Mustard */
+  padding: 20px 0 0 20px;
+  background-color: #217ca3; /* Cerulean Blue */
+  font-family: "Lato";
+  font-weight: bold;
+  font-size: 64px;
+}
+
+/* Estilos del contenedor principal de formularios */
+.formContainer {
+  background-color: #32384d; /* Asphalt */
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Lista de formularios */
+.formList {
+  list-style: none;
+  padding: 0;
+}
+
+/* Elementos individuales de la lista */
+.formItem {
+  background-color: #e29930; /* Mustard */
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  color: #211f30; /* Shadow */
+}
+
+.formItem:hover {
+  background-color: #211f30; /* Shadow */
+  color: #e29930; /* Mustard */
+}
+
+/* Mensajes de carga o error */
+.formMessage,
+.formError {
+  text-align: center;
+  font-size: 16px;
+  color: #e29930; /* Mustard */
+  margin-top: 10px;
+}
+
+.formError {
+  color: #32384d; /* Asphalt */
+}

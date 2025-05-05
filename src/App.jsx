@@ -1,21 +1,36 @@
-//Rutas de la aplicación
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./Home/Components/Home";
-import Encuestas from "./Encuestas/Components/Encuestas";
-import Login from "./Login/Components/Login";
-import FormDetails from "./FormDetails/Components/FormDetails";
+import Home from "./Components/Home/Index"
+import Login from "./Components/Login/Index";
+import Form from "./Components/Forms/Index";
+import ProtectedRoute from "./Components/PrivateRoute/Index"
+import History from "./Components/History/Index";
+import HistoryForms from "./Components/HistoryForms/index";
+import SelectPreferences from "./Components/SelectPreferences/Index";
+import { UserProvider } from "./Context/userContext";
+import './index.css';
 
 const App = () => {
+    const user = { isAdmin: true };
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/encuestas" element={<Encuestas />} />
-                <Route path="/form/:id" element={<FormDetails />} />
-            </Routes>
-        </Router>
+        // Envolvemos la aplicación con el UserProvider para acceder al contexto global
+        <UserProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/login" element={<Login />} />
+
+                    {/* Rutas protegidas para admins */}
+                    <Route element={<ProtectedRoute isAdmin={user.isAdmin} />}>
+                        <Route path="/settings" element={<SelectPreferences />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/form/:id" element={<Form />} />
+                        <Route path="/history" element={<History />} />
+                        <Route path="/form-history/:formIndex/:realizacionIndex/:encuestadoIndex" element={<HistoryForms />} />
+                    </Route>
+                </Routes>
+            </Router>
+        </UserProvider>
     );
 };
 

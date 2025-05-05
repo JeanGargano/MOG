@@ -9,6 +9,8 @@ lerna-debug.log*
 .env
 node_modules
 cachedForms.json
+Formularios.json
+Respuestas.json
 dist
 dist-ssr
 *.local

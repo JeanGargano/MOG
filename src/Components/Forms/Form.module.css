@@ -1,0 +1,128 @@
+.container {
+  display: flex; /* Usar flexbox */
+  flex-direction: column; /* Colocar los elementos en columna */
+  align-items: center; /* Centrar los elementos horizontalmente */
+  justify-content: center; /* Centrar los elementos verticalmente */
+  max-width: 600px;
+  margin: 0 auto; /* Centrar el contenedor horizontalmente */
+  margin-top: 50px;
+  padding: 20px;
+  background-color: #32384d;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  min-height: 100vh; /* Asegura que ocupe todo el alto de la ventana */
+  font-family: "Lato";
+  font-weight: bold;
+}
+
+.alertInfo,
+.alertError {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.alertInfo {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alertError {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.title {
+  text-align: center;
+  color: #e29930;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.formWrapper {
+  background: #e29930;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  max-width: 500px; /* Limita el ancho del formulario */
+  text-transform: uppercase;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.formLabel {
+  font-weight: bold;
+  color: #495057;
+}
+
+.textInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.checkboxInput {
+  width: auto;
+  transform: scale(1.2);
+}
+
+.radioInput {
+  width: auto;
+  transform: scale(1.2);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table th,
+.table td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #e9ecef;
+  font-weight: bold;
+}
+
+.submitButton {
+  background-color: #32384d;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.submitButton:hover {
+  background-color: #217ca3;
+}
