@@ -25,7 +25,7 @@ const SelectPreferences = () => {
     useEffect(() => {
         const loadForms = async () => {
             try {
-                const response = await fetch("/Formularios.json");
+                const response = await fetch("../../../Backend/Formularios.json");
                 if (!response.ok) throw new Error("No se pudo cargar el archivo.");
                 const data = await response.json();
                 const formTitles = data.map(form => ({ id: form.id, title: form.title }));

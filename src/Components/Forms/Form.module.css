@@ -1,128 +1,145 @@
 .container {
-  display: flex; /* Usar flexbox */
-  flex-direction: column; /* Colocar los elementos en columna */
-  align-items: center; /* Centrar los elementos horizontalmente */
-  justify-content: center; /* Centrar los elementos verticalmente */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   max-width: 600px;
-  margin: 0 auto; /* Centrar el contenedor horizontalmente */
+  margin: 0 auto;
   margin-top: 50px;
-  padding: 20px;
-  background-color: #32384d;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  min-height: 100vh; /* Asegura que ocupe todo el alto de la ventana */
-  font-family: "Lato";
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #4c3aff, #764ba2);
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  min-height: 100vh;
+  font-family: "Lato", sans-serif;
   font-weight: bold;
 }
 
+/* Alertas */
 .alertInfo,
 .alertError {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 15px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
   text-align: center;
 }
 
 .alertInfo {
-  background-color: #d1ecf1;
-  color: #0c5460;
+  background-color: #dff5ff;
+  color: #116686;
 }
 
 .alertError {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: #ffe0e3;
+  color: #a82837;
 }
 
+/* Título */
 .title {
+  font-size: 32px;
+  color: #fff9ec;
+  margin-bottom: 30px;
   text-align: center;
-  color: #e29930;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
   text-transform: uppercase;
 }
 
+/* Contenedor de formulario */
 .formWrapper {
-  background: #e29930;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Asegura que ocupe todo el ancho disponible */
-  max-width: 500px; /* Limita el ancho del formulario */
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 500px;
   text-transform: uppercase;
 }
 
+/* Grupos de inputs */
 .formGroup {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .formLabel {
-  font-weight: bold;
-  color: #495057;
-}
-
-.textInput {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
+  font-weight: 700;
+  color: #2e217a;
   font-size: 14px;
 }
 
+.textInput {
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  transition: border 0.3s ease;
+}
+
+.textInput:focus {
+  outline: none;
+  border: 2px solid #bbaaff;
+  background-color: #fff;
+}
+
+/* Checkbox & radio */
 .checkboxGroup {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
 }
 
-.checkboxInput {
-  width: auto;
-  transform: scale(1.2);
-}
-
+.checkboxInput,
 .radioInput {
-  width: auto;
-  transform: scale(1.2);
+  transform: scale(1.3);
+  accent-color: #6a56ff;
 }
 
+/* Tabla */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  border-radius: 10px;
+  margin-top: 15px;
+  border-radius: 12px;
   overflow: hidden;
+  font-size: 14px;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .table th,
 .table td {
-  border: 1px solid #dee2e6;
-  padding: 10px;
+  border: 1px solid #eee;
+  padding: 12px;
   text-align: center;
-  font-size: 14px;
 }
 
 .table th {
-  background-color: #e9ecef;
-  font-weight: bold;
+  background-color: #f2f0ff;
+  color: #2e217a;
+  font-weight: 700;
 }
 
+/* Botón */
 .submitButton {
-  background-color: #32384d;
-  color: white;
-  padding: 12px;
+  background-color: #6a56ff;
+  color: #ffffff;
+  padding: 14px;
   border: none;
-  border-radius: 10px;
+  border-radius: 14px;
   cursor: pointer;
-  width: 100%;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
+  width: 100%;
+  transition: background-color 0.3s ease;
 }
 
 .submitButton:hover {
-  background-color: #217ca3;
+  background-color: #4f3cd0;
 }

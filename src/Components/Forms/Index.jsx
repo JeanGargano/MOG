@@ -18,7 +18,7 @@ const Form = () => {
     useEffect(() => {
         const loadFormDetails = async () => {
             try {
-                const response = await fetch("/Formularios.json");
+                const response = await fetch("../../../Backend/Formularios.json");
                 if (!response.ok) throw new Error("No se pudo cargar el archivo JSON.");
 
                 const forms = await response.json(); // Convertir a JSON
@@ -64,7 +64,6 @@ const Form = () => {
     };
 
     const handleSaveAnswers = async () => {
-        const answeredForms = JSON.parse(localStorage.getItem("answeredForms")) || [];
 
         const nuevoEncuestado = {
             fechaRealizacion: new Date().toISOString(),
@@ -84,66 +83,26 @@ const Form = () => {
                 }))
         };
 
-        // Buscar formulario existente
-        const formIndex = answeredForms.findIndex(f => f.id_formulario === id);
-
-        if (formIndex !== -1) {
-            const form = answeredForms[formIndex];
-
-            // Buscar realización con el mismo encargado y comedor
-            const realizacionIndex = form.Realizaciones.findIndex(
-                r => r.id_encargado === colaborador && r.id_comedor === comedor.nombre
-            );
-
-            if (realizacionIndex !== -1) {
-                // Si ya existe la realización, añadimos el encuestado
-                form.Realizaciones[realizacionIndex].encuestados.push(nuevoEncuestado);
-            } else {
-                // Si no existe la realización, la creamos
-                form.Realizaciones.push({
+        // Crear formulario si no existe
+        const nuevoFormulario = {
+            nombre: formDetails.title,
+            Realizaciones: [
+                {
                     id_encargado: colaborador,
                     id_comedor: comedor.nombre,
                     encuestados: [nuevoEncuestado]
-                });
-            }
-        } else {
-            // Si no existe el formulario, lo creamos
-            answeredForms.push({
-                nombre: formDetails.title,
-                Realizaciones: [
-                    {
-                        id_encargado: colaborador,
-                        id_comedor: comedor.nombre,
-                        encuestados: [nuevoEncuestado]
-                    }
-                ],
-                id_formulario: id
-            });
-        }
+                }
+            ],
+            id_formulario: id
+        };
 
-        // Guardar en localStorage
-        localStorage.setItem("answeredForms", JSON.stringify(answeredForms));
 
-        // Guardar estructura actualizada
-        localStorage.setItem("answeredForms", JSON.stringify(answeredForms));
-        console.log("🧠 Guardado en localStorage:", answeredForms);
 
-        // Lógica para enviar al backend solo esta nueva realización
         try {
-            const response = await fetch('http://localhost:5001/writeData', {
+            const response = await fetch('http://localhost:5001/guardarRespuestaEnArchivo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    nombre: formDetails.title,
-                    Realizaciones: [
-                        {
-                            id_encargado: colaborador,
-                            id_comedor: comedor.nombre,
-                            encuestados: [nuevoEncuestado]
-                        }
-                    ],
-                    id_formulario: id
-                })
+                body: JSON.stringify(nuevoFormulario)
             });
 
             const result = await response.json();

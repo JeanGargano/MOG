@@ -11,19 +11,29 @@ const HistoryForms = () => {
     const [encuestado, setEncuestado] = useState(null);
 
     useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem("answeredForms")) || [];
-        const selectedForm = saved[parseInt(formIndex)];
-        if (selectedForm) {
-            setForm(selectedForm);
-            const selectedRealizacion = selectedForm.Realizaciones?.[parseInt(realizacionIndex)];
-            if (selectedRealizacion) {
-                setRealizacion(selectedRealizacion);
-                const selectedEncuestado = selectedRealizacion.encuestados?.[parseInt(encuestadoIndex)];
-                if (selectedEncuestado) {
-                    setEncuestado(selectedEncuestado);
+        const fetchData = async () => {
+            try {
+                const response = await fetch("../../../Backend/Respuestas.json");
+                const data = await response.json();
+
+                const selectedForm = data[parseInt(formIndex)];
+                if (selectedForm) {
+                    setForm(selectedForm);
+                    const selectedRealizacion = selectedForm.Realizaciones?.[parseInt(realizacionIndex)];
+                    if (selectedRealizacion) {
+                        setRealizacion(selectedRealizacion);
+                        const selectedEncuestado = selectedRealizacion.encuestados?.[parseInt(encuestadoIndex)];
+                        if (selectedEncuestado) {
+                            setEncuestado(selectedEncuestado);
+                        }
+                    }
                 }
+            } catch (error) {
+                console.error("Error al cargar el archivo Respuestas.json:", error);
             }
-        }
+        };
+
+        fetchData();
     }, [formIndex, realizacionIndex, encuestadoIndex]);
 
     if (!form || !realizacion || !encuestado) {
@@ -41,33 +51,35 @@ const HistoryForms = () => {
     return (
         <>
             <Header />
-            <div className={styles.container}>
-                <h1 className={styles.title}>Formulario: {form.nombre}</h1>
-                <div className={styles.infoBox}>
-                    <p><strong>COLABORADOR:</strong> {realizacion.id_encargado}</p>
-                    <p><strong>COMEDOR:</strong> {realizacion.id_comedor?.nombre} ({realizacion.id_comedor?.pais})</p>
-                </div>
+            <div className={styles.bg}>
+                <div className={styles.container}>
+                    <h1 className={styles.title}>Formulario: {form.nombre}</h1>
+                    <div className={styles.infoBox}>
+                        <p><strong>COLABORADOR:</strong> {realizacion.id_encargado}</p>
+                        <p><strong>COMEDOR:</strong> {realizacion.id_comedor}</p>
+                    </div>
 
-                <div className={styles.responseSection}>
-                    <p><strong>Fecha:</strong> {new Date(encuestado.fechaRealizacion).toLocaleString()}</p>
-                    <ul className={styles.responseList}>
-                        <li><strong>Nombre:</strong> {encuestado.nombreCompleto}</li>
-                        <li><strong>Nacionalidad:</strong> {encuestado.nacionalidad}</li>
-                        <li><strong>Edad:</strong> {encuestado.edad}</li>
-                        <li><strong>Ciudad:</strong> {encuestado.ciudad}</li>
-                        <li><strong>Localidad:</strong> {encuestado.localidad}</li>
-                        <li><strong>Estrato:</strong> {encuestado.estrato}</li>
-                        {encuestado.preguntas.map((p, j) => (
-                            <li key={j}>
-                                <strong>{p.pregunta}:</strong> {p.respuesta}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                    <div className={styles.responseSection}>
+                        <p><strong>Fecha:</strong> {new Date(encuestado.fechaRealizacion).toLocaleString()}</p>
+                        <ul className={styles.responseList}>
+                            <li><strong>Nombre:</strong> {encuestado.nombreCompleto}</li>
+                            <li><strong>Nacionalidad:</strong> {encuestado.nacionalidad}</li>
+                            <li><strong>Edad:</strong> {encuestado.edad}</li>
+                            <li><strong>Ciudad:</strong> {encuestado.ciudad}</li>
+                            <li><strong>Localidad:</strong> {encuestado.localidad}</li>
+                            <li><strong>Estrato:</strong> {encuestado.estrato}</li>
+                            {encuestado.preguntas.map((p, j) => (
+                                <li key={j}>
+                                    <strong>{p.pregunta}:</strong> {p.respuesta}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                <button className={styles.backButton} onClick={() => navigate("/history")}>
-                    Volver
-                </button>
+                    <button className={styles.backButton} onClick={() => navigate("/history")}>
+                        Volver
+                    </button>
+                </div>
             </div>
         </>
     );

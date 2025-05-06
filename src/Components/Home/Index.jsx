@@ -14,7 +14,7 @@ const Home = () => {
     useEffect(() => {
         const loadForms = async () => {
             try {
-                const response = await fetch("Formularios.json");
+                const response = await fetch("../../../Backend/Formularios.json");
                 if (!response.ok) throw new Error("No se pudo cargar el archivo.");
                 const data = await response.json();
 
@@ -41,25 +41,27 @@ const Home = () => {
     return (
         <>
             <Header />
-            <h1 className={styles.title}>FORMULARIOS</h1>
-            <div className={styles.pageContainer}>
-                <div className={styles.formContainer}>
-                    {loading && <p className={styles.formMessage}>Cargando...</p>}
-                    {error && <p className={styles.formError}>{error}</p>}
-                    {!loading && forms.length === 0 && (
-                        <p className={styles.formMessage}>No tienes formularios seleccionados.</p>
-                    )}
-                    <ul className={styles.formList}>
-                        {forms.map((form) => (
-                            <li
-                                key={form.id}
-                                className={styles.formItem}
-                                onClick={() => handleFormClick(form.id)}
-                            >
-                                {form.title}
-                            </li>
-                        ))}
-                    </ul>
+            <div className={styles.home}>
+                <h1 className={styles.title}>FORMULARIOS</h1>
+                <div className={styles.pageContainer}>
+                    <div className={styles.formContainer}>
+                        {loading && <p className={styles.formMessage}>Cargando...</p>}
+                        {error && <p className={styles.formError}>{error}</p>}
+                        {!loading && forms.length === 0 && (
+                            <p className={styles.formMessage}>No tienes formularios seleccionados.</p>
+                        )}
+                        <ul className={styles.formList}>
+                            {forms.map((form) => (
+                                <li
+                                    key={form.id}
+                                    className={styles.formItem}
+                                    onClick={() => handleFormClick(form.id)}
+                                >
+                                    {form.title}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </>

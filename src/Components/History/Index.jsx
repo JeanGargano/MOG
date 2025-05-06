@@ -8,9 +8,38 @@ const History = () => {
     const [history, setHistory] = useState([]);
 
     useEffect(() => {
-        const savedAnswers = JSON.parse(localStorage.getItem("answeredForms")) || [];
-        setHistory(savedAnswers);
+        const fetchAnswers = async () => {
+            try {
+                const response = await fetch("../../../Backend/Respuestas.json");
+
+                if (!response.ok) {
+                    throw new Error(`Error de red: ${response.status}`);
+                }
+
+                const text = await response.text();
+
+                if (!text.trim()) {
+                    alert("⚠️ El archivo Respuestas.json está vacío1.");
+                    return;
+                }
+
+                const data = JSON.parse(text);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    alert("⚠️ No hay respuestas que mostrar en el archivo Respuestas.json.");
+                    return;
+                }
+
+                setHistory(data);
+            } catch (error) {
+                console.error("Error al cargar Respuestas.json:", error);
+                alert("❌ No se pudo cargar el archivo de respuestas.");
+            }
+        };
+
+        fetchAnswers();
     }, []);
+
 
     const handleFormClick = (formIndex, realizacionIndex, encuestadoIndex) => {
         navigate(`/form-history/${formIndex}/${realizacionIndex}/${encuestadoIndex}`);
@@ -19,22 +48,44 @@ const History = () => {
 
     const handleUpload = async () => {
         try {
-            const response = await fetch('http://localhost:5001/migrateData', {
+            const response = await fetch("../../../Backend/Respuestas.json");
+
+            if (!response.ok) {
+                throw new Error("No se pudo cargar Respuestas.json. Código: " + response.status);
+            }
+
+            const text = await response.text(); // primero obtenemos texto plano
+
+            if (!text.trim()) {
+                alert("⚠️ El archivo Respuestas.json está vacío. No se enviará ninguna información.");
+                return;
+            }
+
+            const data = JSON.parse(text);
+
+            if (!Array.isArray(data) || data.length === 0) {
+                alert("⚠️ El archivo Respuestas.json no tiene formularios válidos.");
+                return;
+            }
+
+            const uploadResponse = await fetch('http://localhost:5001/migrateData', {
                 method: 'POST',
             });
 
-            const result = await response.json();
+            const result = await uploadResponse.json();
 
-            if (response.ok) {
+            if (uploadResponse.ok) {
                 alert(`✅ ${result.message}\nTotal migradas: ${result.cantidad}`);
             } else {
                 alert(`❌ Error: ${result.error}`);
             }
+            navigate(`/home`)
         } catch (error) {
-            console.error('Error al migrar encuestas:', error);
-            alert('❌ Error al conectar con el servidor.');
+            console.error('Error al cargar o enviar los datos:', error);
+            alert('❌ Error al conectar con el servidor o al leer el archivo.');
         }
     };
+
 
     // Contar todas las realizaciones
     const totalRealizaciones = history.reduce((acc, form) => {
@@ -65,7 +116,7 @@ const History = () => {
                                             <h3>{form.nombre}</h3>
                                             <p><strong>Fecha:</strong> {new Date(encuestado.fechaRealizacion).toLocaleString()}</p>
                                             <p><strong>Colaborador:</strong> {realizacion?.id_encargado || "No disponible"}</p>
-                                            <p><strong>Comedor:</strong> {realizacion?.id_comedor?.nombre} ({realizacion?.id_comedor?.pais})</p>
+                                            <p><strong>Comedor:</strong> {realizacion?.id_comedor}</p>
                                         </div>
                                         <button
                                             className={styles.viewButton}
