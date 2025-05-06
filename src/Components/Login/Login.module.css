@@ -1,69 +1,81 @@
-/* Estilos para la página de login */
+/* Contenedor principal centrado */
 .loginContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #217ca3;
-  font-family: "Lato";
-  font-weight: bold;
+  background: linear-gradient(
+    135deg,
+    #4c3aff,
+    #764ba2
+  ); /* Fondo morado degradado */
+  font-family: "Lato", sans-serif;
 }
 
-/* Tarjeta de login */
+/* Tarjeta clara con bordes redondeados */
 .loginCard {
-  background-color: #32384d; /* Cerulean Blue */
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 350px;
+  background-color: #fff9ec; /* Fondo beige claro */
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  width: 360px;
   text-align: center;
 }
 
-/* Título del formulario */
+/* Título */
 .loginTitle {
-  color: #e29930; /* Mustard */
-  font-size: 24px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
+  color: #2e217a; /* Azul violeta oscuro */
+  font-size: 26px;
+  margin-bottom: 25px;
+  font-weight: 700;
 }
 
-/* Inputs de correo y contraseña */
+/* Campos de entrada */
 .inputField {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #211f30; /* Shadow */
-  border-radius: 5px;
+  padding: 12px 15px;
+  margin-bottom: 18px;
+  border: 2px solid #e0d9ff;
+  border-radius: 12px;
   font-size: 16px;
+  font-family: "Lato", sans-serif;
+  background-color: #fff;
+  color: #2e217a;
+  transition: border 0.3s;
 }
 
-/* Botón de inicio de sesión */
+.inputField:focus {
+  outline: none;
+  border-color: #c4b2ff;
+}
+
+/* Botón llamativo */
 .loginButton {
   width: 100%;
-  padding: 10px;
-  background-color: #e29930; /* Shadow */
+  padding: 12px;
+  background-color: #2e217a; /* Morado fuerte */
   border: none;
-  color: #32384d; /* Mustard */
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 5px;
+  color: #fff9ec; /* Texto claro */
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 999px;
   cursor: pointer;
   transition: background 0.3s;
   text-transform: uppercase;
 }
 
 .loginButton:hover {
-  background-color: #217ca3; /* Mustard */
-  color: #e29930; /* Shadow */
+  background-color: #4431b3;
 }
 
-/* Enlace de recuperación de contraseña */
+/* Enlace sutil */
 .forgotPassword {
   display: block;
-  margin-top: 10px;
-  color: #e29930; /* Asphalt */
+  margin-top: 15px;
+  color: #705dcf;
   text-decoration: none;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .forgotPassword:hover {

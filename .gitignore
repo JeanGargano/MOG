@@ -8,9 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 .env
 node_modules
-cachedForms.json
-Formularios.json
-Respuestas.json
+Backend/Respuestas.json
+Backend/Formularios.json
 dist
 dist-ssr
 *.local

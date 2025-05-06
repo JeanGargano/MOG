@@ -13,7 +13,7 @@ html {
 }
 
 .header {
-  background-color: #32384d; /* Asphalt */
+  background-color: #ffbd59; /* Asphalt */
   color: white;
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@ html {
   font-size: 32px;
   padding: 50px 25px;
   margin: 0;
-  color: #e29930;
+  color: #3e2f92;
   text-transform: uppercase;
 }
 
@@ -37,8 +37,8 @@ html {
 }
 
 .navbar button {
-  background-color: #32384d; /* Asphalt */
-  color: white;
+  background-color: #ffbd59; /* Asphalt */
+  color: #3e2f92;
   border: none;
   padding: 38px 20px;
   cursor: pointer;
@@ -48,7 +48,8 @@ html {
 }
 
 .navbar button:hover {
-  background-color: #e29930; /* Cerulean Blue */
+  background-color: #3e2f92; /* Cerulean Blue */
+  color: #ffbd59;
 }
 
 .navbar input {

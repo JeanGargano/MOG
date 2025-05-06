@@ -1,43 +1,48 @@
 .container {
-  background-color: #2c3145;
-  color: white;
+  background-color: #3e2f92; /* Violeta oscuro */
+  color: #fff;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 20px;
   max-width: 800px;
   margin: 2rem auto;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
 .title {
   text-align: center;
-  font-size: 1.8rem;
-  color: #fbb040;
+  font-size: 2rem;
+  color: #ffbd59; /* Amarillo cálido */
   margin-bottom: 2rem;
+  font-weight: bold;
 }
 
 .infoBox {
-  background-color: #e1952d;
+  background-color: #ffdfb5; /* Fondo claro tipo pastel */
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .infoBox p {
   margin: 0.5rem 0;
-  color: #2c3145;
+  color: #3e2f92;
   font-weight: bold;
 }
 
 .responseSection {
-  background-color: #e1952d;
+  background-color: #ffdfb5;
   padding: 1.5rem;
-  border-radius: 12px;
+  border-radius: 16px;
   padding-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .responseSection h2 {
-  color: #2c3145;
+  color: #3e2f92;
   margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .responseList {
@@ -48,27 +53,30 @@
 
 .responseList li {
   margin-bottom: 1.2rem;
-  background-color: white;
-  color: #2c3145;
+  background-color: #ffffff;
+  color: #3e2f92;
   padding: 0.8rem 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: bold;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .backButton {
-  background-color: #217ca3;
-  color: white;
+  background-color: #3e2f92;
+  color: #fffbd4;
   padding: 12px;
   border: none;
-  border-radius: 10px;
+  border-radius: 16px;
   cursor: pointer;
   width: 100%;
   font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
   margin-top: 25px;
+  transition: background-color 0.3s ease;
 }
 
 .backButton:hover {
-  background-color: #e1952d;
+  background-color: #ffbd59;
+  color: #3e2f92;
 }
