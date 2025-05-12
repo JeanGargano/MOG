@@ -22,7 +22,6 @@ export class EncuestaService {
       try {
         let contenido = await readFile(archivoRespuestas, 'utf-8');
         let json;
-    
         // Si el archivo está vacío, inicializamos el array con el nuevo encuestado
         if (contenido.trim() === '') {
           json = [{
@@ -32,12 +31,10 @@ export class EncuestaService {
           }];
         } else {
           json = JSON.parse(contenido);
-          
           // Buscar si ya existe una encuesta con el mismo nombre
           const encuestaExistente = json.find(encuesta =>
             encuesta.nombre === nuevoEncuestado.nombre && encuesta.id_formulario === nuevoEncuestado.id_formulario
           );
-          
           if (encuestaExistente) {
             // Si existe la encuesta, agregar las realizaciones
             for (const nuevaRealizacion of nuevoEncuestado.Realizaciones) {
@@ -45,7 +42,6 @@ export class EncuestaService {
                 r.id_encargado === nuevaRealizacion.id_encargado &&
                 r.id_comedor === nuevaRealizacion.id_comedor
               );
-        
               if (realizacionExistente) {
                 // Agregar encuestados si no existen
                 for (const encuestado of nuevaRealizacion.encuestados) {
@@ -71,11 +67,9 @@ export class EncuestaService {
             });
           }
         }
-    
         // Escribir el archivo con el nuevo formato
         const nuevaLinea = JSON.stringify(json, null, 2) + '\n';
         await writeFile(archivoRespuestas, nuevaLinea);
-    
         console.log("Formulario actualizado con éxito");
         return { success: true };
       } catch (err) {
@@ -84,22 +78,17 @@ export class EncuestaService {
       }
     }
     
-    
     //Metodo para migrar respuestas a la Base de datos
     async migrarEncuestasDesdeArchivo() {
       try {
-        // Leer el archivo con las encuestas
         const fileContent = await readFile(archivoRespuestas, 'utf-8');
-        const encuestas = JSON.parse(fileContent); // Parsear el JSON correctamente
+        const encuestas = JSON.parse(fileContent); 
     
         if (encuestas.length === 0) {
           console.log('📭 No hay encuestas por migrar.');
           return { status: 'No hay encuestas para migrar' };
         }
-    
         const resultados = [];
-    
-        // Iterar sobre cada encuesta en el archivo
         for (const encuesta of encuestas) {
           const encuestaSeparada = {
             nombre: encuesta.nombre,
@@ -111,8 +100,6 @@ export class EncuestaService {
           const result = await this.encuestaRepository.save(encuestaSeparada);
           resultados.push(result);
         }
-    
-        // Limpia el archivo después de migrar
         await writeFile(archivoRespuestas, '');
         console.log(`✅ ${resultados.length} encuestas migradas y archivo limpio`);
         return { status: 'Migración completada', cantidad: resultados.length };
@@ -121,7 +108,6 @@ export class EncuestaService {
         throw err;
       }
     }
-       
 
   //Metodo para cargar los Formularios desde el archivo
   async loadData() {
@@ -130,6 +116,19 @@ export class EncuestaService {
     }
     return null;
   }
+
+  //Metodo que escribe los datos de un formulario en el archivo
+  async writeData(data) {
+      try {
+        const linea = JSON.stringify(data) + '\n';
+        await appendFile(archivoFormularios, linea);
+        console.log("Formulario guardado con éxito");
+        return { success: true };
+      } catch (err) {
+        console.error("Error al guardar el formulario", err.message);
+        throw err;
+      }
+    }
 }
 
 

@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 Backend/Respuestas.json
 Backend/Formularios.json
+Backend/Encargado.json
 dist
 dist-ssr
 *.local

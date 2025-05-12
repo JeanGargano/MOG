@@ -2,9 +2,14 @@
 import mongoose from 'mongoose';
 
 const EncargadoSchema = new mongoose.Schema({
-  _id: { type: String, required: true }, 
-  nombreCompleto: { type: String, required: true },
-  contraseña: {type:String, required:true}
+  nombreCompleto: { type: String, required: true},
+  identificacion: { type: Number, required: true, unique: true},
+  comedores: {type: Array, required: false},
+  pais: {type: String, required: false},
+  telefono: {type: Number, required: false},
+  contraseña: {type: String, required:false}
+}, {
+    collection: "Encargado"
 });
 
 const EncargadoModel = mongoose.model('Encargado', EncargadoSchema);

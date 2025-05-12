@@ -1,34 +1,49 @@
-//Clase de controladores para Encargado
+//Controladores para encargado
 export class EncargadoController {
 
-  //Metodo constructor
   constructor(encargadoService) {
     this.encargadoService = encargadoService;
   }
 
-  async getEncargado(req, res) { 
+  //Encontrar un encargado por su identificacion
+  async findByIdentificacion(req, res) {
     try {
-      const { name } = req.query;
-      const encargado = await this.encargadoService.autenticarEncargado(name);
+      const { identificacion } = req.query;
+      const encargado = await this.encargadoService.findByIdentificacion(identificacion);
       res.status(200).json(encargado);
     } catch (error) {
       res.status(404).json({ error: error.message });
     }
   }
 
-  // Controlador Para crear Encargado
+  //Crear un encargado
   async postEncargado(req, res) {
     try {
-      const result = await this.encargadoService.crearEncargado(req.body);
-      if (result.error) {
-        return res.status(result.status).json({ error: result.error });
-      } else {
-        return res.status(200).json({ message: "Se ha creado el Encargado exitosamente" });
-      }
+      const result = await this.encargadoService.postEncargado(req.body);
+      res.status(200).json({ message: "Encargado creado exitosamente", result });
     } catch (error) {
-      console.error("Error en encargado Controller:", error.message);
-      res.status(500).json({ error: "Error interno del servidor" });
-    } 
+      res.status(500).json({ error: error.message });
+    }
   }
 
+  //Añade los nuevos campos al encargado
+  async agregarCampos(req, res) {
+    try {
+      const { identificacion } = req.body;
+      const actualizado = await this.encargadoService.agregarCampos(identificacion, req.body);
+      res.status(200).json({ message: "Campos añadidos correctamente", actualizado });
+    } catch (error) {
+      res.status(404).json({ error: error.message });
+    }
+  }
+
+  //Logea un encargado
+  async logearEncargado(req, res) {
+    try {
+      const response = await this.encargadoService.logearEncargado(req.body);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(401).json({ error: error.message });
+    }
+  }
 }
