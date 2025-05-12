@@ -70,14 +70,7 @@ const SelectPreferences = () => {
                 id: doc.id,
                 name: doc.name,
             }));
-
-            // Evitar duplicados
-            setSelectedForms((prev) => {
-                const nuevos = selected.filter(
-                    (nuevo) => !prev.some((existente) => existente.id === nuevo.id)
-                );
-                return [...prev, ...nuevos];
-            });
+            setSelectedForms(selected);
         }
     };
 
@@ -87,11 +80,7 @@ const SelectPreferences = () => {
         }
     };
 
-    const handleRemoveForm = (id) => {
-        setSelectedForms((prev) => prev.filter((form) => form.id !== id));
-    };
-
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!colaborador || !comedorNombre || !comedorPais || selectedForms.length === 0) {
             alert("Por favor completa todos los campos y selecciona al menos un formulario.");
             return;
@@ -99,8 +88,31 @@ const SelectPreferences = () => {
 
         setColaborador(colaborador);
         setComedor({ nombre: comedorNombre, pais: comedorPais });
-        setFormulariosSeleccionados(selectedForms.map((f) => f.id));
-        navigate("/home");
+        setFormulariosSeleccionados(selectedForms.map(f => f.id));
+
+        // 🔁 Llama al backend para cada formulario seleccionado
+        try {
+            const fetchPromises = selectedForms.map((form) =>
+                fetch(`http://localhost:5001/getForm?name=${encodeURIComponent(form.name)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(`Datos recibidos para ${form.name}:`, data);
+                        return data;
+                    })
+            );
+
+            const results = await Promise.all(fetchPromises);
+            console.log("Todos los datos:", results);
+
+            // Después de obtener los datos, redirige
+            navigate("/home");
+        } catch (error) {
+            console.error("Error al obtener formularios desde el backend:", error);
+        }
+    };
+
+    const handleRemoveForm = (formId) => {
+        setSelectedForms(prev => prev.filter(form => form.id !== formId));
     };
 
     return (
@@ -140,13 +152,14 @@ const SelectPreferences = () => {
 
             <div className={styles.inputGroup}>
                 {selectedForms.length > 0 && (
-                    <ul className={styles.formList}>
+                    <ul>
                         {selectedForms.map((form) => (
-                            <li key={form.id} className={styles.formItem}>
+                            <li key={form.id}>
                                 {form.name}
                                 <button
-                                    className={styles.removeButton}
+                                    type="button"
                                     onClick={() => handleRemoveForm(form.id)}
+                                    style={{ marginLeft: "10px", color: "red" }}
                                 >
                                     Quitar
                                 </button>
