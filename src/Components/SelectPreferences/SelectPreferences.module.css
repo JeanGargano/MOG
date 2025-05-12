@@ -141,3 +141,24 @@
 .buttonGroup button:hover {
   opacity: 0.85;
 }
+
+.formList {
+  list-style: none;
+  padding: 0;
+}
+
+.formItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.removeButton {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
