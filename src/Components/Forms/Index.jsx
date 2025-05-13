@@ -1,19 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getFormById } from "../Services/Services";
 import styles from "./Form.module.css";
 import Header from "../Header/Index";
-import { useUser } from "../../Context/userContext"; // Importa el contexto
-import { saveAs } from "file-saver";
+import { useUser } from "../../Context/userContext";
 
 const Form = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const { colaborador, comedor } = useUser(); // Accede a colaborador y comedor desde el contexto
+    const { user, comedores } = useUser();
     const [formDetails, setFormDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [responses, setResponses] = useState({});
+    const [responses, setResponses] = useState({
+        "Nombre completo": "",
+        "Nacionalidad": "",
+        "Edad": "",
+        "Ciudad": "",
+        "Localidad": "",
+        "Estrato": ""
+    });
+
+
+    const [comedor, setComedor] = useState(null);
+
+    useEffect(() => {
+        const loadComedor = () => {
+            try {
+                const stored = localStorage.getItem("formulariosSeleccionados");
+                if (!stored) return;
+
+                const seleccionados = JSON.parse(stored);
+                const match = seleccionados.find((entry) =>
+                    entry.formularios.some((f) => f.id === id)
+                );
+
+                if (match) {
+                    setComedor(match.comedor);
+                }
+            } catch (err) {
+                console.error("❌ Error al cargar comedor desde localStorage:", err);
+            }
+        };
+
+        loadComedor();
+    }, [id]);
 
     useEffect(() => {
         const loadFormDetails = async () => {
@@ -21,11 +51,8 @@ const Form = () => {
                 const response = await fetch("../../../Backend/Formularios.json");
                 if (!response.ok) throw new Error("No se pudo cargar el archivo JSON.");
 
-                const forms = await response.json(); // Convertir a JSON
-                console.log("📌 Formularios cargados:", forms); // Verifica los datos
-
+                const forms = await response.json();
                 const foundForm = forms.find((form) => form.id === id);
-                console.log("🔍 Formulario encontrado:", foundForm); // Verifica si lo encuentra
 
                 if (!foundForm) throw new Error(`Formulario con ID ${id} no encontrado.`);
 
@@ -64,15 +91,19 @@ const Form = () => {
     };
 
     const handleSaveAnswers = async () => {
+        if (!user || !comedor) {
+            alert("Faltan datos del colaborador o comedor.");
+            return;
+        }
 
         const nuevoEncuestado = {
             fechaRealizacion: new Date().toISOString(),
-            nombreCompleto: responses["Nombre completo"] || "Prueba",
-            nacionalidad: responses["Nacionalidad"] || "Prueba",
-            edad: responses["Edad"] || "Prueba",
-            ciudad: responses["Ciudad"] || "Prueba",
-            localidad: responses["Localidad"] || "Prueba",
-            estrato: responses["Estrato"] || "Prueba",
+            nombreCompleto: responses["Nombre completo"],
+            nacionalidad: responses["Nacionalidad"],
+            edad: responses["Edad"],
+            ciudad: responses["Ciudad"],
+            localidad: responses["Localidad"],
+            estrato: responses["Estrato"],
             preguntas: Object.entries(responses)
                 .filter(([key]) =>
                     !["Nombre completo", "Nacionalidad", "Edad", "Ciudad", "Localidad", "Estrato"].includes(key)
@@ -83,20 +114,17 @@ const Form = () => {
                 }))
         };
 
-        // Crear formulario si no existe
         const nuevoFormulario = {
             nombre: formDetails.title,
             Realizaciones: [
                 {
-                    id_encargado: colaborador,
-                    id_comedor: comedor.nombre,
+                    id_encargado: user.nombreCompleto || colaborador, // si es objeto o string
+                    id_comedor: comedor._id || comedor.nombre,
                     encuestados: [nuevoEncuestado]
                 }
             ],
             id_formulario: id
         };
-
-
 
         try {
             const response = await fetch('http://localhost:5001/guardarRespuestaEnArchivo', {
@@ -130,19 +158,81 @@ const Form = () => {
                     <>
                         <h1 className={styles.title}>{formDetails.title}</h1>
                         <form onSubmit={(e) => e.preventDefault()} className={styles.formWrapper}>
-                            {/* Mostrar colaborador y comedor */}
                             <div className={styles.formGroup}>
                                 <label className={styles.formLabel}>Colaborador:</label>
-                                <p>{colaborador || "No seleccionado"}</p>
+                                <p>{user?.nombreCompleto || "No seleccionado"}</p>
                             </div>
                             <div className={styles.formGroup}>
                                 <label className={styles.formLabel}>Comedor:</label>
                                 <p>
-                                    {comedor.nombre && comedor.pais
+                                    {comedor
                                         ? `${comedor.nombre} (${comedor.pais})`
                                         : "No seleccionado"}
+
+
                                 </p>
                             </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Nombre completo:</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={responses["Nombre completo"]}
+                                    onChange={(e) => handleResponseChange("Nombre completo", e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Nacionalidad:</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={responses["Nacionalidad"]}
+                                    onChange={(e) => handleResponseChange("Nacionalidad", e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Edad:</label>
+                                <input
+                                    type="number"
+                                    className={styles.textInput}
+                                    value={responses["Edad"]}
+                                    onChange={(e) => handleResponseChange("Edad", e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Ciudad:</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={responses["Ciudad"]}
+                                    onChange={(e) => handleResponseChange("Ciudad", e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Localidad:</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={responses["Localidad"]}
+                                    onChange={(e) => handleResponseChange("Localidad", e.target.value)}
+                                />
+                            </div>
+
+                            <div className={styles.formGroup}>
+                                <label className={styles.formLabel}>Estrato:</label>
+                                <input
+                                    type="text"
+                                    className={styles.textInput}
+                                    value={responses["Estrato"]}
+                                    onChange={(e) => handleResponseChange("Estrato", e.target.value)}
+                                />
+                            </div>
+
 
                             {formDetails.fields.map((field, index) => (
                                 <div key={index} className={styles.formGroup}>

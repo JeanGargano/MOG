@@ -1,45 +1,59 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Creación del contexto
+// Crear el contexto
 const UserContext = createContext();
 
 // Proveedor del contexto
 export const UserProvider = ({ children }) => {
-  const [colaborador, setColaborador] = useState("");
-  const [comedor, setComedor] = useState({ nombre: "", pais: "" });
+  const [user, setUser] = useState(null); // objeto con info completa del encargado
+  const [comedores, setComedores] = useState({ nombre: "", pais: "" });
   const [formulariosSeleccionados, setFormulariosSeleccionados] = useState([]);
+  const [formulariosPorComedor, setFormulariosPorComedor] = useState({}); // NUEVO
 
-
-  // Cargar datos desde localStorage si existen
+  // Cargar datos desde localStorage
   useEffect(() => {
-    const savedColaborador = localStorage.getItem("colaborador");
-    const savedComedor = localStorage.getItem("comedor");
+    const savedUser = localStorage.getItem("user");
+    const savedComedor = localStorage.getItem("comedores");
     const savedFormularios = localStorage.getItem("formulariosSeleccionados");
+    const savedFormulariosPorComedor = localStorage.getItem("formulariosPorComedor");
 
-    if (savedColaborador) setColaborador(savedColaborador);
-    if (savedComedor) setComedor(JSON.parse(savedComedor));
+    if (savedUser) setUser(JSON.parse(savedUser));
+    if (savedComedor) setComedores(JSON.parse(savedComedor));
     if (savedFormularios) setFormulariosSeleccionados(JSON.parse(savedFormularios));
+    if (savedFormulariosPorComedor) setFormulariosPorComedor(JSON.parse(savedFormulariosPorComedor));
   }, []);
 
-
-  // Guardar en localStorage cuando cambian
+  // Guardar en localStorage cuando cambien
   useEffect(() => {
-    if (colaborador) localStorage.setItem("colaborador", colaborador);
-    if (comedor && comedor.nombre && comedor.pais) {
-      localStorage.setItem("comedor", JSON.stringify(comedor));
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    if (comedores && comedores.nombre && comedores.pais) {
+      localStorage.setItem("comedores", JSON.stringify(comedores));
     }
     if (formulariosSeleccionados.length > 0) {
       localStorage.setItem("formulariosSeleccionados", JSON.stringify(formulariosSeleccionados));
     }
-  }, [colaborador, comedor, formulariosSeleccionados]);
-
+    if (Object.keys(formulariosPorComedor).length > 0) {
+      localStorage.setItem("formulariosPorComedor", JSON.stringify(formulariosPorComedor));
+    }
+  }, [user, comedores, formulariosSeleccionados, formulariosPorComedor]);
 
   return (
-    <UserContext.Provider value={{ colaborador, setColaborador, comedor, setComedor, formulariosSeleccionados, setFormulariosSeleccionados }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        comedores,
+        setComedores,
+        formulariosSeleccionados,
+        setFormulariosSeleccionados,
+        formulariosPorComedor,
+        setFormulariosPorComedor,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
 };
 
-// Hook para usar el contexto de usuario
+// Hook para usar el contexto
 export const useUser = () => useContext(UserContext);

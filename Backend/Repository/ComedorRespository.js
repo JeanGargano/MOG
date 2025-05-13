@@ -1,7 +1,6 @@
 import ComedorModel from "../Model/ComedorModel.js";
 
 export class ComedorRepository {
-
   async postComedor(data) {
     try {
       const comedor = new ComedorModel(data);
@@ -13,5 +12,9 @@ export class ComedorRepository {
 
   async findComedores() {
     return await ComedorModel.find({});
+  }
+
+  async findComedoresByIds(ids) {
+    return await ComedorModel.find({ _id: { $in: ids } });
   }
 }

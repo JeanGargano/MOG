@@ -18,10 +18,20 @@ const Home = () => {
                 if (!response.ok) throw new Error("No se pudo cargar el archivo.");
                 const data = await response.json();
 
-                // Filtrar solo los formularios seleccionados por el usuario
-                const formTitles = data
-                    .filter(form => formulariosSeleccionados.includes(form.id))
-                    .map(form => ({ id: form.id, title: form.title }));
+                // Crear una lista de formularios con su comedor asociado
+                const formTitles = formulariosSeleccionados.flatMap(entry =>
+                    entry.formularios.map(formSel => {
+                        // Buscar el formulario completo en el archivo JSON
+                        const fullForm = data.find(f => f.id === formSel.id);
+                        return fullForm
+                            ? {
+                                id: formSel.id,
+                                title: fullForm.title,
+                                comedorNombre: entry.comedor.nombre
+                            }
+                            : null;
+                    }).filter(Boolean) // Eliminar posibles nulls si algún id no se encuentra
+                );
 
                 setForms(formTitles);
             } catch (err) {
@@ -32,7 +42,8 @@ const Home = () => {
         };
 
         loadForms();
-    }, [formulariosSeleccionados]); // <-- Dependencia importante
+    }, [formulariosSeleccionados]);
+
 
     const handleFormClick = (formId) => {
         navigate(`/form/${formId}`);
@@ -57,10 +68,11 @@ const Home = () => {
                                     className={styles.formItem}
                                     onClick={() => handleFormClick(form.id)}
                                 >
-                                    {form.title}
+                                    {form.title} – {form.comedorNombre}
                                 </li>
                             ))}
                         </ul>
+
                     </div>
                 </div>
             </div>

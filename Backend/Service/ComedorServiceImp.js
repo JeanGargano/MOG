@@ -20,4 +20,9 @@ export class ComedorService {
     }
     return comedores;
   }
+
+  //Listar comedores por ID
+  async findComedoresByIds(ids) {
+    return await this.comedorRepository.findComedoresByIds(ids);
+  }
 }
