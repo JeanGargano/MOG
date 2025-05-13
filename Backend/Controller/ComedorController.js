@@ -23,4 +23,20 @@ export class ComedorController {
       res.status(404).json({ error: error.message });
     }
   }
+
+  // Controlador para obtener comedores por ID
+  async getComedoresByIds(req, res) {
+    const { ids } = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ error: "Se requiere un array de IDs" });
+    }
+
+    try {
+      const comedores = await this.comedorService.findComedoresByIds(ids);
+      res.status(200).json(comedores);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
