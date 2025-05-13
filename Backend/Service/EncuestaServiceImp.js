@@ -119,16 +119,32 @@ export class EncuestaService {
 
   //Metodo que escribe los datos de un formulario en el archivo
   async writeData(data) {
-      try {
-        const linea = JSON.stringify(data) + '\n';
-        await appendFile(archivoFormularios, linea);
-        console.log("Formulario guardado con éxito");
-        return { success: true };
-      } catch (err) {
-        console.error("Error al guardar el formulario", err.message);
-        throw err;
+  try {
+    let formularios = [];
+    if (fs.existsSync(archivoFormularios)) {
+      const contenido = await readFile(archivoFormularios, 'utf8');
+      if (contenido.trim()) {
+        try {
+          formularios = JSON.parse(contenido);
+          if (!Array.isArray(formularios)) {
+            throw new Error("El contenido del archivo no es un array válido.");
+          }
+        } catch (parseErr) {
+          console.error("❌ Error al parsear Formulario.json:", parseErr.message);
+          throw new Error("El archivo de formularios está dañado o no es JSON válido.");
+        }
       }
     }
+    formularios.push(data);
+    await writeFile(archivoFormularios, JSON.stringify(formularios, null, 2));
+    console.log("📥 Formulario guardado con éxito");
+    return { success: true };
+  } catch (err) {
+    console.error("❌ Error al guardar el formulario:", err.message);
+    throw err;
+  }
+}
+
 }
 
 
