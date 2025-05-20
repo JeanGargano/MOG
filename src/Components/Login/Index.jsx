@@ -26,9 +26,12 @@ const Login = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log("Login exitoso:", data);
-                setUser(data.encargado)
-                navigate("/settings");
+                setUser(data.encargado);
+                if (data.encargado.isAdmin) {
+                    navigate("/admin"); // o el panel principal de admin
+                } else {
+                    navigate("/settings");
+                }
             } else {
                 alert(data.message || "Credenciales incorrectas");
             }

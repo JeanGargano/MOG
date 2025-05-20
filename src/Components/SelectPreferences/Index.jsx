@@ -137,18 +137,44 @@ const SelectPreferences = () => {
             return;
         }
         // Guardar en el contexto la estructura completa
-        setFormulariosSeleccionados([
-            {
-                comedor: {
-                    id: comedorIdSeleccionado,
-                    nombre: comedoresDisponibles.find(c => c._id === comedorIdSeleccionado)?.nombre || "",
-                    pais: comedorPais
-                },
-                formularios: formulariosSeleccionados
+        setFormulariosSeleccionados((prev) => {
+            // Verifica si ya existe el comedor
+            const yaExiste = prev.find(item => item.comedor.id === comedorIdSeleccionado);
+
+            if (yaExiste) {
+                // Actualiza los formularios para ese comedor (sin duplicar)
+                return prev.map(item => {
+                    if (item.comedor.id === comedorIdSeleccionado) {
+                        const nuevosFormularios = formulariosSeleccionados.filter(
+                            nuevo => !item.formularios.some(existing => existing.id === nuevo.id)
+                        );
+                        return {
+                            ...item,
+                            formularios: [...item.formularios, ...nuevosFormularios],
+                        };
+                    }
+                    return item;
+                });
+            } else {
+                // Agrega un nuevo comedor con sus formularios
+                return [
+                    ...prev,
+                    {
+                        comedor: {
+                            id: comedorIdSeleccionado,
+                            nombre: comedoresDisponibles.find(c => c._id === comedorIdSeleccionado)?.nombre || "",
+                            pais: comedorPais
+                        },
+                        formularios: formulariosSeleccionados
+                    }
+                ];
             }
-        ]);
+        });
+
 
         try {
+            console.log("Formulario seleccionado:", formulariosSeleccionados);
+            console.log("Comedor seleccionado:", comedorIdSeleccionado);
             const fetchPromises = formulariosSeleccionados.map((form) =>
                 fetch(`http://localhost:5001/getForm?name=${encodeURIComponent(form.name)}`)
                     .then(res => res.json())

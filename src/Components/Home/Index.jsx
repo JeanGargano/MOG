@@ -21,16 +21,16 @@ const Home = () => {
                 // Crear una lista de formularios con su comedor asociado
                 const formTitles = formulariosSeleccionados.flatMap(entry =>
                     entry.formularios.map(formSel => {
-                        // Buscar el formulario completo en el archivo JSON
                         const fullForm = data.find(f => f.id === formSel.id);
                         return fullForm
                             ? {
                                 id: formSel.id,
                                 title: fullForm.title,
-                                comedorNombre: entry.comedor.nombre
+                                comedorNombre: entry.comedor.nombre,
+                                comedorId: entry.comedor.id, // Agrega esto para crear una key única
                             }
                             : null;
-                    }).filter(Boolean) // Eliminar posibles nulls si algún id no se encuentra
+                    }).filter(Boolean)
                 );
 
                 setForms(formTitles);
@@ -45,9 +45,10 @@ const Home = () => {
     }, [formulariosSeleccionados]);
 
 
-    const handleFormClick = (formId) => {
-        navigate(`/form/${formId}`);
+    const handleFormClick = (formId, comedorNombre) => {
+        navigate(`/form/${formId}`, { state: { comedorNombre } });
     };
+
 
     return (
         <>
@@ -64,9 +65,9 @@ const Home = () => {
                         <ul className={styles.formList}>
                             {forms.map((form) => (
                                 <li
-                                    key={form.id}
+                                    key={`${form.id}-${form.comedorId}`} // ← Key única por formulario y comedor
                                     className={styles.formItem}
-                                    onClick={() => handleFormClick(form.id)}
+                                    onClick={() => handleFormClick(form.id, form.comedorNombre)}
                                 >
                                     {form.title} – {form.comedorNombre}
                                 </li>
