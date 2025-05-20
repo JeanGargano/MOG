@@ -6,11 +6,11 @@ import ProtectedRoute from "./Components/PrivateRoute/Index"
 import History from "./Components/History/Index";
 import HistoryForms from "./Components/HistoryForms/index";
 import SelectPreferences from "./Components/SelectPreferences/Index";
+import Admin from './Components/Admin/Index';
 import { UserProvider } from "./Context/userContext";
 import './index.css';
 
 const App = () => {
-    const user = { isAdmin: true };
 
     return (
         // Envolvemos la aplicación con el UserProvider para acceder al contexto global
@@ -21,12 +21,13 @@ const App = () => {
                     <Route path="/login" element={<Login />} />
 
                     {/* Rutas protegidas para admins */}
-                    <Route element={<ProtectedRoute isAdmin={user.isAdmin} />}>
+                    <Route element={<ProtectedRoute />}>
                         <Route path="/settings" element={<SelectPreferences />} />
                         <Route path="/home" element={<Home />} />
                         <Route path="/form/:id" element={<Form />} />
                         <Route path="/history" element={<History />} />
                         <Route path="/form-history/:formIndex/:realizacionIndex/:encuestadoIndex" element={<HistoryForms />} />
+                        <Route path="/admin" element={<Admin />} />
                     </Route>
                 </Routes>
             </Router>

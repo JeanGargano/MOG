@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Form.module.css";
 import Header from "../Header/Index";
 import { useUser } from "../../Context/userContext";
@@ -7,6 +7,7 @@ import { useUser } from "../../Context/userContext";
 const Form = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, comedores } = useUser();
     const [formDetails, setFormDetails] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,10 @@ const Form = () => {
                 if (!stored) return;
 
                 const seleccionados = JSON.parse(stored);
+                const comedorNombre = location.state?.comedorNombre;
+
                 const match = seleccionados.find((entry) =>
+                    entry.comedor.nombre === comedorNombre &&
                     entry.formularios.some((f) => f.id === id)
                 );
 
@@ -43,7 +47,8 @@ const Form = () => {
         };
 
         loadComedor();
-    }, [id]);
+    }, [id, location.state]);
+
 
     useEffect(() => {
         const loadFormDetails = async () => {
