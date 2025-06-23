@@ -1,10 +1,11 @@
-// Components/Admin/CrudEncargados.jsx
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     getEncargado,
     crearEncargado,
     agregarCampos,
+    listarComedoresPorIds
 } from "../Services";
+import SeleccionarPais from "../../SelectPaisCiudad/SeleccionarPais/Index";
 import styles from "./CrudEncargados.module.css";
 
 const CrudEncargados = () => {
@@ -19,6 +20,30 @@ const CrudEncargados = () => {
         isAdmin: false,
     });
     const [resultado, setResultado] = useState(null);
+    const [resultadoFormateado, setResultadoFormateado] = useState(null);
+
+    useEffect(() => {
+        const procesarResultado = async () => {
+            if (resultado && (resultado.result || resultado)._id) {
+                const datos = resultado.result || resultado;
+                if (Array.isArray(datos.comedores) && datos.comedores.length > 0) {
+                    const res = await listarComedoresPorIds(datos.comedores);
+                    if (Array.isArray(res) && res.length > 0) {
+                        const nombresComedores = res.map(c => c.nombre);
+                        const enriquecido = {
+                            ...datos,
+                            comedores: nombresComedores,
+                        };
+                        setResultadoFormateado(enriquecido);
+                        return;
+                    }
+                }
+                setResultadoFormateado(datos);
+            }
+        };
+
+        procesarResultado();
+    }, [resultado]);
 
     const manejarGetEncargado = async () => {
         const res = await getEncargado(identificacion);
@@ -31,11 +56,24 @@ const CrudEncargados = () => {
             comedores: datos.comedores
                 .split(",")
                 .map((id) => id.trim())
-                .filter(Boolean), // Elimina entradas vacías
+                .filter(Boolean),
         };
 
         const res = await crearEncargado(datosConComedores);
         setResultado(res);
+
+        if (res?.message === "Encargado creado exitosamente") {
+            setIdentificacion("");
+            setDatos({
+                nombreCompleto: "",
+                identificacion: "",
+                comedores: "",
+                pais: "",
+                telefono: "",
+                contraseña: "",
+                isAdmin: false,
+            });
+        }
     };
 
 
@@ -53,32 +91,41 @@ const CrudEncargados = () => {
     };
 
     const renderResultado = (data) => {
-        if (!data || typeof data !== "object") return <p>No hay datos para mostrar.</p>;
-
-        // Campos a excluir
+        if (!data || typeof data !== "object") {
+            return <p>No hay datos para mostrar.</p>;
+        }
         const camposExcluir = ["_id", "__v", "contraseña"];
+        const resultado = data.result || data;
+        const renderFila = (key, value) => (
+            <tr key={key}>
+                <td className={styles.keyCell}>{key}</td>
+                <td className={styles.valueCell}>
+                    {Array.isArray(value)
+                        ? value.join(", ")
+                        : typeof value === "object" && value !== null
+                            ? JSON.stringify(value, null, 2)
+                            : value?.toString()}
+                </td>
+            </tr>
+        );
 
         return (
             <table className={styles.resultTable}>
+                <thead>
+                    <tr>
+                        <th className={styles.keyCell}>Clave</th>
+                        <th className={styles.keyCell}>Valor</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    {Object.entries(data)
+                    {Object.entries(resultado)
                         .filter(([key]) => !camposExcluir.includes(key))
-                        .map(([key, value]) => (
-                            <tr key={key}>
-                                <td className={styles.keyCell}>{key}</td>
-                                <td className={styles.valueCell}>
-                                    {Array.isArray(value)
-                                        ? value.join(", ")
-                                        : typeof value === "object" && value !== null
-                                            ? JSON.stringify(value)
-                                            : value?.toString()}
-                                </td>
-                            </tr>
-                        ))}
+                        .map(([key, value]) => renderFila(key, value))}
                 </tbody>
             </table>
         );
     };
+
 
     return (
         <div className={styles.container}>
@@ -87,13 +134,14 @@ const CrudEncargados = () => {
             <div className={styles.formGroup}>
                 <label className={styles.label}>Identificación:</label>
                 <input
-                    className={styles.input}
-                    type="text"
+                    className={`${styles.input} noSpinner`}
+                    type="number"
                     value={identificacion}
                     onChange={(e) => {
                         setIdentificacion(e.target.value);
                         setDatos({ ...datos, identificacion: e.target.value });
                     }}
+                    onWheel={(e) => e.target.blur()}
                     placeholder="Ej. 123456789"
                 />
             </div>
@@ -120,22 +168,20 @@ const CrudEncargados = () => {
             </div>
 
             <div className={styles.formGroup}>
-                <label className={styles.label}>País:</label>
-                <input
-                    className={styles.input}
-                    type="text"
-                    value={datos.pais}
-                    onChange={(e) => setDatos({ ...datos, pais: e.target.value })}
+                <SeleccionarPais
+                    pais={datos.pais}
+                    setPais={(nuevoPais) => setDatos(prev => ({ ...prev, pais: nuevoPais }))}
                 />
             </div>
 
             <div className={styles.formGroup}>
                 <label className={styles.label}>Teléfono:</label>
                 <input
-                    className={styles.input}
+                    className={`${styles.input} noSpinner`}
                     type="number"
                     value={datos.telefono}
                     onChange={(e) => setDatos({ ...datos, telefono: e.target.value })}
+                    onWheel={(e) => e.target.blur()}
                 />
             </div>
 
@@ -172,13 +218,13 @@ const CrudEncargados = () => {
                 </button>
             </div>
 
-            {resultado && (
+            {resultado && resultadoFormateado && (
                 <div className={styles.resultContainer}>
                     <h3>Resultado:</h3>
-                    {renderResultado(resultado)}
+                    {renderResultado(resultadoFormateado)}
                 </div>
             )}
-        </div>
+        </div >
     );
 };
 

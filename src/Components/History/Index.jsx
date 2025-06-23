@@ -10,30 +10,24 @@ const History = () => {
     useEffect(() => {
         const fetchAnswers = async () => {
             try {
-                const response = await fetch("../../../Backend/Respuestas.json");
+                const storedData = localStorage.getItem("respuestas");
 
-                if (!response.ok) {
-                    throw new Error(`Error de red: ${response.status}`);
-                }
-
-                const text = await response.text();
-
-                if (!text.trim()) {
-                    alert("⚠️ El archivo Respuestas.json está vacío1.");
+                if (!storedData) {
+                    alert("⚠️ No hay respuestas guardadas en localStorage.");
                     return;
                 }
 
-                const data = JSON.parse(text);
+                const data = JSON.parse(storedData);
 
                 if (!Array.isArray(data) || data.length === 0) {
-                    alert("⚠️ No hay respuestas que mostrar en el archivo Respuestas.json.");
+                    alert("⚠️ No hay respuestas que mostrar en localStorage.");
                     return;
                 }
 
                 setHistory(data);
             } catch (error) {
-                console.error("Error al cargar Respuestas.json:", error);
-                alert("❌ No se pudo cargar el archivo de respuestas.");
+                console.error("Error al cargar respuestas desde localStorage:", error);
+                alert("❌ No se pudo cargar la colección de respuestas.");
             }
         };
 
@@ -48,46 +42,46 @@ const History = () => {
 
     const handleUpload = async () => {
         try {
-            const response = await fetch("../../../Backend/Respuestas.json");
+            const storedData = localStorage.getItem("respuestas");
 
-            if (!response.ok) {
-                throw new Error("No se pudo cargar Respuestas.json. Código: " + response.status);
-            }
-
-            const text = await response.text(); // primero obtenemos texto plano
-
-            if (!text.trim()) {
-                alert("⚠️ El archivo Respuestas.json está vacío. No se enviará ninguna información.");
+            if (!storedData || !storedData.trim()) {
+                alert("⚠️ No hay datos válidos guardados en localStorage.");
                 return;
             }
 
-            const data = JSON.parse(text);
+            const data = JSON.parse(storedData);
 
             if (!Array.isArray(data) || data.length === 0) {
-                alert("⚠️ El archivo Respuestas.json no tiene formularios válidos.");
+                alert("⚠️ La colección de respuestas no tiene formularios válidos.");
                 return;
             }
 
             const uploadResponse = await fetch('http://localhost:5001/migrateData', {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
             });
 
             const result = await uploadResponse.json();
 
             if (uploadResponse.ok) {
                 alert(`✅ ${result.message}\nTotal migradas: ${result.cantidad}`);
+
+                localStorage.removeItem("respuestas");
+
             } else {
                 alert(`❌ Error: ${result.error}`);
             }
-            navigate(`/home`)
+
+            navigate(`/home`);
         } catch (error) {
             console.error('Error al cargar o enviar los datos:', error);
-            alert('❌ Error al conectar con el servidor o al leer el archivo.');
+            alert('❌ Error al conectar con el servidor o al leer los datos del localStorage.');
         }
     };
 
-
-    // Contar todas las realizaciones
     const totalRealizaciones = history.reduce((acc, form) => {
         return acc + (form.Realizaciones?.reduce((sum, realizacion) => {
             return sum + (realizacion.encuestados?.length || 0);

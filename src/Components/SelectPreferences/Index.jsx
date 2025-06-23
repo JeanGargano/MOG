@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import styles from "./SelectPreferences.module.css";
 import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
+import Header from "../Header/Index";
 
 const SelectPreferences = () => {
     const navigate = useNavigate();
@@ -25,6 +26,14 @@ const SelectPreferences = () => {
 
     const tokenClient = useRef(null);
     const accessToken = useRef(null);
+
+    const [isAdmin, setIsAdmin] = useState("");
+
+    useEffect(() => {
+        const adminFlag = localStorage.getItem("user");
+        const user = adminFlag ? JSON.parse(adminFlag) : {};
+        setIsAdmin(user.isAdmin === true);
+    }, []);
 
     useEffect(() => {
         const initializeGapi = async () => {
@@ -142,7 +151,7 @@ const SelectPreferences = () => {
             const yaExiste = prev.find(item => item.comedor.id === comedorIdSeleccionado);
 
             if (yaExiste) {
-                // Actualiza los formularios para ese comedor (sin duplicar)
+                // Actualiza los formularios para ese comedor (sin duplicados)
                 return prev.map(item => {
                     if (item.comedor.id === comedorIdSeleccionado) {
                         const nuevosFormularios = formulariosSeleccionados.filter(
@@ -208,63 +217,74 @@ const SelectPreferences = () => {
         comedorSeleccionadoRef.current = comedorIdSeleccionado;
     }, [comedorIdSeleccionado]);
 
+    const handleLogout = () => {
+        const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");
+        if (confirmLogout) {
+            localStorage.clear();
+            sessionStorage.clear();
+            navigate("/login");
+        }
+    }
 
     return (
-        <div className={styles.pageContainer}>
-            <h2>Seleccionar Preferencias</h2>
+        <div className={styles.selectPreferencesContainer}>
+            {isAdmin && <Header />}
+            <div className={styles.pageContainer}>
+                <h2>Seleccionar Preferencias</h2>
 
-            <div className={styles.inputGroup}>
-                <label>Colaborador:</label>
-                <input type="text" value={user?.nombreCompleto || ""} disabled />
+                <div className={styles.inputGroup}>
+                    <label>Colaborador:</label>
+                    <input type="text" value={user?.nombreCompleto || ""} disabled />
 
-                <label>Comedor:</label>
-                <select
-                    value={comedorIdSeleccionado}
-                    onChange={(e) => setComedorIdSeleccionado(e.target.value)}
-                >
-                    <option value="">Selecciona un comedor</option>
-                    {comedoresDisponibles.map((comedor) => (
-                        <option key={comedor._id} value={comedor._id}>
-                            {comedor.nombre}
-                        </option>
-                    ))}
-                </select>
+                    <label>Comedor:</label>
+                    <select
+                        value={comedorIdSeleccionado}
+                        onChange={(e) => setComedorIdSeleccionado(e.target.value)}
+                    >
+                        <option value="">Selecciona un comedor</option>
+                        {comedoresDisponibles.map((comedor) => (
+                            <option key={comedor._id} value={comedor._id}>
+                                {comedor.nombre}
+                            </option>
+                        ))}
+                    </select>
 
-                <label>País:</label>
-                <input type="text" value={comedorPais} disabled />
+                    <label>País:</label>
+                    <input type="text" value={comedorPais} disabled />
 
-                <label>Seleccionar formulario:</label>
-                <button onClick={handleOpenDrivePicker}>
-                    Seleccionar formularios desde Drive
-                </button>
-            </div>
+                    <label>Seleccionar formulario:</label>
+                    <button onClick={handleOpenDrivePicker}>
+                        Seleccionar formularios desde Drive
+                    </button>
+                </div>
 
-            <div className={styles.inputGroup}>
-                {Object.entries(formulariosPorComedor).map(([comedorId, formularios]) => {
-                    const comedorNombre = comedoresDisponibles.find(c => c._id === comedorId)?.nombre || "Comedor desconocido";
-                    return formularios.map((form) => (
-                        <li key={form.id}>
-                            {form.name} - {comedorNombre}
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setFormulariosPorComedor((prev) => ({
-                                        ...prev,
-                                        [comedorId]: (prev[comedorId] || []).filter(f => f.id !== form.id),
-                                    }));
-                                }}
-                                style={{ marginLeft: "10px", color: "red" }}
-                            >
-                                Quitar
-                            </button>
-                        </li>
-                    ));
-                })}
-            </div>
+                <div className={styles.inputGroup}>
+                    {Object.entries(formulariosPorComedor).map(([comedorId, formularios]) => {
+                        const comedorNombre = comedoresDisponibles.find(c => c._id === comedorId)?.nombre || "Comedor desconocido";
+                        return formularios.map((form) => (
+                            <li key={form.id}>
+                                {form.name} - {comedorNombre}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormulariosPorComedor((prev) => ({
+                                            ...prev,
+                                            [comedorId]: (prev[comedorId] || []).filter(f => f.id !== form.id),
+                                        }));
+                                    }}
+                                    style={{ marginLeft: "10px", color: "red" }}
+                                >
+                                    Quitar
+                                </button>
+                            </li>
+                        ));
+                    })}
+                </div>
 
-            <div className={styles.buttonGroup}>
-                <button onClick={handleSave}>Guardar</button>
-                <button onClick={() => navigate("/")}>Cancelar</button>
+                <div className={styles.buttonGroup}>
+                    <button onClick={handleSave}>Guardar</button>
+                    <button onClick={handleLogout}>Cancelar</button>
+                </div>
             </div>
         </div>
     );

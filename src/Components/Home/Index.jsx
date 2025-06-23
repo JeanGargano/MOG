@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../Context/userContext";
 import styles from "./Home.module.css";
@@ -9,7 +9,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const navigate = useNavigate();
-    const { formulariosSeleccionados } = useUser(); // <-- Trae los formularios seleccionados
+    const { formulariosSeleccionados } = useUser();
 
     useEffect(() => {
         const loadForms = async () => {
@@ -18,7 +18,7 @@ const Home = () => {
                 if (!response.ok) throw new Error("No se pudo cargar el archivo.");
                 const data = await response.json();
 
-                // Crear una lista de formularios con su comedor asociado
+                // se crea una lista de formularios con su comedor asociado
                 const formTitles = formulariosSeleccionados.flatMap(entry =>
                     entry.formularios.map(formSel => {
                         const fullForm = data.find(f => f.id === formSel.id);
@@ -27,7 +27,7 @@ const Home = () => {
                                 id: formSel.id,
                                 title: fullForm.title,
                                 comedorNombre: entry.comedor.nombre,
-                                comedorId: entry.comedor.id, // Agrega esto para crear una key única
+                                comedorId: entry.comedor.id,
                             }
                             : null;
                     }).filter(Boolean)
@@ -65,7 +65,7 @@ const Home = () => {
                         <ul className={styles.formList}>
                             {forms.map((form) => (
                                 <li
-                                    key={`${form.id}-${form.comedorId}`} // ← Key única por formulario y comedor
+                                    key={`${form.id}-${form.comedorId}`}
                                     className={styles.formItem}
                                     onClick={() => handleFormClick(form.id, form.comedorNombre)}
                                 >

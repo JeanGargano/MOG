@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import styles from "./Form.module.css";
 import Header from "../Header/Index";
 import { useUser } from "../../Context/userContext";
+import { guardarRespuestasEnStorage } from "../Services/Services";
 
 const Form = () => {
     const { id } = useParams();
@@ -63,7 +64,6 @@ const Form = () => {
 
                 setFormDetails(foundForm);
 
-                // Inicializar respuestas
                 const initialResponses = foundForm.fields.reduce((acc, field) => {
                     acc[field.title] = field.type === "CHECKBOX" ? [] : "";
                     return acc;
@@ -95,7 +95,7 @@ const Form = () => {
         });
     };
 
-    const handleSaveAnswers = async () => {
+    const handleSaveAnswers = () => {
         if (!user || !comedor) {
             alert("Faltan datos del colaborador o comedor.");
             return;
@@ -123,7 +123,7 @@ const Form = () => {
             nombre: formDetails.title,
             Realizaciones: [
                 {
-                    id_encargado: user.nombreCompleto || colaborador, // si es objeto o string
+                    id_encargado: user.nombreCompleto || colaborador,
                     id_comedor: comedor._id || comedor.nombre,
                     encuestados: [nuevoEncuestado]
                 }
@@ -132,25 +132,16 @@ const Form = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:5001/guardarRespuestaEnArchivo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(nuevoFormulario)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                alert(result.message);
-                navigate("/home");
-            } else {
-                throw new Error(result.error || 'Error al guardar las respuestas en el backend');
-            }
+            guardarRespuestasEnStorage(nuevoFormulario);
+            alert("Datos guardados correctamente en localStorage");
+            navigate("/home");
         } catch (error) {
-            console.error('Error al enviar los datos:', error);
-            alert('Hubo un problema al guardar las respuestas');
+            console.error("Error al guardar localmente:", error);
+            alert("Hubo un problema al guardar los datos localmente");
         }
     };
+    if (loading) return <div className={styles.loading}>Cargando...</div>;
+    if (error) return <div className={styles.error}>{error}</div>;
 
     return (
         <>
@@ -202,9 +193,10 @@ const Form = () => {
                                 <label className={styles.formLabel}>Edad:</label>
                                 <input
                                     type="number"
-                                    className={styles.textInput}
+                                    className={`${styles.textInput} noSpinner`}
                                     value={responses["Edad"]}
                                     onChange={(e) => handleResponseChange("Edad", e.target.value)}
+                                    onWheel={(e) => e.target.blur()}
                                 />
                             </div>
 

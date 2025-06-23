@@ -13,8 +13,14 @@ const HistoryForms = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch("../../../Backend/Respuestas.json");
-                const data = await response.json();
+                const storedData = localStorage.getItem("respuestas");
+
+                if (!storedData) {
+                    alert("⚠️ No hay respuestas guardadas en localStorage.");
+                    return;
+                }
+
+                const data = JSON.parse(storedData);
 
                 const selectedForm = data[parseInt(formIndex)];
                 if (selectedForm) {
@@ -29,7 +35,8 @@ const HistoryForms = () => {
                     }
                 }
             } catch (error) {
-                console.error("Error al cargar el archivo Respuestas.json:", error);
+                console.error("Error al cargar datos desde localStorage:", error);
+                alert("❌ No se pudo cargar la colección de respuestas.");
             }
         };
 

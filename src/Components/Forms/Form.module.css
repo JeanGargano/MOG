@@ -3,19 +3,27 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  max-width: 600px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  margin-top: 50px;
-  padding: 30px 20px;
-  background: linear-gradient(135deg, #4c3aff, #764ba2);
+  margin-top: 40px;
+  padding: 20px;
+  background: linear-gradient(to right, #e0f2fe, #dbeafe);
   border-radius: 25px;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
   min-height: 100vh;
   font-family: "Lato", sans-serif;
   font-weight: bold;
+  box-sizing: border-box;
 }
 
-/* Alertas */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+    margin-top: 20px;
+  }
+}
+
 .alertInfo,
 .alertError {
   padding: 12px 16px;
@@ -28,36 +36,47 @@
 }
 
 .alertInfo {
-  background-color: #dff5ff;
-  color: #116686;
+  background-color: #dbeafe;
+  color: #1e3a8a;
 }
 
 .alertError {
-  background-color: #ffe0e3;
-  color: #a82837;
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
-/* Título */
 .title {
-  font-size: 32px;
-  color: #fff9ec;
-  margin-bottom: 30px;
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
+  color: #0c4a6e;
+  margin-bottom: 30px;
   text-transform: uppercase;
 }
 
-/* Contenedor de formulario */
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+}
+
 .formWrapper {
   background-color: #ffffff;
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
   width: 100%;
-  max-width: 500px;
   text-transform: uppercase;
+  box-sizing: border-box;
 }
 
-/* Grupos de inputs */
+@media (max-width: 768px) {
+  .formWrapper {
+    padding: 20px;
+  }
+}
+
 .formGroup {
   margin-bottom: 25px;
   display: flex;
@@ -82,25 +101,24 @@
 
 .textInput:focus {
   outline: none;
-  border: 2px solid #bbaaff;
+  border: 2px solid #93c5fd;
   background-color: #fff;
 }
 
-/* Checkbox & radio */
 .checkboxGroup {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
 .checkboxInput,
 .radioInput {
   transform: scale(1.3);
-  accent-color: #6a56ff;
+  accent-color: #2563eb;
 }
 
-/* Tabla */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -120,14 +138,25 @@
 }
 
 .table th {
-  background-color: #f2f0ff;
-  color: #2e217a;
+  background-color: #eff6ff;
+  color: #1e3a8a;
   font-weight: 700;
 }
 
-/* Botón */
+@media (max-width: 600px) {
+  .table th,
+  .table td {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+}
+
 .submitButton {
-  background-color: #6a56ff;
+  background-color: #2563eb;
   color: #ffffff;
   padding: 14px;
   border: none;
@@ -137,9 +166,15 @@
   font-weight: bold;
   text-transform: uppercase;
   width: 100%;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .submitButton:hover {
-  background-color: #4f3cd0;
+  background-color: #1e40af;
+}
+
+.submitButton:active {
+  transform: scale(0.97);
 }

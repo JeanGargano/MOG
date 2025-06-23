@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null); // objeto con info completa del encargado
   const [comedores, setComedores] = useState({ nombre: "", pais: "" });
   const [formulariosSeleccionados, setFormulariosSeleccionados] = useState([]);
-  const [formulariosPorComedor, setFormulariosPorComedor] = useState({}); // NUEVO
+  const [formulariosPorComedor, setFormulariosPorComedor] = useState({});
 
   // Cargar datos desde localStorage
   useEffect(() => {
@@ -54,6 +54,5 @@ export const UserProvider = ({ children }) => {
     </UserContext.Provider>
   );
 };
-
 // Hook para usar el contexto
 export const useUser = () => useContext(UserContext);

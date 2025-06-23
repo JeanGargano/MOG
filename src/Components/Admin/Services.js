@@ -1,5 +1,4 @@
-// src/services/encargadoService.js
-const API_URL = "http://localhost:5001"; // Ajusta el dominio/puerto si es necesario
+const API_URL = "http://localhost:5001";
 
 export const getEncargado = async (identificacion) => {
   const response = await fetch(
