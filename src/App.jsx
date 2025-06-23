@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Home from "./Components/Home/Index"
 import Login from "./Components/Login/Index";
 import Form from "./Components/Forms/Index";
@@ -8,19 +9,36 @@ import HistoryForms from "./Components/HistoryForms/index";
 import SelectPreferences from "./Components/SelectPreferences/Index";
 import Admin from './Components/Admin/Index';
 import { UserProvider } from "./Context/userContext";
-import './index.css';
+
+
+const BlockBackNavigation = () => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const handlePopState = () => {
+            // evita back navigation
+            navigate(location.pathname, { replace: true });
+        };
+        window.addEventListener('popstate', handlePopState);
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, [location.pathname, navigate]);
+
+    return null;
+};
+
 
 const App = () => {
-
     return (
-        // Envolvemos la aplicación con el UserProvider para acceder al contexto global
         <UserProvider>
             <Router>
+                <BlockBackNavigation />
+
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/login" element={<Login />} />
-
-                    {/* Rutas protegidas para admins */}
                     <Route element={<ProtectedRoute />}>
                         <Route path="/settings" element={<SelectPreferences />} />
                         <Route path="/home" element={<Home />} />

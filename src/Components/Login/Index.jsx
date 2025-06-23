@@ -28,7 +28,7 @@ const Login = () => {
             if (response.ok) {
                 setUser(data.encargado);
                 if (data.encargado.isAdmin) {
-                    navigate("/admin"); // o el panel principal de admin
+                    navigate("/admin");
                 } else {
                     navigate("/settings");
                 }
@@ -49,10 +49,11 @@ const Login = () => {
                 <form onSubmit={handleSubmit}>
                     <input
                         type="number"
-                        className={styles.inputField}
+                        className={`${styles.inputField} noSpinner`}
                         placeholder="Identificación"
                         value={identificacion}
                         onChange={(e) => setIdentificacion(e.target.value)}
+                        onWheel={(e) => e.target.blur()}
                         required
                     />
                     <input

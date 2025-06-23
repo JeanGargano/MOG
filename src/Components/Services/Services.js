@@ -34,3 +34,43 @@ export const createAnswer = async (formData) => {
     throw error;
   }
 };
+
+export function guardarRespuestasEnStorage(nuevoFormulario) {
+  let json = JSON.parse(localStorage.getItem("respuestas")) || [];
+
+  const encuestaExistente = json.find(
+    (encuesta) =>
+      encuesta.nombre === nuevoFormulario.nombre &&
+      encuesta.id_formulario === nuevoFormulario.id_formulario,
+  );
+
+  if (encuestaExistente) {
+    for (const nuevaRealizacion of nuevoFormulario.Realizaciones) {
+      const realizacionExistente = encuestaExistente.Realizaciones.find(
+        (r) =>
+          r.id_encargado === nuevaRealizacion.id_encargado &&
+          r.id_comedor === nuevaRealizacion.id_comedor,
+      );
+
+      if (realizacionExistente) {
+        for (const encuestado of nuevaRealizacion.encuestados) {
+          const yaExiste = realizacionExistente.encuestados.some(
+            (e) =>
+              e.nombreCompleto === encuestado.nombreCompleto &&
+              e.fechaRealizacion === encuestado.fechaRealizacion,
+          );
+          if (!yaExiste) {
+            realizacionExistente.encuestados.push(encuestado);
+          }
+        }
+      } else {
+        encuestaExistente.Realizaciones.push(nuevaRealizacion);
+      }
+    }
+  } else {
+    json.push(nuevoFormulario);
+  }
+
+  localStorage.setItem("respuestas", JSON.stringify(json));
+  console.log("✅ Formulario guardado en localStorage");
+}

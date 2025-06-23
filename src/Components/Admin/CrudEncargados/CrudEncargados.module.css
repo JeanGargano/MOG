@@ -1,125 +1,172 @@
 .container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px 25px;
-  background: linear-gradient(135deg, #4c3aff, #764ba2);
-  border-radius: 25px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  font-family: "Lato", sans-serif;
-  color: #fff;
-  font-weight: bold;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 20px;
+  background: linear-gradient(to right, #e0f2fe, #dbeafe);
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  min-height: 100vh;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 15px;
+    margin-top: 20px;
+  }
 }
 
 .title {
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
-  font-size: 28px;
+  color: #0c4a6e;
+  margin-bottom: 30px;
   text-transform: uppercase;
-  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
 }
 
 .formGroup {
+  margin-bottom: 25px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  width: 100%;
+  gap: 8px;
 }
 
 .label {
+  font-weight: 700;
+  color: #2e217a;
   font-size: 14px;
-  color: #dcd9f0;
 }
 
 .input {
-  padding: 10px 12px;
+  padding: 12px;
+  font-size: 15px;
+  border: 1px solid #ddd;
   border-radius: 12px;
-  border: none;
-  font-size: 14px;
-  font-weight: 600;
-  outline: none;
-  color: #4c3aff;
-  background-color: #f0eaff;
+  background-color: #f9f9f9;
   transition: border 0.3s ease;
 }
 
 .input:focus {
-  border: 2px solid #bbaaff;
+  outline: none;
+  border: 2px solid #93c5fd;
   background-color: #fff;
 }
 
 .formGroupCheckbox {
-  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
 .labelCheckbox {
-  font-weight: 700;
-  cursor: pointer;
-  user-select: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #2e217a;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 15px;
+  cursor: pointer;
+}
+
+.labelCheckbox input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: #2563eb;
 }
 
 .buttonGroup {
   display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 20px;
   flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+  width: 100%;
 }
 
 .button {
-  background-color: #6a56ff;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 12px 20px;
   border: none;
-  padding: 12px 24px;
   border-radius: 14px;
-  color: white;
   font-weight: bold;
   text-transform: uppercase;
   cursor: pointer;
-  flex: 1 1 150px;
-  transition: background-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .button:hover {
-  background-color: #4f3cd0;
+  background-color: #1e40af;
+}
+
+.button:active {
+  transform: scale(0.97);
 }
 
 .resultContainer {
-  margin-top: 25px;
-  background-color: #ffffff;
-  color: #2e217a;
-  border-radius: 20px;
-  padding: 20px;
-  font-weight: 600;
-  text-transform: none;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
-}
-
-.resultContainer h3 {
-  margin-bottom: 15px;
-  text-transform: uppercase;
+  margin-top: 30px;
+  width: 100%;
 }
 
 .resultTable {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
 }
 
-.resultTable tr:nth-child(even) {
-  background-color: #f9f7ff;
+.resultTable th,
+.resultTable td {
+  border: 1px solid #e5e7eb;
+  padding: 12px;
+  text-align: center;
 }
 
 .keyCell {
+  background-color: #eff6ff;
+  color: #1e3a8a;
   font-weight: 700;
-  padding: 10px;
-  width: 40%;
-  text-transform: capitalize;
+  text-transform: uppercase;
 }
 
 .valueCell {
-  padding: 10px;
-  word-wrap: break-word;
+  color: #1f2937;
+  background-color: #f9fafb;
+}
+
+@media (max-width: 768px) {
+  .resultTable {
+    font-size: 13px;
+  }
+
+  .resultTable th,
+  .resultTable td {
+    padding: 10px;
+  }
 }

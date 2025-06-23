@@ -4,15 +4,16 @@ import Button from "../Button/Index";
 import styles from "./Header.module.css";
 
 function Header() {
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState("");
     const location = useLocation();
     const navigate = useNavigate();
     const isHome = location.pathname === "/home";
     const isntHome = !isHome;
 
     useEffect(() => {
-        const adminFlag = localStorage.getItem("isAdmin");
-        setIsAdmin(adminFlag === "true");
+        const adminFlag = localStorage.getItem("user");
+        const user = adminFlag ? JSON.parse(adminFlag) : {};
+        setIsAdmin(user.isAdmin === true);
     }, []);
 
     const handleBack = () => navigate(-1);
@@ -24,7 +25,7 @@ function Header() {
         const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");
         if (confirmLogout) {
             localStorage.clear();
-            sessionStorage.clear(); // si usas sessionStorage también
+            sessionStorage.clear();
             navigate("/login");
         }
     };
@@ -42,11 +43,11 @@ function Header() {
                 {isntHome && (
                     <>
                         <Button onClick={handleHome}>Home</Button>
-                        <Button onClick={handleBack}>Volver</Button>
                     </>
                 )}
-                <Button onClick={handleLogout}>Cerrar Sesión</Button>
                 {isAdmin && <Button onClick={handleSettings}>Preferencias</Button>}
+                {isAdmin && <Button onClick={() => navigate("/admin")}>Admin</Button>}
+                <Button onClick={handleLogout}>Cerrar Sesión</Button>
             </nav>
         </header>
     );
