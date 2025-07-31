@@ -3,13 +3,15 @@ import {
     crearComedor,
     listarComedores,
     listarComedoresPorIds,
+    listarComedoresPorNombres
 } from "../Services";
+import Header from "../../Header/Index";
 import SelectPaisCiudad from "../../SelectPaisCiudad/Index";
 import styles from "./CrudComedores.module.css";
 
 const CrudComedores = () => {
     const [datosCrear, setDatosCrear] = useState({ nombre: "", pais: "" });
-    const [ids, setIds] = useState("");
+    const [nombre, setNombre] = useState("");
     const [resultado, setResultado] = useState(null);
 
     const manejarCrearComedor = async () => {
@@ -27,11 +29,7 @@ const CrudComedores = () => {
     };
 
     const manejarListarPorIds = async () => {
-        const arrayIds = ids
-            .split(",")
-            .map((id) => id.trim())
-            .filter(Boolean);
-        const res = await listarComedoresPorIds(arrayIds);
+        const res = await listarComedoresPorNombres(nombre);
         setResultado(res);
     };
 
@@ -70,50 +68,53 @@ const CrudComedores = () => {
 
 
     return (
-        <div className={styles.container}>
-            <h2 className={styles.title}>Gestor de Comedores</h2>
+        <>
+            <Header />
+            <div className={styles.container}>
+                <h2 className={styles.title}>Gestor de Comedores</h2>
 
-            {/* Selector modular de país y ciudad */}
-            <div className={styles.formGroup}>
-                <SelectPaisCiudad datos={datosCrear} setDatos={setDatosCrear} />
+                {/* Selector modular de país y ciudad */}
+                <div className={styles.formGroup}>
+                    <SelectPaisCiudad datos={datosCrear} setDatos={setDatosCrear} />
 
-            </div>
-
-            {/* Buscar por IDs */}
-            <div className={styles.formGroup}>
-                <label className={styles.label}>
-                    Buscar Comedores por IDs (separados por coma):
-                </label>
-                <input
-                    className={styles.input}
-                    type="text"
-                    value={ids}
-                    onChange={(e) => setIds(e.target.value)}
-                    placeholder="id1, id2, id3..."
-                />
-            </div>
-
-            {/* Botones */}
-            <div className={styles.buttonGroup}>
-                <button className={styles.button} onClick={manejarCrearComedor}>
-                    Crear Comedor
-                </button>
-                <button className={styles.button} onClick={manejarListarComedores}>
-                    Listar Todos
-                </button>
-                <button className={styles.button} onClick={manejarListarPorIds}>
-                    Buscar por IDs
-                </button>
-            </div>
-
-            {/* Resultado */}
-            {resultado && (
-                <div className={styles.resultContainer}>
-                    <h3>Resultado:</h3>
-                    {renderResultado(resultado)}
                 </div>
-            )}
-        </div>
+
+                {/* Buscar por IDs */}
+                <div className={styles.formGroup}>
+                    <label className={styles.label}>
+                        Buscar Comedores por IDs (separados por coma):
+                    </label>
+                    <input
+                        className={styles.input}
+                        type="text"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                        placeholder="Nombre del comedor"
+                    />
+                </div>
+
+                {/* Botones */}
+                <div className={styles.buttonGroup}>
+                    <button className={styles.button} onClick={manejarCrearComedor}>
+                        Crear Comedor
+                    </button>
+                    <button className={styles.button} onClick={manejarListarComedores}>
+                        Listar Todos
+                    </button>
+                    <button className={styles.button} onClick={manejarListarPorIds}>
+                        Buscar por Nombre
+                    </button>
+                </div>
+
+                {/* Resultado */}
+                {resultado && (
+                    <div className={styles.resultContainer}>
+                        <h3>Resultado:</h3>
+                        {renderResultado(resultado)}
+                    </div>
+                )}
+            </div>
+        </>
     );
 };
 

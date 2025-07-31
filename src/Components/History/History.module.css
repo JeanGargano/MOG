@@ -11,12 +11,12 @@
   font-size: 1.875rem; /* text-3xl */
   font-weight: 800;
   text-transform: uppercase;
-  color: #1e3a8a; /* text-sky-900 */
+  color: white; /* text-sky-900 */
 }
 
 .counter {
   font-size: 1rem;
-  color: #334155; /* text-slate-700 */
+  color: white; /* text-slate-700 */
   font-weight: 600;
 }
 
@@ -29,7 +29,7 @@
 .emptyMessage {
   text-align: center;
   font-size: 1rem;
-  color: #6b7280; /* text-gray-500 */
+  color: white;
   font-style: italic;
   padding: 2.5rem 0;
 }

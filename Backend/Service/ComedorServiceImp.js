@@ -25,4 +25,11 @@ export class ComedorService {
   async findComedoresByIds(ids) {
     return await this.comedorRepository.findComedoresByIds(ids);
   }
+
+  async findComedoresByName(name) {
+    if (!name) {
+      throw new Error("El campo 'name' es obligatorio");
+    }
+    return await this.comedorRepository.findComedoresByName(name);
+  }
 }

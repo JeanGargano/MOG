@@ -169,4 +169,14 @@
   .resultTable td {
     padding: 10px;
   }
+  .sugerenciasList {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+  }
 }

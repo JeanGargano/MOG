@@ -59,3 +59,19 @@ export const listarComedoresPorIds = async (ids) => {
     return { error: error.message };
   }
 };
+
+export const listarComedoresPorNombres = async (nombre) => {
+  try {
+    const response = await fetch(
+      "http://localhost:5001/listar_comedor_nombre",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre }),
+      },
+    );
+    return response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
+};

@@ -1,4 +1,3 @@
-import React from "react";
 import CrudEncargados from "./CrudEncargados/Index";
 import CrudComedores from "./CrudComedores/Index";
 import Header from "../Header/Index";
