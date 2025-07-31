@@ -51,5 +51,8 @@ router.get("/listar_comedores", (req, res) =>
 router.post("/listar_comedor_Id", (req, res) =>
   comedorController.getComedoresByIds(req, res),
 );
+router.post("/listar_comedor_nombre", (req, res) =>
+  comedorController.findComedoresByName(req, res),
+);
 
 export default router;

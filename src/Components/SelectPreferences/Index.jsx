@@ -3,13 +3,14 @@ import styles from "./SelectPreferences.module.css";
 import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Index";
+import Swal from "sweetalert2";
 
 const SelectPreferences = () => {
     const navigate = useNavigate();
     const {
         user,
         setUser,
-        setComedor,
+        setComedores,
         setFormulariosSeleccionados,
         formulariosPorComedor,
         setFormulariosPorComedor
@@ -139,52 +140,28 @@ const SelectPreferences = () => {
     }, [comedorIdSeleccionado, comedoresDisponibles]);
 
     const handleSave = async () => {
-        const formulariosSeleccionados = formulariosPorComedor[comedorIdSeleccionado] || [];
-
-        if (!user?.nombreCompleto || !comedorIdSeleccionado || !comedorPais || formulariosSeleccionados.length === 0) {
+        if (!user?.nombreCompleto || Object.keys(formulariosPorComedor).length === 0) {
             alert("Por favor completa todos los campos y selecciona al menos un formulario.");
             return;
         }
-        // Guardar en el contexto la estructura completa
-        setFormulariosSeleccionados((prev) => {
-            // Verifica si ya existe el comedor
-            const yaExiste = prev.find(item => item.comedor.id === comedorIdSeleccionado);
 
-            if (yaExiste) {
-                // Actualiza los formularios para ese comedor (sin duplicados)
-                return prev.map(item => {
-                    if (item.comedor.id === comedorIdSeleccionado) {
-                        const nuevosFormularios = formulariosSeleccionados.filter(
-                            nuevo => !item.formularios.some(existing => existing.id === nuevo.id)
-                        );
-                        return {
-                            ...item,
-                            formularios: [...item.formularios, ...nuevosFormularios],
-                        };
-                    }
-                    return item;
-                });
-            } else {
-                // Agrega un nuevo comedor con sus formularios
-                return [
-                    ...prev,
-                    {
-                        comedor: {
-                            id: comedorIdSeleccionado,
-                            nombre: comedoresDisponibles.find(c => c._id === comedorIdSeleccionado)?.nombre || "",
-                            pais: comedorPais
-                        },
-                        formularios: formulariosSeleccionados
-                    }
-                ];
-            }
+        // Guardar todos los formularios de todos los comedores
+        setFormulariosSeleccionados(() => {
+            return Object.entries(formulariosPorComedor).map(([comedorId, formularios]) => {
+                const comedor = comedoresDisponibles.find(c => c._id === comedorId);
+                return {
+                    comedor: {
+                        id: comedorId,
+                        nombre: comedor?.nombre || "",
+                        pais: comedor?.pais || ""
+                    },
+                    formularios: formularios
+                };
+            });
         });
 
-
         try {
-            console.log("Formulario seleccionado:", formulariosSeleccionados);
-            console.log("Comedor seleccionado:", comedorIdSeleccionado);
-            const fetchPromises = formulariosSeleccionados.map((form) =>
+            const fetchPromises = Object.values(formulariosPorComedor).flat().map((form) =>
                 fetch(`http://localhost:5001/getForm?name=${encodeURIComponent(form.name)}`)
                     .then(res => res.json())
                     .then(data => {
@@ -196,12 +173,14 @@ const SelectPreferences = () => {
             const results = await Promise.all(fetchPromises);
             console.log("Todos los datos:", results);
 
+            // ✅ Limpiar todos los formularios seleccionados
+            setFormulariosPorComedor({});
+
             navigate("/home");
         } catch (error) {
             console.error("Error al obtener formularios desde el backend:", error);
         }
     };
-
 
 
     const handleRemoveForm = (formId) => {
@@ -217,14 +196,67 @@ const SelectPreferences = () => {
         comedorSeleccionadoRef.current = comedorIdSeleccionado;
     }, [comedorIdSeleccionado]);
 
-    const handleLogout = () => {
-        const confirmLogout = window.confirm("¿Estás seguro de que quieres cerrar sesión?");
-        if (confirmLogout) {
-            localStorage.clear();
-            sessionStorage.clear();
+    const handleLogout = async () => {
+        const result = await Swal.fire({
+            title: "¿Cerrar sesión?",
+            html: `
+            <div style="text-align: left; font-size: 15px; color: #374151;">
+                <p>¿Quieres borrar también los datos guardados en este dispositivo?</p>
+                <label style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.6rem;
+                    margin-top: 1rem;
+                    padding: 0.75rem;
+                    border: 1px solid #e5e7eb;
+                    border-radius: 8px;
+                    background-color: #f9fafb;
+                    color: #111827;
+                    font-weight: 500;
+                ">
+                    <input type="checkbox" id="borrarDatos" style="transform: scale(1.2);" />
+                    <span>Borrar datos locales</span>
+                </label>
+            </div>
+        `,
+            icon: "question",
+            iconColor: "#1d4ed8",
+            showCancelButton: true,
+            confirmButtonText: "Cerrar sesión",
+            cancelButtonText: "Cancelar",
+            confirmButtonColor: "#1d4ed8",
+            cancelButtonColor: "#6b7280",
+            background: "#ffffff",
+            customClass: {
+                popup: 'swal2-rounded',
+                confirmButton: 'swal2-confirm-custom',
+                cancelButton: 'swal2-cancel-custom',
+            },
+            preConfirm: () => {
+                const borrarDatos = document.getElementById("borrarDatos").checked;
+                return { borrarDatos };
+            }
+        });
+
+        if (result.isConfirmed) {
+            if (result.value.borrarDatos) {
+                localStorage.clear();
+                sessionStorage.clear();
+                setFormulariosPorComedor([]);
+                setUser(null);
+                setComedores([]);
+                setFormulariosSeleccionados([]);
+                await Swal.fire({
+                    icon: "success",
+                    title: "Sesión cerrada",
+                    text: "Tus datos han sido borrados correctamente",
+                    confirmButtonColor: "#1d4ed8",
+                });
+            }
             navigate("/login");
         }
-    }
+    };
+
 
     return (
         <div className={styles.selectPreferencesContainer}>

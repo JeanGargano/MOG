@@ -17,4 +17,7 @@ export class ComedorRepository {
   async findComedoresByIds(ids) {
     return await ComedorModel.find({ _id: { $in: ids } });
   }
+  async findComedoresByName(name) {
+    return await ComedorModel.find({ nombre: new RegExp(name, "i") });
+  }
 }

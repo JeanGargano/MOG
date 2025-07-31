@@ -39,4 +39,21 @@ export class ComedorController {
       res.status(500).json({ error: error.message });
     }
   }
+  // Controlador para buscar comedores por nombre
+  async findComedoresByName(req, res) {
+    const { nombre } = req.body;
+
+    if (!nombre) {
+      return res
+        .status(400)
+        .json({ error: "El campo 'nombre' es obligatorio" });
+    }
+
+    try {
+      const comedores = await this.comedorService.findComedoresByName(nombre);
+      res.status(200).json(comedores);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
