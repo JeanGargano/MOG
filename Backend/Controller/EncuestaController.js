@@ -7,25 +7,28 @@ export class EncuestaController {
   }
 
   async getForm(name) {
-    try {
-      const response = await axios.get(
-        "https://script.google.com/macros/s/AKfycbwwYUe_KCzLNFBKryXKSB-IV7t722-9OgUsETpt-2z3kN4Rd5tvwnW4CxzCnuY5_ihTPA/exec",
-        {
-          params: { name },
-        },
-      );
-      const form = response.data;
-      const result = await this.encuestaService.writeData(form);
-      if (result.error) {
-        return res.status(result.status).json({ error: result.error });
-      } else {
-        return form;
-        console.log("Se han guardado los datos correctamente");
-      }
-    } catch (error) {
-      console.error("❌ Error al obtener el formulario:", error);
+  try {
+    const response = await axios.get(
+      "https://script.google.com/macros/s/AKfycbxBK8SttWSnTJDA3mt8NHuyis9aCICrJydrXgpYlkApnYU0heuIFfBOj1jwGCaqIvPKzQ/exec",
+      { params: { name } }
+    );
+
+    const form = response.data;
+    console.log(form);
+
+    if (form.error) {
+      console.error("Error desde el servidor Apps Script:", form.error);
+      return { error: form.error, status: 404 }; 
     }
+
+    const result = await this.encuestaService.writeData(form);
+    return form;
+  } catch (error) {
+    console.error("Error al obtener el formulario:", error);
+    return { error: error.message, status: 500 };
   }
+}
+
 
   //Migrar Encuestas desde archivo
   async migrateData(req, res) {
