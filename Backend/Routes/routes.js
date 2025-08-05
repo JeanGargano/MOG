@@ -9,7 +9,7 @@ import {
 //Enrutador
 const router = express.Router();
 
-//Endpoints Para Formulario
+//Endpoints Para Encuesta
 router.get("/getForm", async (req, res) => {
   const name = req.query.name;
   const data = await encuestaController.getForm(name);
