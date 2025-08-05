@@ -3,6 +3,7 @@ import styles from "./SelectPreferences.module.css";
 import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Index";
+import { showCustomAlert } from "../../utils/customAlert";
 import Swal from "sweetalert2";
 
 const SelectPreferences = () => {
@@ -59,7 +60,12 @@ const SelectPreferences = () => {
 
     const openPicker = () => {
         if (!window.google.picker) {
-            alert("Google Picker API no está disponible.");
+            showCustomAlert({
+                title: "Error",
+                text: "Google Picker API no está disponible.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
             return;
         }
 
@@ -82,7 +88,12 @@ const SelectPreferences = () => {
             const comedorId = comedorSeleccionadoRef.current;
 
             if (!comedorId) {
-                alert("Error: no se ha seleccionado un comedor.");
+                showCustomAlert({
+                    title: "Error",
+                    text: "No se ha seleccionado un comedor.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
                 return;
             }
 
@@ -141,7 +152,13 @@ const SelectPreferences = () => {
 
     const handleSave = async () => {
         if (!user?.nombreCompleto || Object.keys(formulariosPorComedor).length === 0) {
-            alert("Por favor completa todos los campos y selecciona al menos un formulario.");
+            await showCustomAlert({
+                title: "Error",
+                text: "Por favor completa todos los campos y selecciona al menos un formulario.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+
             return;
         }
 

@@ -1,4 +1,3 @@
-// src/components/FinisherBackground.jsx
 import { useEffect } from "react";
 
 const FinisherBackground = () => {
@@ -10,20 +9,20 @@ const FinisherBackground = () => {
         script.onload = () => {
             if (window.FinisherHeader) {
                 new window.FinisherHeader({
-                    "count": 90,
+                    "count": 5,
                     "size": {
-                        "min": 20,
-                        "max": 20,
+                        "min": 900,
+                        "max": 1500,
                         "pulse": 0
                     },
                     "speed": {
                         "x": {
                             "min": 0,
-                            "max": 0.4
+                            "max": 0.3
                         },
                         "y": {
                             "min": 0,
-                            "max": 0.1
+                            "max": 0
                         }
                     },
                     "colors": {
@@ -36,15 +35,13 @@ const FinisherBackground = () => {
                             "#f88aff"
                         ]
                     },
-                    "blending": "screen",
+                    "blending": "lighten",
                     "opacity": {
-                        "center": 0,
+                        "center": 0.15,
                         "edge": 0.4
                     },
                     "skew": -2,
                     "shapes": [
-                        "c",
-                        "t",
                         "s"
                     ]
                 });

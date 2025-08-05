@@ -4,6 +4,7 @@ import styles from "./Form.module.css";
 import Header from "../Header/Index";
 import { useUser } from "../../Context/userContext";
 import { guardarRespuestasEnStorage } from "../Services/Services";
+import { showCustomAlert } from "../../utils/customAlert";
 
 const Form = () => {
     const { id } = useParams();
@@ -43,7 +44,7 @@ const Form = () => {
                     setComedor(match.comedor);
                 }
             } catch (err) {
-                console.error("❌ Error al cargar comedor desde localStorage:", err);
+                a
             }
         };
 
@@ -70,7 +71,12 @@ const Form = () => {
                 }, {});
                 setResponses(initialResponses);
             } catch (err) {
-                console.error("❌ Error en loadFormDetails:", err);
+                await showCustomAlert({
+                    title: "Error al cargar el formulario",
+                    text: "Por favor, verifica los datos ingresados.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
                 setError(`Error al cargar el formulario: ${err.message}`);
             } finally {
                 setLoading(false);
@@ -95,9 +101,14 @@ const Form = () => {
         });
     };
 
-    const handleSaveAnswers = () => {
+    const handleSaveAnswers = async (e) => {
         if (!user || !comedor) {
-            alert("Faltan datos del colaborador o comedor.");
+            await showCustomAlert({
+                title: "Error de autenticación",
+                text: "Por favor, verifica tus credenciales.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
             return;
         }
 
@@ -133,11 +144,21 @@ const Form = () => {
 
         try {
             guardarRespuestasEnStorage(nuevoFormulario);
-            alert("Datos guardados correctamente en localStorage");
+            await showCustomAlert({
+                title: "Respuestas guardadas",
+                text: "Las respuestas se han guardado correctamente.",
+                icon: "success",
+                confirmButtonText: "Aceptar"
+            });
             navigate("/home");
         } catch (error) {
             console.error("Error al guardar localmente:", error);
-            alert("Hubo un problema al guardar los datos localmente");
+            await showCustomAlert({
+                title: "Error al guardar",
+                text: "Hubo un problema al guardar los datos localmente.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
         }
     };
     if (loading) return <div className={styles.loading}>Cargando...</div>;
