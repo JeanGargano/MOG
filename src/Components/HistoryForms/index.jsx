@@ -16,7 +16,12 @@ const HistoryForms = () => {
                 const storedData = localStorage.getItem("respuestas");
 
                 if (!storedData) {
-                    alert("⚠️ No hay respuestas guardadas en localStorage.");
+                    await showCustomAlert({
+                        title: "No hay respuestas",
+                        text: "No hay respuestas guardadas en localStorage.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
                     return;
                 }
 
@@ -36,7 +41,12 @@ const HistoryForms = () => {
                 }
             } catch (error) {
                 console.error("Error al cargar datos desde localStorage:", error);
-                alert("❌ No se pudo cargar la colección de respuestas.");
+                await showCustomAlert({
+                    title: "Error",
+                    text: "❌ No se pudo cargar la colección de respuestas.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
             }
         };
 

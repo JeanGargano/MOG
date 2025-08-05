@@ -31,7 +31,7 @@ export class EncargadoService {
       throw new Error("Ya existe un encargado con esta identificación");
     }
 
-    const camposRequeridos = ["identificacion", "nombreCompleto"];
+    const camposRequeridos = ["identificacion", "nombreCompleto", "comedores"];
     for (const campo of camposRequeridos) {
       if (!data[campo]) {
         throw new Error(`Falta el campo requerido: ${campo}`);
