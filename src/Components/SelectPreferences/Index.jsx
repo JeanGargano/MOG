@@ -4,6 +4,7 @@ import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Index";
 import { showCustomAlert } from "../../utils/customAlert";
+import { Backdrop, CircularProgress } from "@mui/material";
 import Swal from "sweetalert2";
 
 const SelectPreferences = () => {
@@ -30,6 +31,8 @@ const SelectPreferences = () => {
     const accessToken = useRef(null);
 
     const [isAdmin, setIsAdmin] = useState("");
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const adminFlag = localStorage.getItem("user");
@@ -162,6 +165,8 @@ const SelectPreferences = () => {
             return;
         }
 
+        setLoading(true);
+
         // Guardar todos los formularios de todos los comedores
         setFormulariosSeleccionados(() => {
             return Object.entries(formulariosPorComedor).map(([comedorId, formularios]) => {
@@ -196,6 +201,8 @@ const SelectPreferences = () => {
             navigate("/home");
         } catch (error) {
             console.error("Error al obtener formularios desde el backend:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -278,6 +285,13 @@ const SelectPreferences = () => {
     return (
         <div className={styles.selectPreferencesContainer}>
             {isAdmin && <Header />}
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <div className={styles.pageContainer}>
                 <h2>Seleccionar Preferencias</h2>
 
