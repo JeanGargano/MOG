@@ -6,11 +6,11 @@ export class EncuestaController {
     this.encuestaService = encuestaService;
   }
 
-  async getForm(name) {
+  async getForm(id) {
   try {
     const response = await axios.get(
-      "https://script.google.com/macros/s/AKfycbwJQ4oPFIyYcgX57ZEZwJOZBFtJkFhXIH6Xx3hT4vJJlwLtavPT51-R-cf1KBwiY8NuWg/exec",
-      { params: { name } }
+      "https://script.google.com/macros/s/AKfycbyVnzIolY4YETpV1Fe4Jp3HYHT7397XnJ767nRua3Z7OWq4Y4JZRcUD_4OO5M42P3g3QA/exec",
+      { params: { id } }
     );
 
     const form = response.data;
@@ -89,4 +89,23 @@ export class EncuestaController {
       );
     }
   }
+  async covert_to_excel(req, res) {
+    try {
+      const filePath = await this.encuestaService.convert_to_excel();
+      res.download(filePath, 'encuesta.xlsx', (err) => {
+        if (err) {
+          console.error("❌ Error al enviar el archivo:", err);
+          res.status(500).json({ error: "Error al descargar el archivo" });
+        } else {
+          console.log("📥 Archivo descargado exitosamente");
+        }
+      });
+    } catch (error) {
+      console.error("❌ Error en EncuestaController:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
+
 }
+
+

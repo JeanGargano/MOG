@@ -1,0 +1,32 @@
+{
+  "nombre": "Encuesta de Alimentación Escolar",
+  "Realizaciones": [
+    {
+      "id_encargado": "83749238592",
+      "id_comedor": "Comedor Municipal 5",
+      "encuestados": [
+        {
+          "fechaRealizacion": "2024-10-01T10:30:00Z",
+          "nombreCompleto": "Juana",
+          "nacionalidad": "Colombiana",
+          "edad": "15",
+          "ciudad": "Bogotá",
+          "localidad": "Suba",
+          "estrato": "3",
+          "preguntas": [
+            {
+              "pregunta": "¿Te gusta el almuerzo que recibes?",
+              "respuesta": "Sí"
+            },
+            {
+              "pregunta": "¿Cuántas veces comes al día?",
+              "respuesta": "3"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "id_formulario": "form123"
+}
+

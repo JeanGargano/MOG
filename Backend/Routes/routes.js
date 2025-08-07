@@ -26,6 +26,16 @@ router.post("/guardarRespuestaEnArchivo", (req, res) =>
 router.post("/migrateData", (req, res) =>
   encuestaController.migrateData(req, res),
 );
+router.get("/convert_to_excel", async (req, res) => {
+  try {
+    encuestaController.covert_to_excel(req, res);
+  } catch (error) {
+    console.error("Error exportando encuestas:", error.message);
+    res.status(500).json({ error: "Error al exportar encuestas a Excel" });
+  }
+});
+
+
 
 //Endpoints Para Encargado
 router.get("/getEncargado", (req, res) =>
