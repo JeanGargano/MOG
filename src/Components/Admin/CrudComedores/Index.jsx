@@ -16,7 +16,12 @@ const CrudComedores = () => {
 
     const manejarCrearComedor = async () => {
         if (!datosCrear.nombre || !datosCrear.pais) {
-            alert("Completa todos los campos.");
+            await Swal.fire({
+                icon: "warning",
+                title: "Complete los campos",
+                text: "Por favor, completa todos los campos requeridos.",
+                confirmButtonColor: "#1d4ed8"
+            });
             return;
         }
         const res = await crearComedor(datosCrear);

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "./History.module.css";
 import Header from "../Header/Index";
+import { showCustomAlert } from "../../utils/customAlert";
 
 const History = () => {
     const navigate = useNavigate();
@@ -13,21 +14,36 @@ const History = () => {
                 const storedData = localStorage.getItem("respuestas");
 
                 if (!storedData) {
-                    alert("⚠️ No hay respuestas guardadas en localStorage.");
+                    await showCustomAlert({
+                        title: "No hay respuestas",
+                        text: "No hay respuestas guardadas en localStorage.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
                     return;
                 }
 
                 const data = JSON.parse(storedData);
 
                 if (!Array.isArray(data) || data.length === 0) {
-                    alert("⚠️ No hay respuestas que mostrar en localStorage.");
+                    await showCustomAlert({
+                        title: "No hay respuestas",
+                        text: "No hay respuestas que mostrar en localStorage.",
+                        icon: "error",
+                        confirmButtonText: "Aceptar"
+                    });
                     return;
                 }
 
                 setHistory(data);
             } catch (error) {
                 console.error("Error al cargar respuestas desde localStorage:", error);
-                alert("❌ No se pudo cargar la colección de respuestas.");
+                await showCustomAlert({
+                    title: "Error al cargar",
+                    text: "No se pudo cargar la colección de respuestas.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
             }
         };
 
@@ -45,14 +61,24 @@ const History = () => {
             const storedData = localStorage.getItem("respuestas");
 
             if (!storedData || !storedData.trim()) {
-                alert("⚠️ No hay datos válidos guardados en localStorage.");
+                await showCustomAlert({
+                    title: "No hay datos",
+                    text: "No hay datos válidos guardados en localStorage.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
                 return;
             }
 
             const data = JSON.parse(storedData);
 
             if (!Array.isArray(data) || data.length === 0) {
-                alert("⚠️ La colección de respuestas no tiene formularios válidos.");
+                await showCustomAlert({
+                    title: "No hay datos",
+                    text: "La colección de respuestas no tiene formularios válidos.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
                 return;
             }
 
@@ -67,18 +93,33 @@ const History = () => {
             const result = await uploadResponse.json();
 
             if (uploadResponse.ok) {
-                alert(`✅ ${result.message}\nTotal migradas: ${result.cantidad}`);
+                await showCustomAlert({
+                    title: "Datos migrados",
+                    text: `✅ ${result.message}\nTotal migradas: ${result.cantidad}`,
+                    icon: "success",
+                    confirmButtonText: "Aceptar"
+                });
 
                 localStorage.removeItem("respuestas");
 
             } else {
-                alert(`❌ Error: ${result.error}`);
+                await showCustomAlert({
+                    title: "Error",
+                    text: `❌ Error: ${result.error}`,
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
             }
 
             navigate(`/home`);
         } catch (error) {
             console.error('Error al cargar o enviar los datos:', error);
-            alert('❌ Error al conectar con el servidor o al leer los datos del localStorage.');
+            await showCustomAlert({
+                title: "Error",
+                text: "❌ Error al conectar con el servidor o al leer los datos del localStorage.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
         }
     };
 

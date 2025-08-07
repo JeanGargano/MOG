@@ -3,6 +3,8 @@ import styles from "./SelectPreferences.module.css";
 import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
 import Header from "../Header/Index";
+import { showCustomAlert } from "../../utils/customAlert";
+import { Backdrop, CircularProgress } from "@mui/material";
 import Swal from "sweetalert2";
 
 const SelectPreferences = () => {
@@ -29,6 +31,8 @@ const SelectPreferences = () => {
     const accessToken = useRef(null);
 
     const [isAdmin, setIsAdmin] = useState("");
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const adminFlag = localStorage.getItem("user");
@@ -59,7 +63,12 @@ const SelectPreferences = () => {
 
     const openPicker = () => {
         if (!window.google.picker) {
-            alert("Google Picker API no está disponible.");
+            showCustomAlert({
+                title: "Error",
+                text: "Google Picker API no está disponible.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
             return;
         }
 
@@ -82,7 +91,12 @@ const SelectPreferences = () => {
             const comedorId = comedorSeleccionadoRef.current;
 
             if (!comedorId) {
-                alert("Error: no se ha seleccionado un comedor.");
+                showCustomAlert({
+                    title: "Error",
+                    text: "No se ha seleccionado un comedor.",
+                    icon: "error",
+                    confirmButtonText: "Aceptar"
+                });
                 return;
             }
 
@@ -141,9 +155,17 @@ const SelectPreferences = () => {
 
     const handleSave = async () => {
         if (!user?.nombreCompleto || Object.keys(formulariosPorComedor).length === 0) {
-            alert("Por favor completa todos los campos y selecciona al menos un formulario.");
+            await showCustomAlert({
+                title: "Error",
+                text: "Por favor completa todos los campos y selecciona al menos un formulario.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
+
             return;
         }
+
+        setLoading(true);
 
         // Guardar todos los formularios de todos los comedores
         setFormulariosSeleccionados(() => {
@@ -179,6 +201,8 @@ const SelectPreferences = () => {
             navigate("/home");
         } catch (error) {
             console.error("Error al obtener formularios desde el backend:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -261,6 +285,13 @@ const SelectPreferences = () => {
     return (
         <div className={styles.selectPreferencesContainer}>
             {isAdmin && <Header />}
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <div className={styles.pageContainer}>
                 <h2>Seleccionar Preferencias</h2>
 

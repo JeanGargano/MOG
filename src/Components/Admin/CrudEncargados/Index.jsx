@@ -16,9 +16,6 @@ const CrudEncargados = () => {
         nombreCompleto: "",
         identificacion: "",
         comedores: [],
-        pais: "",
-        telefono: "",
-        contraseña: "",
         isAdmin: false,
     });
     const [resultado, setResultado] = useState(null);
@@ -88,9 +85,6 @@ const CrudEncargados = () => {
                 nombreCompleto: "",
                 identificacion: "",
                 comedores: "",
-                pais: "",
-                telefono: "",
-                contraseña: "",
                 isAdmin: false,
             });
         }
@@ -163,7 +157,6 @@ const CrudEncargados = () => {
                         placeholder="Ej. 123456789"
                     />
                 </div>
-
                 <div className={styles.formGroup}>
                     <label className={styles.label}>Nombre Completo:</label>
                     <input
@@ -210,14 +203,14 @@ const CrudEncargados = () => {
                     </ul>
                 )}
 
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                     <SeleccionarPais
                         pais={datos.pais}
                         setPais={(nuevoPais) => setDatos(prev => ({ ...prev, pais: nuevoPais }))}
                     />
-                </div>
+                </div> */}
 
-                <div className={styles.formGroup}>
+                {/* <div className={styles.formGroup}>
                     <label className={styles.label}>Teléfono:</label>
                     <input
                         className={`${styles.input} noSpinner`}
@@ -236,7 +229,7 @@ const CrudEncargados = () => {
                         value={datos.contraseña}
                         onChange={(e) => setDatos({ ...datos, contraseña: e.target.value })}
                     />
-                </div>
+                </div> */}
 
                 <div className={styles.formGroupCheckbox}>
                     <label className={styles.labelCheckbox}>
@@ -256,9 +249,9 @@ const CrudEncargados = () => {
                     <button className={styles.button} onClick={manejarCrearEncargado}>
                         Crear Encargado
                     </button>
-                    <button className={styles.button} onClick={manejarAgregarCampos}>
+                    {/* <button className={styles.button} onClick={manejarAgregarCampos}>
                         Agregar Campos
-                    </button>
+                    </button> */}
                 </div>
 
                 {resultado && resultadoFormateado && (

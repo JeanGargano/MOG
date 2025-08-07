@@ -8,7 +8,7 @@ import ProtectedRoute from "./Components/PrivateRoute/Index"
 import History from "./Components/History/Index";
 import HistoryForms from "./Components/HistoryForms/index";
 import SelectPreferences from "./Components/SelectPreferences/Index";
-import Admin from './Components/Admin/Index';
+import AñadirCampos from "./Components/AñadirCampos/Index.jsx";
 import { UserProvider } from "./Context/userContext";
 import CrudEncargados from "./Components/Admin/CrudEncargados/Index";
 import CrudComedores from "./Components/Admin/CrudComedores/Index";
@@ -42,7 +42,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/first-time" element={<Login />} />
+                    <Route path="/añadir-campos/:id" element={<AñadirCampos />} />
                     <Route element={<ProtectedRoute />}>
                         <Route path="/settings" element={<SelectPreferences />} />
                         <Route path="/home" element={<Home />} />
