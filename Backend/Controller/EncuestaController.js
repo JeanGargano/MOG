@@ -29,51 +29,51 @@ export class EncuestaController {
   }
 }
 
-
   //Migrar Encuestas desde archivo
   async migrateData(req, res) {
-    try {
-      const datos = req.body;
+  try {
+    const encuesta = req.body;
+    
+    const result = await this.encuestaService.migrar_encuestas(encuesta);
 
-      const result = await this.encuestaService.migrarEncuestasDesdeBody(datos);
-
-      if (result.error) {
-        return res.status(Number(result.status) || 400).json({
-          error: result.error,
-        });
-      }
-
-      return res.status(Number(result.status) || 200).json({
-        message: result.message || "Migración completada",
-        cantidad: result.cantidad,
-      });
-    } catch (error) {
-      console.error("Error en EncuestaController:", error);
-      return res.status(500).json({
-        error: "Error interno del servidor",
-        detalles: error.message,
+    if (result.error) {
+      return res.status(Number(result.status) || 400).json({
+        error: result.error,
       });
     }
-  }
 
-  //Escribir respuestas en archivo
-  async guardarRespuestasEnArchivo(req, res) {
-    try {
-      const result = await this.encuestaService.guardarRespuestasEnArchivo(
-        req.body,
-      );
-      if (result.error) {
-        return res.status(result.status).json({ error: result.error });
-      } else {
-        return res
-          .status(200)
-          .json({ message: "Se han escrito los datos correctamente" });
-      }
-    } catch (error) {
-      console.error("Error en EncuestaController", error);
-      res.status(500).json({ error: "Error interno del servidor" });
-    }
+    this.encuestaService.guardarRespuestasEnArchivo(encuesta)
+      .then(result => {
+        console.log("Respuestas guardadas localmente", result);
+      })
+      .catch(err => {
+        console.error("Error al guardar respuestas localmente", err);
+      });
+
+
+    this.encuestaService.convert_to_excel()
+      .then(filePath => {
+        console.log("Excel generado en:", filePath);
+      })
+      .catch(err => {
+        console.error("Error al generar Excel:", err);
+      });
+
+    return res.status(Number(result.status) || 200).json({
+      message: result.message || "Migración completada",
+      cantidad: result.cantidad,
+      aviso: "El archivo Excel se está generando en background"
+    });
+
+  } catch (error) {
+    console.error("Error en EncuestaController:", error);
+    return res.status(500).json({
+      error: "Error interno del servidor",
+      detalles: error.message,
+    });
   }
+}
+
 
   //Obtener formularios desde archivo
   async getFormFromCache(name) {
@@ -87,22 +87,6 @@ export class EncuestaController {
       throw new Error(
         "No se pudieron obtener los datos en cache del formulario" + name,
       );
-    }
-  }
-  async covert_to_excel(req, res) {
-    try {
-      const filePath = await this.encuestaService.convert_to_excel();
-      res.download(filePath, 'encuesta.xlsx', (err) => {
-        if (err) {
-          console.error("❌ Error al enviar el archivo:", err);
-          res.status(500).json({ error: "Error al descargar el archivo" });
-        } else {
-          console.log("📥 Archivo descargado exitosamente");
-        }
-      });
-    } catch (error) {
-      console.error("❌ Error en EncuestaController:", error);
-      res.status(500).json({ error: "Error interno del servidor" });
     }
   }
 
