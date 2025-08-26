@@ -7,28 +7,27 @@ export class EncuestaController {
   }
 
   async getForm(id) {
-  try {
-    const response = await axios.get(
-      "https://script.google.com/macros/s/AKfycbyVnzIolY4YETpV1Fe4Jp3HYHT7397XnJ767nRua3Z7OWq4Y4JZRcUD_4OO5M42P3g3QA/exec",
-      { params: { id } }
-    );
+    try {
+      const response = await axios.get(
+        "https://script.google.com/macros/s/AKfycbyVnzIolY4YETpV1Fe4Jp3HYHT7397XnJ767nRua3Z7OWq4Y4JZRcUD_4OO5M42P3g3QA/exec",
+        { params: { id } },
+      );
 
-    const form = response.data;
-    console.log(form);
+      const form = response.data;
+      console.log(form);
 
-    if (form.error) {
-      console.error("Error desde el servidor Apps Script:", form.error);
-      return { error: form.error, status: 404 }; 
+      if (form.error) {
+        console.error("Error desde el servidor Apps Script:", form.error);
+        return { error: form.error, status: 404 };
+      }
+
+      const result = await this.encuestaService.writeData(form);
+      return form;
+    } catch (error) {
+      console.error("Error al obtener el formulario:", error);
+      return { error: error.message, status: 500 };
     }
-
-    const result = await this.encuestaService.writeData(form);
-    return form;
-  } catch (error) {
-    console.error("Error al obtener el formulario:", error);
-    return { error: error.message, status: 500 };
   }
-}
-
 
   //Migrar Encuestas desde archivo
   async migrateData(req, res) {
@@ -89,23 +88,20 @@ export class EncuestaController {
       );
     }
   }
-  async covert_to_excel(req, res) {
-    try {
-      const filePath = await this.encuestaService.convert_to_excel();
-      res.download(filePath, 'encuesta.xlsx', (err) => {
-        if (err) {
-          console.error("❌ Error al enviar el archivo:", err);
-          res.status(500).json({ error: "Error al descargar el archivo" });
-        } else {
-          console.log("📥 Archivo descargado exitosamente");
-        }
-      });
-    } catch (error) {
-      console.error("❌ Error en EncuestaController:", error);
-      res.status(500).json({ error: "Error interno del servidor" });
-    }
-  }
-
+  // async covert_to_excel(req, res) {
+  //   try {
+  //     const filePath = await this.encuestaService.convert_to_excel();
+  //     res.download(filePath, 'encuesta.xlsx', (err) => {
+  //       if (err) {
+  //         console.error("❌ Error al enviar el archivo:", err);
+  //         res.status(500).json({ error: "Error al descargar el archivo" });
+  //       } else {
+  //         console.log("📥 Archivo descargado exitosamente");
+  //       }
+  //     });
+  //   } catch (error) {
+  //     console.error("❌ Error en EncuestaController:", error);
+  //     res.status(500).json({ error: "Error interno del servidor" });
+  //   }
+  // }
 }
-
-
