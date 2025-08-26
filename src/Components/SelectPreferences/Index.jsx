@@ -188,7 +188,7 @@ const SelectPreferences = () => {
             // Crear un array de promesas, una por cada formulario individual
             const fetchPromises = todosLosFormularios.map((form) => {
                 console.log(`Obteniendo formulario con id: ${form.id}`);
-                return fetch(`http://localhost:5001/getForm?name=${encodeURIComponent(form.id)}`)
+                return fetch(`http://localhost:5001/getForm?id=${encodeURIComponent(form.id)}`)
                     .then(res => {
                         if (!res.ok) {
                             throw new Error(`Error al obtener formulario ${form.id}: ${res.status}`);
