@@ -92,7 +92,7 @@ async getForm(id) {
   async covert_to_excel(req, res) {
     try {
       const filePath = await this.encuestaService.convert_to_excel();
-      res.download(filePath, 'encuesta.xlsx', (err) => {
+      res.download(filePath, "encuesta.xlsx", (err) => {
         if (err) {
           console.error("❌ Error al enviar el archivo:", err);
           res.status(500).json({ error: "Error al descargar el archivo" });

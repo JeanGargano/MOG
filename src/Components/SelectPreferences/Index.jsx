@@ -246,8 +246,6 @@ const SelectPreferences = () => {
             setLoading(false);
         }
     };
-
-
     const handleRemoveForm = (formId) => {
         setFormulariosPorComedor((prev) => ({
             ...prev,
