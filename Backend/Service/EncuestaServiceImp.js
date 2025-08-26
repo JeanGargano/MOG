@@ -8,8 +8,6 @@ import ExcelJS from "exceljs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
-const archivoRespuestas = path.join(__dirname, "..", "Respuestas.json");
 const archivoFormularios = path.join(__dirname, "..", "Formularios.json");
 const filePath = path.join(__dirname, "..", "encuesta.xlsx");
 
@@ -18,75 +16,9 @@ export class EncuestaService {
     this.encuestaRepository = encuestaRepository;
   }
 
-  //Metodo para guardar respuestas en archivo
-  async guardarRespuestasEnArchivo(nuevoEncuestado) {
-    try {
-      let contenido = await readFile(archivoRespuestas, "utf-8");
-      let json;
-      // Si el archivo está vacío, inicializamos el array con el nuevo encuestado
-      if (contenido.trim() === "") {
-        json = [
-          {
-            nombre: nuevoEncuestado.nombre,
-            id_formulario: nuevoEncuestado.id_formulario,
-            Realizaciones: nuevoEncuestado.Realizaciones,
-          },
-        ];
-      } else {
-        json = JSON.parse(contenido);
-        // Buscar si ya existe una encuesta con el mismo nombre
-        const encuestaExistente = json.find(
-          (encuesta) =>
-            encuesta.nombre === nuevoEncuestado.nombre &&
-            encuesta.id_formulario === nuevoEncuestado.id_formulario,
-        );
-        if (encuestaExistente) {
-          // Si existe la encuesta, agregar las realizaciones
-          for (const nuevaRealizacion of nuevoEncuestado.Realizaciones) {
-            const realizacionExistente = encuestaExistente.Realizaciones.find(
-              (r) =>
-                r.id_encargado === nuevaRealizacion.id_encargado &&
-                r.id_comedor === nuevaRealizacion.id_comedor,
-            );
-            if (realizacionExistente) {
-              // Agregar encuestados si no existen
-              for (const encuestado of nuevaRealizacion.encuestados) {
-                const yaExiste = realizacionExistente.encuestados.some(
-                  (e) =>
-                    e.nombreCompleto === encuestado.nombreCompleto &&
-                    e.fechaRealizacion === encuestado.fechaRealizacion,
-                );
-                if (!yaExiste) {
-                  realizacionExistente.encuestados.push(encuestado);
-                }
-              }
-            } else {
-              // Si no existe la realización, agregarla
-              encuestaExistente.Realizaciones.push(nuevaRealizacion);
-            }
-          }
-        } else {
-          // Si no existe la encuesta, agregarla completamente
-          json.push({
-            nombre: nuevoEncuestado.nombre,
-            id_formulario: nuevoEncuestado.id_formulario,
-            Realizaciones: nuevoEncuestado.Realizaciones,
-          });
-        }
-      }
-      // Escribir el archivo con el nuevo formato
-      const nuevaLinea = JSON.stringify(json, null, 2) + "\n";
-      await writeFile(archivoRespuestas, nuevaLinea);
-      console.log("Formulario actualizado con éxito");
-      return { success: true };
-    } catch (err) {
-      console.error("Error al guardar el formulario", err.message);
-      throw err;
-    }
-  }
 
   //Metodo para migrar respuestas a la Base de datos
-  async migrarEncuestasDesdeBody(encuestas) {
+  async migrar_encuestas(encuestas) {
     try {
       if (!Array.isArray(encuestas) || encuestas.length === 0) {
         console.log("📭 No hay encuestas por migrar.");

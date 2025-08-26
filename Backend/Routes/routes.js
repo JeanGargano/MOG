@@ -11,29 +11,20 @@ const router = express.Router();
 
 //Endpoints Para Encuesta
 router.get("/getForm", async (req, res) => {
-  const name = req.query.name;
-  const data = await encuestaController.getForm(name);
+  const id = req.query.id;
+  const data = await encuestaController.getForm(id);
   res.json(data);
 });
+
 router.get("/getFormFromCache", async (req, res) => {
   const name = req.query.name;
   const data = await encuestaController.getFormFromCache(name);
   res.json(data);
 });
-router.post("/guardarRespuestaEnArchivo", (req, res) =>
-  encuestaController.guardarRespuestasEnArchivo(req, res),
-);
+
 router.post("/migrateData", (req, res) =>
   encuestaController.migrateData(req, res),
 );
-router.get("/convert_to_excel", async (req, res) => {
-  try {
-    encuestaController.covert_to_excel(req, res);
-  } catch (error) {
-    console.error("Error exportando encuestas:", error.message);
-    res.status(500).json({ error: "Error al exportar encuestas a Excel" });
-  }
-});
 
 
 
