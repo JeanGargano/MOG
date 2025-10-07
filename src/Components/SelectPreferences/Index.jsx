@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import styles from "./SelectPreferences.module.css";
 import { useUser } from "../../Context/userContext";
 import { useNavigate } from "react-router-dom";
@@ -161,7 +161,6 @@ const SelectPreferences = () => {
                 icon: "error",
                 confirmButtonText: "Aceptar"
             });
-
             return;
         }
 
@@ -183,30 +182,70 @@ const SelectPreferences = () => {
         });
 
         try {
-            const fetchPromises = Object.values(formulariosPorComedor).flat().map((form) =>
-                fetch(`http://localhost:5001/getForm?name=${encodeURIComponent(form.name)}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log(`Datos recibidos para ${form.name}:`, data);
-                        return data;
-                    })
-            );
+            // Obtener todos los formularios únicos de todos los comedores
+            const todosLosFormularios = Object.values(formulariosPorComedor).flat();
 
+            // Crear un array de promesas, una por cada formulario individual
+            const fetchPromises = todosLosFormularios.map((form) => {
+                console.log(`Obteniendo formulario con id: ${form.id}`);
+                return fetch(`http://localhost:5001/getForm?id=${encodeURIComponent(form.id)}`)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`Error al obtener formulario ${form.id}: ${res.status}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        console.log(`Datos recibidos para ${form.id}:`, data);
+                        return {
+                            formId: form.id,
+                            formName: form.name,
+                            data: data
+                        };
+                    })
+                    .catch(error => {
+                        console.error(`Error al obtener formulario ${form.id}:`, error);
+                        return {
+                            formId: form.id,
+                            formName: form.name,
+                            data: null,
+                            error: error.message
+                        };
+                    });
+            });
+
+            // Ejecutar todas las promesas
             const results = await Promise.all(fetchPromises);
-            console.log("Todos los datos:", results);
+
+            console.log("Todos los datos obtenidos:", results);
+
+            // Verificar si hubo errores
+            const errores = results.filter(result => result.error);
+            if (errores.length > 0) {
+                console.warn("Algunos formularios no se pudieron obtener:", errores);
+            }
+
+            // Mostrar resultados exitosos
+            const exitosos = results.filter(result => !result.error);
+            console.log(`Se obtuvieron exitosamente ${exitosos.length} de ${results.length} formularios`);
 
             // ✅ Limpiar todos los formularios seleccionados
             setFormulariosPorComedor({});
 
             navigate("/home");
+
         } catch (error) {
             console.error("Error al obtener formularios desde el backend:", error);
+            await showCustomAlert({
+                title: "Error",
+                text: "Error al obtener los formularios. Inténtalo de nuevo.",
+                icon: "error",
+                confirmButtonText: "Aceptar"
+            });
         } finally {
             setLoading(false);
         }
     };
-
-
     const handleRemoveForm = (formId) => {
         setFormulariosPorComedor((prev) => ({
             ...prev,

@@ -66,7 +66,7 @@ const Form = () => {
                 setFormDetails(foundForm);
 
                 const initialResponses = foundForm.fields.reduce((acc, field) => {
-                    acc[field.title] = field.type === "CHECKBOX" ? [] : "";
+                    acc[field.placeholder] = field.type === "CHECKBOX" ? [] : "";
                     return acc;
                 }, {});
                 setResponses(initialResponses);
@@ -255,7 +255,7 @@ const Form = () => {
                             {formDetails.fields.map((field, index) => (
                                 <div key={index} className={styles.formGroup}>
                                     <label className={styles.formLabel}>
-                                        {index + 1}. {field.title} ({field.type})
+                                        {index + 1}. {field.placeholder} ({field.type})
                                     </label>
 
                                     {field.type === "CHECKBOX" ? (
