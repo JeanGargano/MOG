@@ -86,18 +86,20 @@ const Form = () => {
         loadFormDetails();
     }, [id]);
 
-    const handleResponseChange = (fieldTitle, value, isCheckbox = false) => {
+    // Mejor manejo de cambios para campos dinámicos
+    const handleResponseChange = (fieldKey, value, type = "") => {
         setResponses((prev) => {
-            if (isCheckbox) {
-                const currentValues = prev[fieldTitle];
+            if (type === "CHECKBOX" || type === "MULTIPLE_CHOICE") {
+                // Para checkbox múltiple y MULTIPLE_CHOICE
+                const currentValues = prev[fieldKey] || [];
                 return {
                     ...prev,
-                    [fieldTitle]: currentValues.includes(value)
+                    [fieldKey]: currentValues.includes(value)
                         ? currentValues.filter((val) => val !== value)
                         : [...currentValues, value],
                 };
             }
-            return { ...prev, [fieldTitle]: value };
+            return { ...prev, [fieldKey]: value };
         });
     };
 
@@ -112,6 +114,20 @@ const Form = () => {
             return;
         }
 
+        // Generar preguntas con formato adecuado
+        const preguntas = formDetails.fields.map((field, idx) => {
+            const fieldKey = field.title || field.placeholder || `field-${idx}`;
+            let respuesta = responses[fieldKey];
+            // Si es array (checkboxes, MULTIPLE_CHOICE), unir con coma y espacio
+            if (Array.isArray(respuesta)) {
+                respuesta = respuesta.join(", ");
+            }
+            return {
+                pregunta: field.placeholder || fieldKey,
+                respuesta
+            };
+        });
+
         const nuevoEncuestado = {
             fechaRealizacion: new Date().toISOString(),
             nombreCompleto: responses["Nombre completo"],
@@ -120,14 +136,7 @@ const Form = () => {
             ciudad: responses["Ciudad"],
             localidad: responses["Localidad"],
             estrato: responses["Estrato"],
-            preguntas: Object.entries(responses)
-                .filter(([key]) =>
-                    !["Nombre completo", "Nacionalidad", "Edad", "Ciudad", "Localidad", "Estrato"].includes(key)
-                )
-                .map(([pregunta, respuesta]) => ({
-                    pregunta,
-                    respuesta
-                }))
+            preguntas
         };
 
         const nuevoFormulario = {
@@ -252,95 +261,99 @@ const Form = () => {
                             </div>
 
 
-                            {formDetails.fields.map((field, index) => (
-                                <div key={index} className={styles.formGroup}>
-                                    <label className={styles.formLabel}>
-                                        {index + 1}. {field.placeholder} ({field.type})
-                                    </label>
+                            {formDetails.fields.map((field, index) => {
+                                // Usar una key única para cada campo
+                                const fieldKey = field.title || field.placeholder || `field-${index}`;
+                                return (
+                                    <div key={fieldKey} className={styles.formGroup}>
+                                        <label className={styles.formLabel}>
+                                            {index + 1}. {field.placeholder} ({field.type})
+                                        </label>
 
-                                    {field.type === "CHECKBOX" ? (
-                                        field.choices.map((choice, idx) => (
-                                            <div key={idx} className={styles.checkboxGroup}>
-                                                <input
-                                                    type="radio"
-                                                    name={`radio-${index}`}
-                                                    value={choice}
-                                                    checked={responses[field.title] === choice}
-                                                    className={styles.radioInput}
-                                                    onChange={(e) => handleResponseChange(field.title, e.target.value)}
-                                                />
-                                                <label>{choice}</label>
-                                            </div>
-                                        ))
-                                    ) : field.type === "GRID" ? (
-                                        <table className={styles.table}>
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    {field.columns.map((col, idx) => (
-                                                        <th key={idx}>{col}</th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {field.rows.map((row, rowIdx) => (
-                                                    <tr key={rowIdx}>
-                                                        <td>{row}</td>
-                                                        {field.columns.map((col, colIdx) => (
-                                                            <td key={colIdx}>
-                                                                <input
-                                                                    type="radio"
-                                                                    name={`${field.title}-${rowIdx}`}
-                                                                    value={col}
-                                                                    className={styles.radioInput}
-                                                                    onChange={(e) =>
-                                                                        handleResponseChange(`${field.title}-${row}`, e.target.value)
-                                                                    }
-                                                                />
-                                                            </td>
+                                        {field.type === "CHECKBOX" ? (
+                                            field.choices.map((choice, idx) => (
+                                                <div key={idx} className={styles.checkboxGroup}>
+                                                    <input
+                                                        type="checkbox"
+                                                        name={`${fieldKey}-checkbox`}
+                                                        value={choice}
+                                                        checked={Array.isArray(responses[fieldKey]) && responses[fieldKey].includes(choice)}
+                                                        className={styles.radioInput}
+                                                        onChange={(e) => handleResponseChange(fieldKey, choice, "CHECKBOX")}
+                                                    />
+                                                    <label>{choice}</label>
+                                                </div>
+                                            ))
+                                        ) : field.type === "GRID" ? (
+                                            <table className={styles.table}>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        {field.columns.map((col, idx) => (
+                                                            <th key={idx}>{col}</th>
                                                         ))}
                                                     </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {field.rows.map((row, rowIdx) => (
+                                                        <tr key={rowIdx}>
+                                                            <td>{row}</td>
+                                                            {field.columns.map((col, colIdx) => (
+                                                                <td key={colIdx}>
+                                                                    <input
+                                                                        type="radio"
+                                                                        name={`${fieldKey}-${rowIdx}`}
+                                                                        value={col}
+                                                                        checked={responses[`${fieldKey}-${row}`] === col}
+                                                                        className={styles.radioInput}
+                                                                        onChange={(e) =>
+                                                                            handleResponseChange(`${fieldKey}-${row}`, e.target.value)
+                                                                        }
+                                                                    />
+                                                                </td>
+                                                            ))}
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : field.type === "MULTIPLE_CHOICE" ? (
+                                            field.choices.map((choice, idx) => (
+                                                <div key={idx} className={styles.checkboxGroup}>
+                                                    <input
+                                                        type="checkbox"
+                                                        name={`${fieldKey}-multiple-choice`}
+                                                        value={choice}
+                                                        checked={Array.isArray(responses[fieldKey]) && responses[fieldKey].includes(choice)}
+                                                        className={styles.radioInput}
+                                                        onChange={() => handleResponseChange(fieldKey, choice, "MULTIPLE_CHOICE")}
+                                                    />
+                                                    <label>{choice}</label>
+                                                </div>
+                                            ))
+                                        ) : field.type === "LIST" ? (
+                                            <select
+                                                className={styles.textInput}
+                                                value={responses[fieldKey]}
+                                                onChange={(e) => handleResponseChange(fieldKey, e.target.value)}
+                                            >
+                                                <option value="">Seleccione una opción</option>
+                                                {field.choices.map((choice, idx) => (
+                                                    <option key={idx} value={choice}>
+                                                        {choice}
+                                                    </option>
                                                 ))}
-                                            </tbody>
-                                        </table>
-                                    ) : field.type === "MULTIPLE_CHOICE" ? (
-                                        field.choices.map((choice, idx) => (
-                                            <div key={idx} className={styles.checkboxGroup}>
-                                                <input
-                                                    type="radio"
-                                                    name={`radio-${index}`}
-                                                    value={choice}
-                                                    checked={responses[field.title] === choice}
-                                                    className={styles.radioInput}
-                                                    onChange={(e) => handleResponseChange(field.title, e.target.value)}
-                                                />
-                                                <label>{choice}</label>
-                                            </div>
-                                        ))
-                                    ) : field.type === "LIST" ? (
-                                        <select
-                                            className={styles.textInput}
-                                            value={responses[field.title]}
-                                            onChange={(e) => handleResponseChange(field.title, e.target.value)}
-                                        >
-                                            <option value="">Seleccione una opción</option>
-                                            {field.choices.map((choice, idx) => (
-                                                <option key={idx} value={choice}>
-                                                    {choice}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={responses[field.title]}
-                                            className={styles.textInput}
-                                            onChange={(e) => handleResponseChange(field.title, e.target.value)}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-
+                                            </select>
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                value={responses[fieldKey]}
+                                                className={styles.textInput}
+                                                onChange={(e) => handleResponseChange(fieldKey, e.target.value)}
+                                            />
+                                        )}
+                                    </div>
+                                );
+                            })}
                             <button
                                 type="button"
                                 className={styles.submitButton}
