@@ -30,10 +30,12 @@ const Login = () => {
                     contraseña,
                 }),
             });
+            console.log(`data response:`, response)
 
             const data = await response.json();
 
             if (response.ok) {
+                console.log(`data response:${response.ok}`)
                 setUser(data.encargado);
                 localStorage.setItem("user", JSON.stringify(data.encargado));
 
@@ -45,7 +47,8 @@ const Login = () => {
 
                 return;
             } else {
-                // 🔁 No entramos a modo offline porque sí hubo conexión.
+                onlineFailed = true;
+                console.log(`No hay conexion ${onlineFailed}`)
                 await showCustomAlert({
                     title: "Contraseña incorrecta",
                     text: "La contraseña ingresada no coincide.",
@@ -56,9 +59,9 @@ const Login = () => {
             }
         } catch (error) {
             console.warn("🛑 No se pudo conectar al servidor. Intentando login offline...");
-            onlineFailed = true;
-        }
 
+        }
+        console.log(`✅ Solo llegas aquí si falló la conexión (modo offline)`)
         // ✅ Solo llegas aquí si falló la conexión (modo offline)
         if (onlineFailed) {
             const savedUser = localStorage.getItem("user");
