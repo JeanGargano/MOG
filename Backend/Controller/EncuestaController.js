@@ -9,7 +9,7 @@ export class EncuestaController {
 async getForm(id) {
     try {
       const response = await axios.get(
-        "https://script.google.com/macros/s/AKfycbwQ28DA3rWLUfhVYkPuCTARHbNUxy6w8bRZxVNWmoGtU1qxCBDZdZltFmFU-BRCMemLKw/exec",
+        "https://script.google.com/macros/s/AKfycbwN76byYy3cpuzT64hKAw_YbrU51Pt5D6F8wpfslYYen-CPD6G5W9vx3OhgFIHXHvA0KA/exec",
         { params: { id } },
       );
 
