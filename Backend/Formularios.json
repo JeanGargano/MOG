@@ -1031,5 +1031,610 @@
         "placeholder": "Puedes describirnos la composición de una comida regular en tu hogar:\nEj: arroz, huevo, lentejas, ensalada, jugo"
       }
     ]
+  },
+  {
+    "title": "Caracterización Madres Cabeza de Familia",
+    "fields": [
+      {
+        "title": "Nombres y apellidos",
+        "type": "TEXT",
+        "placeholder": "Nombres y apellidos"
+      },
+      {
+        "title": "Edad",
+        "type": "TEXT",
+        "placeholder": "Edad"
+      },
+      {
+        "title": "Nacionalidad ",
+        "type": "TEXT",
+        "placeholder": "Nacionalidad "
+      },
+      {
+        "title": "Ciudad",
+        "type": "TEXT",
+        "placeholder": "Ciudad"
+      },
+      {
+        "title": "Localidad",
+        "type": "TEXT",
+        "placeholder": "Localidad"
+      },
+      {
+        "title": "Estrato Socio-economico",
+        "type": "TEXT",
+        "placeholder": "Estrato Socio-economico"
+      },
+      {
+        "title": "Cuantas personas componen tu núcleo familiar (viven en la misma casa)?",
+        "type": "TEXT",
+        "placeholder": "Cuantas personas componen tu núcleo familiar (viven en la misma casa)?"
+      },
+      {
+        "title": "Quiénes componen tu núcleo familiar (viven en la misma casa)?",
+        "type": "CHECKBOX",
+        "choices": [
+          "Papá",
+          "Mamá",
+          "Hijos",
+          "Abuelos",
+          "Tíos",
+          "Primos",
+          "Otro"
+        ]
+      },
+      {
+        "title": "Cuántos niños (de 0 a 12 años) hacen parte de tu núcleo familiar (viven en la misma casa)?",
+        "type": "TEXT",
+        "placeholder": "Cuántos niños (de 0 a 12 años) hacen parte de tu núcleo familiar (viven en la misma casa)?"
+      },
+      {
+        "title": "Escribe por favor los nombres y  frente a cada nombre la edad correspondiente",
+        "type": "PARAGRAPH_TEXT"
+      },
+      {
+        "title": "Cuántos adolescentes (de 13 a 18) hacen parte de tu núcleo familiar (viven en la misma casa)?",
+        "type": "TEXT",
+        "placeholder": "Cuántos adolescentes (de 13 a 18) hacen parte de tu núcleo familiar (viven en la misma casa)?"
+      },
+      {
+        "title": "Escribe por favor los nombres y  frente a cada nombre la edad correspondiente",
+        "type": "PARAGRAPH_TEXT"
+      },
+      {
+        "title": "En tu familia hay mujeres embarazadas?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "No"
+        ]
+      },
+      {
+        "title": "Cuantas?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "1",
+          "2",
+          "3",
+          "Más de 3",
+          "No aplica"
+        ]
+      },
+      {
+        "title": "En tu familia hay mujeres en estado de lactancia?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "No"
+        ]
+      },
+      {
+        "title": "Cuantas?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "1",
+          "2",
+          "3",
+          "Más de 3",
+          "No aplica"
+        ]
+      },
+      {
+        "title": "En tu familia hay personas con discapacidad",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "NO"
+        ]
+      },
+      {
+        "title": "Cuantas?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "1",
+          "2",
+          "3",
+          "Más de 2",
+          "No aplica"
+        ]
+      },
+      {
+        "title": "Quien es la persona encargada de proveer para tu familia (comprar la comida, paga el arriendo, etc)",
+        "type": "CHECKBOX",
+        "choices": [
+          "Papá",
+          "Mamá",
+          "Abuelos",
+          "Tíos",
+          "Otro"
+        ]
+      },
+      {
+        "title": "La(s) persona(s) que provee para tu familia cuenta con un empleo formal:",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "No"
+        ]
+      },
+      {
+        "title": "Cuál es el promedio de ingreso mensual de tu familia:",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "$ 300.000 o menos",
+          "$ 300.000 a $ 500.000",
+          "$ 500.000 a $ 800.000",
+          "$800.000 a $ 1'300.000",
+          "$1'300.000 o más"
+        ]
+      },
+      {
+        "title": "En qué usa tu familia la mayor parte de su ingreso (califique de 1 a 7, siendo 1 en lo que más gasta y 7 en lo que menos gasta).",
+        "type": "GRID",
+        "rows": [
+          "Arriendo",
+          "Servicios públicos (agua - luz)",
+          "Comida",
+          "Estudio",
+          "Transporte",
+          "Internet",
+          "Telefonía Celular"
+        ],
+        "columns": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "No aplica"
+        ]
+      },
+      {
+        "title": "Cuantas veces al día comen tu y tú familia:",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "1 vez al día",
+          "2 veces al día",
+          "3 veces al día",
+          "4 o más veces"
+        ]
+      },
+      {
+        "title": "Cual es la comida que mayormente consumen tu y tú familia:\n",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Desayuno",
+          "Almuerzo",
+          "Comida"
+        ]
+      },
+      {
+        "title": "Puedes describirnos la composición de una comida regular en tu hogar:\nEj: arroz, huevo, lentejas, ensalada, jugo",
+        "type": "TEXT",
+        "placeholder": "Puedes describirnos la composición de una comida regular en tu hogar:\nEj: arroz, huevo, lentejas, ensalada, jugo"
+      }
+    ]
+  },
+  {
+    "title": "Registro Inicial Ciclo I Entrega Mezcla de Sopa - Alimentos MoG",
+    "fields": [
+      {
+        "title": "Nombres y apellidos",
+        "type": "TEXT",
+        "placeholder": "Nombres y apellidos"
+      },
+      {
+        "title": "Nacionalidad ",
+        "type": "LIST",
+        "choices": [
+          "Colombiano",
+          "Venezolano"
+        ]
+      },
+      {
+        "title": "Ciudad ",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Bosa",
+          "Cali",
+          "Cúcuta - Zona Rural",
+          "Cúcuta - Zona Urbana",
+          "Leticia",
+          "Maicao",
+          "Manaure",
+          "Necoclí",
+          "Palmira",
+          "Turbo",
+          "Zona de Rio - Amazonas",
+          "Puerto Lleras",
+          "Villas del Rosario",
+          "Montelibano",
+          "Orocué",
+          "Yopal"
+        ]
+      },
+      {
+        "title": "Estrato Socio-economico",
+        "type": "TEXT",
+        "placeholder": "Estrato Socio-economico"
+      },
+      {
+        "title": "Programa por medio del cual recibe la sopa:",
+        "type": "LIST",
+        "choices": [
+          "Colombia Mission",
+          "Fundación Escuela de Pensamiento",
+          "Fundación Mi Buena Tierra Internacional",
+          "Fundación Movements of Grace",
+          "Fundación Social Salud Hoy",
+          "Medical Ministry International",
+          "Plan Jarillón",
+          "Pastoral Social Palmira",
+          "Samaritan's Purse",
+          "Iglesia Cuadrangular Maicao",
+          "YWM",
+          "Capilla Calvario Cristo es el Centro",
+          "Capilla Comunión"
+        ]
+      },
+      {
+        "title": "Número de personas, incluyéndolo a usted, que componen su núcleo familiar -viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Número de personas, incluyéndolo a usted, que componen su núcleo familiar -viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Quiénes componen su núcleo familiar -viven en la misma casa? ",
+        "type": "CHECKBOX",
+        "choices": [
+          "Papá",
+          "Mamá",
+          "Hijos",
+          "Abuelos",
+          "Tíos",
+          "Primos"
+        ]
+      },
+      {
+        "title": "Otro - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otro - Cual?"
+      },
+      {
+        "title": "Cuántos niños de 0 a 5 años hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos niños de 0 a 5 años hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos niños de 6 a 11 años hacen parte de su núcleo familiar - viven en la misma casa?  (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos niños de 6 a 11 años hacen parte de su núcleo familiar - viven en la misma casa?  (responder en #)"
+      },
+      {
+        "title": "Cuántos adolescentes (12 a 17 años) hacen parte de su núcleo familiar (viven en la misma casa)?",
+        "type": "TEXT",
+        "placeholder": "Cuántos adolescentes (12 a 17 años) hacen parte de su núcleo familiar (viven en la misma casa)?"
+      },
+      {
+        "title": "Cuántos jóvenes adultos (18 a 26 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos jóvenes adultos (18 a 26 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos adultos (27 a 59 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos adultos (27 a 59 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos adultos mayores (60 años o mas) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos adultos mayores (60 años o mas) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántas mujeres embarazadas hay en su familia? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántas mujeres embarazadas hay en su familia? (responder en #)"
+      },
+      {
+        "title": "Cuántas mujeres en estado de lactancia hay en su familia? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántas mujeres en estado de lactancia hay en su familia? (responder en #)"
+      },
+      {
+        "title": "Quién es la persona encargada de proveer para su familia (comprar la comida, pagar el arriendo, etc) El que más aporta?",
+        "type": "CHECKBOX",
+        "choices": [
+          "Solo Papá",
+          "Solo Mamá",
+          "Ambos",
+          "Abuelos",
+          "Tíos"
+        ]
+      },
+      {
+        "title": "Otro - Quién?",
+        "type": "TEXT",
+        "placeholder": "Otro - Quién?"
+      },
+      {
+        "title": "La(s) persona(s) que provee(n) para tu familia cuenta(n) con un empleo formal?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "No"
+        ]
+      },
+      {
+        "title": "Cuál es el promedio de ingreso mensual de tu familia:",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "$ 300.000 o menos",
+          "$ 300.000 a $ 500.000",
+          "$ 500.000 a $ 800.000",
+          "$800.000 a $ 1'160.000"
+        ]
+      },
+      {
+        "title": "En qué usa su familia la mayor parte de su ingreso (califique de 1 a 7, siendo 1 en lo que más gasta y 7 en lo que menos gasta).",
+        "type": "CHECKBOX_GRID"
+      },
+      {
+        "title": "Otro - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otro - Cual?"
+      },
+      {
+        "title": "Cual es la comida que mayormente consumen usted y sú familia:\n",
+        "type": "CHECKBOX",
+        "choices": [
+          "Desayuno",
+          "Almuerzo",
+          "Comida",
+          "Ninguna"
+        ]
+      },
+      {
+        "title": "Puede describirnos la composición de una comida regular en su hogar, marque con una X la que mas se asemeje:",
+        "type": "CHECKBOX",
+        "choices": [
+          "Sopa, carne - pollo - cerdo o pescado, arroz, granos, ensalada o verduras",
+          "Sopa, huevo, arroz, granos, ensalada o verduras",
+          "Carne - Pollo - Cerdo o Pescado, arroz, granos, ensalada o verduras",
+          "Huevo, arroz, granos, ensalada o verduras",
+          "Carne - Pollo - Cerdo o Pescado, arroz, granos",
+          "Huevo, arroz, granos",
+          "Arroz, granos, ensalada o verduras",
+          "Arroz, granos",
+          "Arroz, ensalada o verduras",
+          "Arroz"
+        ]
+      },
+      {
+        "title": "Otra - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otra - Cual?"
+      }
+    ]
+  },
+  {
+    "title": "Registro Inicial Ciclo I Entrega Mezcla de Sopa - Alimentos MoG",
+    "fields": [
+      {
+        "title": "Nombres y apellidos",
+        "type": "TEXT",
+        "placeholder": "Nombres y apellidos"
+      },
+      {
+        "title": "Nacionalidad ",
+        "type": "LIST",
+        "choices": [
+          "Colombiano",
+          "Venezolano"
+        ]
+      },
+      {
+        "title": "Ciudad ",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Bosa",
+          "Cali",
+          "Cúcuta - Zona Rural",
+          "Cúcuta - Zona Urbana",
+          "Leticia",
+          "Maicao",
+          "Manaure",
+          "Necoclí",
+          "Palmira",
+          "Turbo",
+          "Zona de Rio - Amazonas",
+          "Puerto Lleras",
+          "Villas del Rosario",
+          "Montelibano",
+          "Orocué",
+          "Yopal"
+        ]
+      },
+      {
+        "title": "Estrato Socio-economico",
+        "type": "TEXT",
+        "placeholder": "Estrato Socio-economico"
+      },
+      {
+        "title": "Programa por medio del cual recibe la sopa:",
+        "type": "LIST",
+        "choices": [
+          "Colombia Mission",
+          "Fundación Escuela de Pensamiento",
+          "Fundación Mi Buena Tierra Internacional",
+          "Fundación Movements of Grace",
+          "Fundación Social Salud Hoy",
+          "Medical Ministry International",
+          "Plan Jarillón",
+          "Pastoral Social Palmira",
+          "Samaritan's Purse",
+          "Iglesia Cuadrangular Maicao",
+          "YWM",
+          "Capilla Calvario Cristo es el Centro",
+          "Capilla Comunión"
+        ]
+      },
+      {
+        "title": "Número de personas, incluyéndolo a usted, que componen su núcleo familiar -viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Número de personas, incluyéndolo a usted, que componen su núcleo familiar -viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Quiénes componen su núcleo familiar -viven en la misma casa? ",
+        "type": "CHECKBOX",
+        "choices": [
+          "Papá",
+          "Mamá",
+          "Hijos",
+          "Abuelos",
+          "Tíos",
+          "Primos"
+        ]
+      },
+      {
+        "title": "Otro - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otro - Cual?"
+      },
+      {
+        "title": "Cuántos niños de 0 a 5 años hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos niños de 0 a 5 años hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos niños de 6 a 11 años hacen parte de su núcleo familiar - viven en la misma casa?  (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos niños de 6 a 11 años hacen parte de su núcleo familiar - viven en la misma casa?  (responder en #)"
+      },
+      {
+        "title": "Cuántos adolescentes (12 a 17 años) hacen parte de su núcleo familiar (viven en la misma casa)?",
+        "type": "TEXT",
+        "placeholder": "Cuántos adolescentes (12 a 17 años) hacen parte de su núcleo familiar (viven en la misma casa)?"
+      },
+      {
+        "title": "Cuántos jóvenes adultos (18 a 26 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos jóvenes adultos (18 a 26 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos adultos (27 a 59 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos adultos (27 a 59 años) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántos adultos mayores (60 años o mas) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántos adultos mayores (60 años o mas) hacen parte de su núcleo familiar - viven en la misma casa? (responder en #)"
+      },
+      {
+        "title": "Cuántas mujeres embarazadas hay en su familia? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántas mujeres embarazadas hay en su familia? (responder en #)"
+      },
+      {
+        "title": "Cuántas mujeres en estado de lactancia hay en su familia? (responder en #)",
+        "type": "TEXT",
+        "placeholder": "Cuántas mujeres en estado de lactancia hay en su familia? (responder en #)"
+      },
+      {
+        "title": "Quién es la persona encargada de proveer para su familia (comprar la comida, pagar el arriendo, etc) El que más aporta?",
+        "type": "CHECKBOX",
+        "choices": [
+          "Solo Papá",
+          "Solo Mamá",
+          "Ambos",
+          "Abuelos",
+          "Tíos"
+        ]
+      },
+      {
+        "title": "Otro - Quién?",
+        "type": "TEXT",
+        "placeholder": "Otro - Quién?"
+      },
+      {
+        "title": "La(s) persona(s) que provee(n) para tu familia cuenta(n) con un empleo formal?",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "Si",
+          "No"
+        ]
+      },
+      {
+        "title": "Cuál es el promedio de ingreso mensual de tu familia:",
+        "type": "MULTIPLE_CHOICE",
+        "choices": [
+          "$ 300.000 o menos",
+          "$ 300.000 a $ 500.000",
+          "$ 500.000 a $ 800.000",
+          "$800.000 a $ 1'160.000"
+        ]
+      },
+      {
+        "title": "En qué usa su familia la mayor parte de su ingreso (califique de 1 a 7, siendo 1 en lo que más gasta y 7 en lo que menos gasta).",
+        "type": "CHECKBOX_GRID"
+      },
+      {
+        "title": "Otro - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otro - Cual?"
+      },
+      {
+        "title": "Cual es la comida que mayormente consumen usted y sú familia:\n",
+        "type": "CHECKBOX",
+        "choices": [
+          "Desayuno",
+          "Almuerzo",
+          "Comida",
+          "Ninguna"
+        ]
+      },
+      {
+        "title": "Puede describirnos la composición de una comida regular en su hogar, marque con una X la que mas se asemeje:",
+        "type": "CHECKBOX",
+        "choices": [
+          "Sopa, carne - pollo - cerdo o pescado, arroz, granos, ensalada o verduras",
+          "Sopa, huevo, arroz, granos, ensalada o verduras",
+          "Carne - Pollo - Cerdo o Pescado, arroz, granos, ensalada o verduras",
+          "Huevo, arroz, granos, ensalada o verduras",
+          "Carne - Pollo - Cerdo o Pescado, arroz, granos",
+          "Huevo, arroz, granos",
+          "Arroz, granos, ensalada o verduras",
+          "Arroz, granos",
+          "Arroz, ensalada o verduras",
+          "Arroz"
+        ]
+      },
+      {
+        "title": "Otra - Cual?",
+        "type": "TEXT",
+        "placeholder": "Otra - Cual?"
+      }
+    ]
   }
 ]
