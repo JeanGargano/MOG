@@ -66,7 +66,7 @@ const Form = () => {
                 setFormDetails(foundForm);
 
                 const initialResponses = foundForm.fields.reduce((acc, field) => {
-                    acc[field.title] = field.type === "CHECKBOX" ? [] : "";
+                    acc[field.id] = field.type === "CHECKBOX" ? [] : "";
                     return acc;
                 }, {});
                 setResponses(initialResponses);
@@ -116,7 +116,7 @@ const Form = () => {
 
         // Generar preguntas con formato adecuado
         const preguntas = formDetails.fields.map((field, idx) => {
-            const fieldKey = field.title || field.placeholder || `field-${idx}`;
+            const fieldKey = field.id || field.placeholder || `field-${idx}`;
             let respuesta = responses[fieldKey];
             // Si es array (checkboxes, MULTIPLE_CHOICE), unir con coma y espacio
             if (Array.isArray(respuesta)) {
@@ -263,11 +263,11 @@ const Form = () => {
 
                             {formDetails.fields.map((field, index) => {
                                 // Usar una key única para cada campo
-                                const fieldKey = field.title || field.placeholder || `field-${index}`;
+                                const fieldKey = field.id || field.title || `field-${index}`;
                                 return (
                                     <div key={fieldKey} className={styles.formGroup}>
                                         <label className={styles.formLabel}>
-                                            {index + 1}. {field.title} ({field.type})
+                                            {index + 1}. {field.title}
                                         </label>
 
                                         {field.type === "CHECKBOX" ? (
