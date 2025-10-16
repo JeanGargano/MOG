@@ -66,7 +66,7 @@ const Form = () => {
                 setFormDetails(foundForm);
 
                 const initialResponses = foundForm.fields.reduce((acc, field) => {
-                    acc[field.placeholder] = field.type === "CHECKBOX" ? [] : "";
+                    acc[field.title] = field.type === "CHECKBOX" ? [] : "";
                     return acc;
                 }, {});
                 setResponses(initialResponses);
@@ -123,7 +123,7 @@ const Form = () => {
                 respuesta = respuesta.join(", ");
             }
             return {
-                pregunta: field.placeholder || fieldKey,
+                pregunta: field.title || fieldKey,
                 respuesta
             };
         });
@@ -267,7 +267,7 @@ const Form = () => {
                                 return (
                                     <div key={fieldKey} className={styles.formGroup}>
                                         <label className={styles.formLabel}>
-                                            {index + 1}. {field.placeholder} ({field.type})
+                                            {index + 1}. {field.title} ({field.type})
                                         </label>
 
                                         {field.type === "CHECKBOX" ? (
