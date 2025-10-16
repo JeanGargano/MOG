@@ -80,6 +80,9 @@ function Header() {
 
         if (result.isConfirmed) {
             if (result.value.borrarDatos) {
+                await fetch('http://localhost:5001/signout', {
+                    method: 'POST',
+                });
                 localStorage.clear();
                 sessionStorage.clear();
                 setFormulariosPorComedor([]);
@@ -97,8 +100,6 @@ function Header() {
         }
     };
 
-
-
     return (
         <header className={styles.header}>
             <h1 className={styles.title}>Sopas de amor</h1>
@@ -115,8 +116,12 @@ function Header() {
                     </>
                 )}
                 {isAdmin && <Button onClick={handleSettings}>Preferencias</Button>}
-                {isntComedoresCrud && <Button onClick={() => navigate("/crud-comedores")}>Comedores</Button>}
-                {isntEncargadosCrud && <Button onClick={() => navigate("/crud-encargados")}>Encargados</Button>}
+                {isAdmin && (
+                    <>
+                        {isntComedoresCrud && <Button onClick={() => navigate("/crud-comedores")}>Comedores</Button>}
+                        {isntEncargadosCrud && <Button onClick={() => navigate("/crud-encargados")}>Encargados</Button>}
+                    </>
+                )}
                 <Button onClick={handleLogout}>Cerrar Sesión</Button>
             </nav>
         </header>
