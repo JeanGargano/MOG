@@ -4,7 +4,6 @@
  * This service acts as an intermediary between the controller and the repository,
  * handling validation and application rules before interacting with the database.
  *
- * @module Services/ComedorService
  */
 export class ComedorService {
   constructor(comedorRepository) {

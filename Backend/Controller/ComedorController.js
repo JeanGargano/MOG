@@ -4,7 +4,6 @@
  * This controller acts as an intermediary between HTTP requests and the service layer (`ComedorService`),
  * handling the logic to create, retrieve, and search dining halls in the system.
  *
- * @module Controllers/ComedorController
  */
 export class ComedorController {
   constructor(comedorService) {
@@ -80,7 +79,7 @@ export class ComedorController {
   }
 
 
-  
+
 
   /**
    * Searches dining halls by name.

@@ -1,6 +1,4 @@
 /**
- * @file SurveyRepository.js
- * @description
  * Repository responsible for interaction with the MongoDB database
  * for CRUD operations related to surveys (encuestas).
  *

@@ -1,6 +1,4 @@
 /**
- * @file ComedorRepository.js
- * @description
  * Repository responsible for interaction with the MongoDB database
  * for operations related to comedores (dining halls).
  *
