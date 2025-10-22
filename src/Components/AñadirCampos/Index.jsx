@@ -76,10 +76,24 @@ const AñadirCampos = () => {
     };
 
     const handleGuardar = async () => {
+        // Validaciones front-end
         if (!formData.contraseña || !formData.telefono || !formData.pais) {
             Swal.fire('Campos requeridos', 'Por favor llena todos los campos.', 'warning');
             return;
         }
+
+        // La API espera una contraseña de más de 4 caracteres (service valida length <= 4)
+        if (typeof formData.contraseña === 'string' && formData.contraseña.length <= 4) {
+            Swal.fire('Contraseña inválida', 'La contraseña debe tener al menos 5 caracteres.', 'warning');
+            return;
+        }
+
+        const payload = {
+            identificacion: Number(formData.identificacion ?? usuario.identificacion),
+            telefono: formData.telefono ? Number(formData.telefono) : undefined,
+            pais: formData.pais,
+            contraseña: formData.contraseña
+        };
 
         try {
             const res = await fetch('http://localhost:5001/agregarCampos', {
@@ -87,10 +101,7 @@ const AñadirCampos = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    ...usuario,
-                    ...formData
-                })
+                body: JSON.stringify(payload)
             });
 
             if (res.ok) {
@@ -98,6 +109,9 @@ const AñadirCampos = () => {
                     navigate('/login');
                 });
             } else {
+                // intentar leer mensaje de error del backend
+                const errText = await res.text();
+                console.error('Error response body:', errText);
                 Swal.fire('Error', 'No se pudo guardar la información', 'error');
             }
         } catch (error) {

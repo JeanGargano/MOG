@@ -7,6 +7,8 @@ import { showCustomAlert } from "../../utils/customAlert";
 const History = () => {
     const navigate = useNavigate();
     const [history, setHistory] = useState([]);
+    const [downloadUrl, setDownloadUrl] = useState(null);
+    const [showDownload, setShowDownload] = useState(false);
 
     useEffect(() => {
         const fetchAnswers = async () => {
@@ -93,13 +95,61 @@ const History = () => {
             const result = await uploadResponse.json();
 
             if (uploadResponse.ok) {
+                // Construir URL absoluta de descarga si backend devuelve downloadUrl
+                let fullUrl = null;
+                if (result && result.downloadUrl) {
+                    const backendOrigin = 'http://localhost:5001';
+                    fullUrl = backendOrigin + result.downloadUrl;
+                    setDownloadUrl(fullUrl);
+                    setShowDownload(true);
+                }
+                // Mostrar alerta con opción de descargar
                 await showCustomAlert({
                     title: "Datos migrados",
                     text: `✅ ${result.message}\nTotal migradas: ${result.cantidad}`,
                     icon: "success",
-                    confirmButtonText: "Aceptar"
+                    confirmButtonText: fullUrl ? "Descargar Excel" : "Aceptar",
+                    showCancelButton: false,
+                    preConfirm: async () => {
+                        if (fullUrl) {
+                            try {
+                                const resp = await fetch(fullUrl);
+                                if (!resp.ok) throw new Error('Respuesta no OK al descargar');
+                                const blob = await resp.blob();
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                // Intentar obtener filename desde headers o usar el último segmento
+                                const disposition = resp.headers.get('content-disposition');
+                                let filename = '';
+                                if (disposition && disposition.indexOf('filename=') !== -1) {
+                                    filename = disposition.split('filename=')[1].split(';')[0].replace(/\"/g, '').trim();
+                                } else {
+                                    // Intentar obtener el nombre desde el query param 'file'
+                                    try {
+                                        const urlObj = new URL(fullUrl);
+                                        const qp = urlObj.searchParams.get('file');
+                                        filename = qp || fullUrl.split('/').pop().split('?')[0];
+                                    } catch (e) {
+                                        filename = fullUrl.split('/').pop().split('?')[0];
+                                    }
+                                }
+                                a.download = filename;
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                                window.URL.revokeObjectURL(url);
+                                // Mostrar alerta de confirmación que inició la descarga
+                                await showCustomAlert({ title: 'Descarga iniciada', text: `El archivo ${filename} se está descargando.`, icon: 'success', confirmButtonText: 'Aceptar' });
+                                navigate(`/home`);
+                            } catch (downloadErr) {
+                                console.error('Error en descarga:', downloadErr);
+                                await showCustomAlert({ title: 'Error', text: 'No se pudo descargar el archivo. Comprueba el backend o CORS.', icon: 'error', confirmButtonText: 'Aceptar' });
+                            }
+                        }
+                    }
                 });
-
+                // Limpiar localStorage (las respuestas ya están en BD)
                 localStorage.removeItem("respuestas");
 
             } else {
@@ -110,8 +160,8 @@ const History = () => {
                     confirmButtonText: "Aceptar"
                 });
             }
-
-            navigate(`/home`);
+            // No navegamos inmediatamente: dejamos que el usuario descargue el archivo
+            // navigate(`/home`);
         } catch (error) {
             console.error('Error al cargar o enviar los datos:', error);
             await showCustomAlert({
@@ -128,8 +178,6 @@ const History = () => {
             return sum + (realizacion.encuestados?.length || 0);
         }, 0) || 0);
     }, 0);
-
-
 
     return (
         <>
@@ -167,7 +215,7 @@ const History = () => {
                 )}
             </div>
             <div className={styles.uploadContainer}>
-                <button className={styles.uploadButton} onClick={handleUpload}>
+                <button className={styles.historyButton} onClick={handleUpload}>
                     Subir Formularios
                 </button>
             </div>

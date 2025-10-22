@@ -26,7 +26,13 @@ router.post("/migrateData", (req, res) =>
   encuestaController.migrateData(req, res),
 );
 
+// Endpoint para limpiar formularios al hacer sign out
+router.post("/signout", (req, res) => encuestaController.signOut(req, res));
 
+// Endpoint para descargar archivos generados
+router.get("/downloadExcel", (req, res) =>
+  encuestaController.downloadExcel(req, res),
+);
 
 //Endpoints Para Encargado
 router.get("/getEncargado", (req, res) =>

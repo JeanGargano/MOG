@@ -9,13 +9,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const archivoFormularios = path.join(__dirname, "..", "Formularios.json");
-const filePath = path.join(__dirname, "..", "encuesta.xlsx");
+const downloadsDir = path.join(__dirname, "..", "downloads");
+const filePath = path.join(downloadsDir, "encuesta.xlsx");
 
 export class EncuestaService {
   constructor(encuestaRepository) {
     this.encuestaRepository = encuestaRepository;
   }
-
 
   //Metodo para migrar respuestas a la Base de datos
   async migrar_encuestas(encuestas) {
@@ -95,17 +95,24 @@ export class EncuestaService {
     }
   }
 
-  async convert_to_excel() {
+  async convert_to_excel(encuestasParam, fileName) {
     try {
-      const contenido = await readFile(archivoRespuestas, "utf-8");
-      if (!contenido.trim()) {
-        throw new Error("El archivo de respuestas está vacío.");
+      // Si se pasan encuestas en parámetro, usarlas; sino obtener desde repositorio (BD)
+      let encuestas = encuestasParam;
+      if (!encuestas || (Array.isArray(encuestas) && encuestas.length === 0)) {
+        encuestas = await this.encuestaRepository.findAll();
       }
 
-      const parsed = JSON.parse(contenido);
-      const encuestas = Array.isArray(parsed) ? parsed : [parsed];
+      if (!encuestas || encuestas.length === 0) {
+        throw new Error("No se encontraron encuestas para exportar a Excel.");
+      }
+
+      // Asegurar existencia de carpeta downloads
+      if (!fs.existsSync(downloadsDir)) {
+        fs.mkdirSync(downloadsDir, { recursive: true });
+      }
       const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Encuesta');
+      const worksheet = workbook.addWorksheet("Encuesta");
       const allQuestions = new Set();
       for (const encuesta of encuestas) {
         for (const realizacion of encuesta.Realizaciones || []) {
@@ -124,7 +131,7 @@ export class EncuestaService {
         { header: "Nombre Encuestado", key: "nombreCompleto", width: 25 },
         { header: "Fecha Realización", key: "fechaRealizacion", width: 20 },
       ];
-      const questionColumns = Array.from(allQuestions).map(q => ({
+      const questionColumns = Array.from(allQuestions).map((q) => ({
         header: q,
         key: q,
         width: 30,
@@ -148,13 +155,33 @@ export class EncuestaService {
           }
         }
       }
-      await workbook.xlsx.writeFile(filePath);
-      console.log("✅ Archivo Excel generado:", filePath);
-      return filePath;
+      // Nombre del archivo: si se pasa fileName, usarlo; sino 'encuesta'
+      const name = fileName || "encuesta";
+      // Sanitizar el nombre
+      const safeName = name
+        .toString()
+        .trim()
+        .replace(/[^a-zA-Z0-9-_\. ]/g, "")
+        .replace(/\s+/g, "_");
+      const outPath = path.join(downloadsDir, `${safeName}.xlsx`);
+      await workbook.xlsx.writeFile(outPath);
+      console.log("✅ Archivo Excel generado:", outPath);
+      return outPath;
     } catch (err) {
       console.error("❌ Error al exportar encuestas a Excel:", err.message);
       throw err;
     }
   }
 
+  // Limpiar el archivo Formulario.json (usado en sign out)
+  async clearFormularios() {
+    try {
+      await writeFile(archivoFormularios, JSON.stringify([], null, 2));
+      console.log("✅ Formulario.json limpiado");
+      return { status: 200, message: "Formularios limpiados" };
+    } catch (err) {
+      console.error("❌ Error al limpiar formularios:", err.message);
+      throw err;
+    }
+  }
 }
