@@ -1,65 +1,60 @@
 //Endpoints de la Aplicación
 import express from "express";
 import {
-  encargadoController,
-  encuestaController,
+  managerController,
+  surveyController,
   comedorController,
 } from "../Container.js";
 
 //Enrutador
 const router = express.Router();
 
+
+
 //Endpoints Para Encuesta
-router.get("/getForm", async (req, res) => {
-  const id = req.query.id;
-  const data = await encuestaController.getForm(id);
-  res.json(data);
-});
-
-router.get("/getFormFromCache", async (req, res) => {
-  const name = req.query.name;
-  const data = await encuestaController.getFormFromCache(name);
-  res.json(data);
-});
-
+router.get("/getForm", (req, res) => 
+  surveyController.get_form(req, res)
+);
 router.post("/migrateData", (req, res) =>
-  encuestaController.migrateData(req, res),
+  surveyController.migrate_surveys(req, res),
 );
-
-// Endpoint para limpiar formularios al hacer sign out
-router.post("/signout", (req, res) => encuestaController.signOut(req, res));
-
-// Endpoint para descargar archivos generados
 router.get("/downloadExcel", (req, res) =>
-  encuestaController.downloadExcel(req, res),
+  surveyController.download_excel(req, res),
 );
+
+
+
 
 //Endpoints Para Encargado
 router.get("/getEncargado", (req, res) =>
-  encargadoController.findByIdentificacion(req, res),
+  managerController.find_by_identification(req, res),
 );
 router.post("/crearEncargado", (req, res) =>
-  encargadoController.postEncargado(req, res),
+  managerController.create_manager(req, res),
 );
 router.post("/agregarCampos", (req, res) =>
-  encargadoController.agregarCampos(req, res),
+  managerController.add_fields(req, res),
 );
 router.post("/login", (req, res) =>
-  encargadoController.logearEncargado(req, res),
+  managerController.login_manager(req, res),
 );
+
+
+
+
 
 //Endpoints para Comedor
 router.post("/crear_comedor", (req, res) =>
-  comedorController.postComedor(req, res),
+  comedorController.post_comedor(req, res),
 );
 router.get("/listar_comedores", (req, res) =>
-  comedorController.findComedores(req, res),
+  comedorController.find_comedores(req, res),
 );
 router.post("/listar_comedor_Id", (req, res) =>
-  comedorController.getComedoresByIds(req, res),
+  comedorController.get_comedores_by_ids(req, res),
 );
 router.post("/listar_comedor_nombre", (req, res) =>
-  comedorController.findComedoresByName(req, res),
+  comedorController.find_comedores_by_name(req, res),
 );
 
 export default router;

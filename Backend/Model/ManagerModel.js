@@ -16,5 +16,5 @@ const EncargadoSchema = new mongoose.Schema(
   },
 );
 
-const EncargadoModel = mongoose.model("Encargado", EncargadoSchema);
-export default EncargadoModel;
+const ManagerModel = mongoose.model("Encargado", EncargadoSchema);
+export default ManagerModel;

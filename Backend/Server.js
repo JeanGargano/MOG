@@ -10,7 +10,7 @@ const PORT = 5001;
 
 
 app.use(cors()); 
-app.use(express.json()); // Middleware para manejar JSON
+app.use(express.json());
 
 app.use("/", routes);
 
@@ -19,5 +19,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Backend corriendo en http://localhost:${PORT}`);
+    console.log(`Backend corriendo en http://localhost:${PORT}`);
 });

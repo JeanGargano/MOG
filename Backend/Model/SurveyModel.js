@@ -28,7 +28,7 @@ const EncuestaSchema = new mongoose.Schema({
   collection: 'Encuesta'
 });
 
-const EncuestaModel = mongoose.model('Encuesta', EncuestaSchema);
-export default EncuestaModel
+const SurveyModel = mongoose.model('Encuesta', EncuestaSchema);
+export default SurveyModel
 
 
