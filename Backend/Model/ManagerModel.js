@@ -16,7 +16,6 @@ const EncargadoSchema = new mongoose.Schema(
     isAdmin: { type: Boolean, required: true, default: false },
   },
   {
-    // Specifies the MongoDB collection name
     collection: "Encargado",
   },
 );

@@ -9,7 +9,7 @@ export class ManagerController {
     this.managerService = managerService;
   }
 
-  
+
 
   /**
    * Finds a manager in the database by their identification number.
@@ -26,6 +26,7 @@ export class ManagerController {
       res.status(404).json({ error: error.message });
     }
   }
+  
 
   /**
    * Creates a new manager in the database.

@@ -51,7 +51,6 @@ const EncuestaSchema = new mongoose.Schema({
 
 
 
-// Model used to interact with the "Encuesta" collection in MongoDB
 const SurveyModel = mongoose.model('Encuesta', EncuestaSchema);
 
 export default SurveyModel;

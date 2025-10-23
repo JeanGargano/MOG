@@ -8,7 +8,6 @@ const ComedorSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   pais: { type: String, required: true }
 }, {
-  // Specifies the MongoDB collection name
   collection: "Comedor"
 });
 

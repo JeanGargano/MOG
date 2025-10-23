@@ -4,10 +4,8 @@ dotenv.config();
 
 import mongoose from 'mongoose';
 
-// Retrieve MongoDB connection string from environment variables
 const dbURI = process.env.MONGODB_URI;
 
-// Validate the existence of the connection string
 if (!dbURI) {
     console.error("Error: MONGODB_URI is not defined in the .env file");
     process.exit(1);
