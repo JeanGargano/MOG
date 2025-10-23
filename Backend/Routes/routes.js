@@ -1,4 +1,4 @@
-//Endpoints de la Aplicación
+// Application Endpoints
 import express from "express";
 import {
   managerController,
@@ -6,55 +6,121 @@ import {
   comedorController,
 } from "../Container.js";
 
-//Enrutador
+// Router initialization
 const router = express.Router();
 
+/**
+ * -----------------------------
+ * Survey Endpoints
+ * -----------------------------
+ */
 
-
-//Endpoints Para Encuesta
-router.get("/getForm", (req, res) => 
+/**
+ * GET /get_form
+ * Retrieves the form configuration or structure for a survey.
+ */
+router.get("/get_form", (req, res) =>
   surveyController.get_form(req, res)
 );
-router.post("/migrateData", (req, res) =>
-  surveyController.migrate_surveys(req, res),
-);
-router.get("/downloadExcel", (req, res) =>
-  surveyController.download_excel(req, res),
+
+/**
+ * POST /migrate_surveys
+ * Migrates existing survey data into the system/database.
+ */
+router.post("/migrate_surveys", (req, res) =>
+  surveyController.migrate_surveys(req, res)
 );
 
-
-
-
-//Endpoints Para Encargado
-router.get("/getEncargado", (req, res) =>
-  managerController.find_by_identification(req, res),
-);
-router.post("/crearEncargado", (req, res) =>
-  managerController.create_manager(req, res),
-);
-router.post("/agregarCampos", (req, res) =>
-  managerController.add_fields(req, res),
-);
-router.post("/login", (req, res) =>
-  managerController.login_manager(req, res),
+/**
+ * GET /download_excel
+ * Generates and downloads survey reports in Excel format.
+ */
+router.get("/download_excel", (req, res) =>
+  surveyController.download_excel(req, res)
 );
 
 
 
 
 
-//Endpoints para Comedor
-router.post("/crear_comedor", (req, res) =>
-  comedorController.post_comedor(req, res),
+/**
+ * -----------------------------
+ * Manager Endpoints
+ * -----------------------------
+ */
+
+/**
+ * GET /find_by_identification
+ * Finds a manager by their identification number or document ID.
+ */
+router.get("/find_by_identification", (req, res) =>
+  managerController.find_by_identification(req, res)
 );
-router.get("/listar_comedores", (req, res) =>
-  comedorController.find_comedores(req, res),
+
+/**
+ * POST /create_manager
+ * Creates a new manager record in the system.
+ */
+router.post("/create_manager", (req, res) =>
+  managerController.create_manager(req, res)
 );
-router.post("/listar_comedor_Id", (req, res) =>
-  comedorController.get_comedores_by_ids(req, res),
+
+/**
+ * POST /add_fields
+ * Adds additional fields or attributes to a manager record.
+ */
+router.post("/add_fields", (req, res) =>
+  managerController.add_fields(req, res)
 );
-router.post("/listar_comedor_nombre", (req, res) =>
-  comedorController.find_comedores_by_name(req, res),
+
+/**
+ * POST /login_manager
+ * Handles login authentication for managers.
+ */
+router.post("/login_manager", (req, res) =>
+  managerController.login_manager(req, res)
+);
+
+
+
+
+/**
+ * -----------------------------
+ * Comedor Endpoints
+ * -----------------------------
+ */
+
+/**
+ * POST /post_comedor
+ * Creates a new dining hall record.
+ */
+router.post("/post_comedor", (req, res) =>
+  comedorController.post_comedor(req, res)
+);
+
+/**
+ * GET /find_comedores
+ * Retrieves a list of all dining halls registered in the system.
+ */
+router.get("/find_comedores", (req, res) =>
+  comedorController.find_comedores(req, res)
+);
+
+/**
+ * POST /get_comedores_by_ids
+ * Retrieves dining halls by specific ID(s).
+ */
+router.post("/get_comedores_by_ids", (req, res) =>
+  comedorController.get_comedores_by_ids(req, res)
+);
+
+
+/**
+ * POST /find_comedores_by_name
+ * Searches dining halls by name.
+ */
+router.post("/find_comedores_by_name", (req, res) =>
+  comedorController.find_comedores_by_name(req, res)
 );
 
 export default router;

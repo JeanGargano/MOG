@@ -1,3 +1,12 @@
+/**
+ * Service that manages operations related to surveys.
+ * 
+ * Includes functions to:
+ * - Retrieve forms from Google Apps Script
+ * - Migrate surveys from request body to database
+ * - Export surveys to Excel format (.xlsx) dynamically
+ */
+
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
@@ -9,27 +18,16 @@ const __dirname = path.dirname(__filename);
 const downloadsDir = path.join(__dirname, "..", "downloads");
 
 
-
-/**
- * Service that manages operations related to surveys.
- * 
- * Includes functions to:
- * - Retrieve forms from Google Apps Script
- * - Migrate surveys from request body to database
- * - Export surveys to Excel format (.xlsx) dynamically
- */
 export class SurveyService {
   constructor(surveyRepository) {
     this.surveyRepository = surveyRepository;
   }
 
+
+
   /**
    * Retrieves a form from the Google Apps Script endpoint and returns the JSON.
-   * 
-   * @async
-   * @param {string} id - Google Form ID to retrieve
    * @returns {Promise<Object>} Returns the form data or error object
-   * @throws {Error} If the 'id' parameter is not provided
    */
   async get_form(id) {
     try {
@@ -59,16 +57,12 @@ export class SurveyService {
 
   /**
    * Migrates surveys received from a request to the database.
-   * 
-   * @async
-   * @param {Array<Object>} surveys - List of surveys to migrate
    * @returns {Promise<Object>} Returns an object with migration status and number of surveys migrated
-   * @throws {Error} If a problem occurs during migration or data is invalid
    */
   async migrate_surveys(surveys) {
     try {
       if (!Array.isArray(surveys) || surveys.length === 0) {
-        console.log("📭 No surveys to migrate.");
+        console.log("No surveys to migrate.");
         return { status: 400, error: "No surveys to migrate" };
       }
 
@@ -105,12 +99,7 @@ export class SurveyService {
    * If no surveys are passed as parameter, retrieves them directly from the repository.
    * Each survey includes its completions, respondents, and questions, which are dynamically
    * broken down into columns within the Excel file.
-   * 
-   * @async
-   * @param {Array<Object>} [surveysParam] - Optional array of surveys to export. If omitted, all surveys are queried from DB
-   * @param {string} [fileName="survey"] - Base name for the output file (without extension)
    * @returns {Promise<string>} Returns the full path of the generated Excel file
-   * @throws {Error} If there are no surveys to export or if an error occurs during file generation
    */
   async convert_to_excel(surveysParam, fileName) {
     try {

@@ -19,11 +19,7 @@ export class SurveyController {
 
   /**
    * Endpoint to fetch a form from Google Apps Script.
-   *
    * This method delegates the HTTP request to the service layer.
-   *
-   * @async
-   * @function getForm
    * @param {import("express").Request} req - HTTP request containing the form ID in `req.query.id`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns the form data as JSON or an error message.
@@ -53,12 +49,10 @@ export class SurveyController {
 
 
 
+
   /**
    * Migrates received survey data from the request body into the database
    * and generates an Excel file containing the stored data.
-   *
-   * @async
-   * @function migrateData
    * @param {import("express").Request} req - HTTP request containing survey data in `req.body`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns a success message, migrated count, and Excel download URL.
@@ -100,8 +94,6 @@ export class SurveyController {
   /**
    * Serves Excel files from the `downloads` directory and deletes them
    * after download or automatically after 15 minutes.
-   *
-   * @function downloadExcel
    * @param {import("express").Request} req - HTTP request that includes the `file` query parameter.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {void} Initiates file download and schedules deletion.

@@ -1,6 +1,10 @@
-//Modelo de datos para Encargado
+// Data model for Manager (Encargado)
 import mongoose from "mongoose";
 
+/**
+ * Encargado Schema
+ * Represents a manager/user in the system.
+ */
 const EncargadoSchema = new mongoose.Schema(
   {
     nombreCompleto: { type: String, required: true },
@@ -8,13 +12,16 @@ const EncargadoSchema = new mongoose.Schema(
     comedores: { type: Array, required: false },
     pais: { type: String, required: false },
     telefono: { type: Number, required: false },
-    contraseña: { type: String, required: false },
+    password: { type: String, required: false },
     isAdmin: { type: Boolean, required: true, default: false },
   },
   {
+    // Specifies the MongoDB collection name
     collection: "Encargado",
   },
 );
 
+// Model for interacting with the Encargado collection
 const ManagerModel = mongoose.model("Encargado", EncargadoSchema);
+
 export default ManagerModel;

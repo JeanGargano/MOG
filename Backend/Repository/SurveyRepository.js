@@ -12,11 +12,8 @@
 
 import SurveyModel from "../Model/SurveyModel.js";
 
-/**
- * Class that implements persistence methods for surveys.
- * 
- */
 export class SurveyRepository {
+
 
   /**
    * Saves a new survey or updates an existing one.
@@ -24,18 +21,7 @@ export class SurveyRepository {
    * If a survey with the same `id_formulario` already exists,
    * new completions (realizaciones) are added to the existing array.
    * Otherwise, a new document is created.
-   *
-   * @async
-   * @function save
-   * @param {Object} data - Survey data.
-   * @param {string} data.nombre - Name of the survey.
-   * @param {string} data.id_formulario - Unique form identifier.
-   * @param {Array<Object>} data.Realizaciones - Array of survey completions.
-   * 
    * @returns {Promise<Object>} Saved or updated survey document in MongoDB.
-   * 
-   * @throws {Error} If a problem occurs while interacting with the database.
-   * 
    */
   async save(data) {
     const { id_formulario, Realizaciones } = data;
@@ -62,17 +48,9 @@ export class SurveyRepository {
 
   /**
    * Retrieves all surveys stored in the database.
-   *
    * Uses `.lean()` to return plain JavaScript objects instead of Mongoose documents,
-   * improving performance for read-only operations.
-   *
-   * @async
-   * @function find_all
+   * improving performance for read-only operations
    * @returns {Promise<Array<Object>>} Array of surveys in JSON format.
-   *
-   * @example
-   * const allSurveys = await surveyRepository.find_all();
-   * console.log(`Total surveys: ${allSurveys.length}`);
    */
   async find_all() {
     return await SurveyModel.find({}).lean();

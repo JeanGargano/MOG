@@ -13,12 +13,9 @@ export class ComedorController {
   /**
    * Creates a new dining hall in the database.
    *
-   * @async
-   * @function postComedor
    * @param {import("express").Request} req - HTTP request containing the dining hall data in `req.body`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns a success message along with the created dining hall.
-   *
    */
   async post_comedor(req, res) {
     try {
@@ -34,13 +31,9 @@ export class ComedorController {
 
   /**
    * Retrieves all registered dining halls from the database.
-   *
-   * @async
-   * @function findComedores
    * @param {import("express").Request} req - HTTP request.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns an array with all available dining halls.
-   *
    */
   async find_comedores(req, res) {
     try {
@@ -55,13 +48,9 @@ export class ComedorController {
 
   /**
    * Retrieves dining halls that match the provided IDs.
-   *
-   * @async
-   * @function getComedoresByIds
    * @param {import("express").Request} req - HTTP request containing an array of IDs in `req.body`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns a list of dining halls matching the provided IDs.
-   *
    */
   async get_comedores_by_ids(req, res) {
     const { ids } = req.body;
@@ -83,13 +72,9 @@ export class ComedorController {
 
   /**
    * Searches dining halls by name.
-   *
-   * @async
-   * @function findComedoresByName
    * @param {import("express").Request} req - HTTP request containing the field `name` in `req.body`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns the dining halls whose names match the search criteria.
-   *
    */
   async find_comedores_by_name(req, res) {
     const { nombre } = req.body;

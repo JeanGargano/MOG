@@ -9,11 +9,10 @@ export class ManagerController {
     this.managerService = managerService;
   }
 
+  
+
   /**
    * Finds a manager in the database by their identification number.
-   *
-   * @async
-   * @function findByIdentification
    * @param {import("express").Request} req - HTTP request object.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns the manager information if found.
@@ -30,9 +29,6 @@ export class ManagerController {
 
   /**
    * Creates a new manager in the database.
-   *
-   * @async
-   * @function createManager
    * @param {import("express").Request} req - HTTP request object containing manager data in `req.body`.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns a success message along with the created manager.
@@ -50,9 +46,6 @@ export class ManagerController {
 
   /**
    * Adds new fields or updates existing information for a manager.
-   *
-   * @async
-   * @function addFields
    * @param {import("express").Request} req - HTTP request object containing data to update.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns a success message along with the updated data.
@@ -71,9 +64,6 @@ export class ManagerController {
 
   /**
    * Authenticates (logs in) a manager in the system.
-   *
-   * @async
-   * @function loginManager
    * @param {import("express").Request} req - HTTP request object containing the manager's credentials.
    * @param {import("express").Response} res - HTTP response object.
    * @returns {Promise<void>} Returns the authenticated manager data or an error if the credentials are invalid.
