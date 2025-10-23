@@ -123,12 +123,11 @@ export class ManagerService {
     if (!identificacion || typeof identificacion !== "number") {
       throw new Error("Invalid identification");
     }
-    if (!password || typeof password !== "string") {
+    if (!contraseña || typeof contraseña !== "string") {
       throw new Error("Invalid password");
     }
 
-    const manager =
-      await this.managerRepository.find_by_identification(identificacion);
+    const manager = await this.managerRepository.find_by_identification(identificacion);
     if (!manager) {
       throw new Error("Identification not found in the system");
     }
