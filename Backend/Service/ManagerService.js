@@ -32,8 +32,6 @@ export class ManagerService {
 
   /**
    * Creates a new manager in the system.
-   * @param {Object} data - Manager data to register.
-   * @returns {Promise<Object>} Returns the created manager.
    */
   async create_manager(data) {
     if (!data || typeof data !== "object") {
@@ -64,8 +62,6 @@ export class ManagerService {
 
   /**
    * Adds or updates fields in an existing manager..
-   * @param {Object} newFields - Fields to add or modify.
-   * @returns {Promise<Object>} Returns the updated manager.
    */
   async add_fields(identificacion, newFields) {
     if (!identificacion || typeof identificacion !== "number") {
@@ -102,7 +98,6 @@ export class ManagerService {
 
   /**
    * Authenticates a manager in the system.
-   * @returns {Promise<Object>} Returns a success message and authenticated manager data.
    */
   async login_manager({ identificacion, password }) {
     if (!identificacion || typeof identificacion !== "number") {
