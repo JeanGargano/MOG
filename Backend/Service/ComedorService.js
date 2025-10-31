@@ -14,8 +14,6 @@ export class ComedorService {
 
   /**
    * Creates a new dining hall.
-   * @returns {Promise<Object>} Returns the created dining hall.
-   * @throws {Error} If required fields `nombre` or `pais` are missing.
    */
   async post_comedor(data) {
     if (!data.nombre || !data.pais) {
@@ -28,8 +26,6 @@ export class ComedorService {
 
   /**
    * Retrieves the list of all registered dining halls.
-   * @returns {Promise<Array>} List of available dining halls.
-   * @throws {Error} If no dining halls are found in the database.
    */
   async find_comedores() {
     const comedores = await this.comedorRepository.find_comedores();
@@ -44,8 +40,6 @@ export class ComedorService {
 
   /**
    * Searches dining halls by their unique identifiers.
-   * @param {Array<string>} ids - Array containing the IDs of the dining halls to search.
-   * @returns {Promise<Array>} List of dining halls matching the provided IDs.
    */
   async find_comedores_by_ids(ids) {
     return await this.comedorRepository.find_comedores_by_ids(ids);
@@ -55,8 +49,6 @@ export class ComedorService {
 
   /**
    * Searches dining halls by name.
-   * @returns {Promise<Array>} List of dining halls that match the provided name.
-   * @throws {Error} If the `name` field is not provided.
    */
   async find_comedores_by_name(name) {
     if (!name) {
