@@ -1,5 +1,5 @@
 import { jest, describe, test, expect, beforeEach, afterEach } from '@jest/globals';
-import { SurveyService } from "../../service/SurveyService.js";
+import { SurveyService } from "../../Service/SurveyService.js";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";

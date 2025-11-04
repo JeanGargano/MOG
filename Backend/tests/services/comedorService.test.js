@@ -1,4 +1,4 @@
-import { ComedorService } from "../../service/ComedorService.js";
+import { ComedorService } from "../../Service/ComedorService.js";
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
 describe("ComedorService", () => {

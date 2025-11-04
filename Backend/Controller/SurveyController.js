@@ -8,7 +8,7 @@
 
 import path from "path";
 import fs from "fs";
-import { Helper } from "../helpers/Helpers.js";
+import { Helper } from "../Helpers/Helpers.js";
 
 export class SurveyController {
   constructor(surveyService) {

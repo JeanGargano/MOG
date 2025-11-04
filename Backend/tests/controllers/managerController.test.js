@@ -1,4 +1,4 @@
-import { ManagerController } from "../../controller/ManagerController.js";
+import { ManagerController } from "../../Controller/ManagerController.js";
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
 describe("ManagerController", () => {

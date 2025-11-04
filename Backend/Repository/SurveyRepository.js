@@ -10,7 +10,7 @@
  * and the service layer.
  */
 
-import SurveyModel from "../model/SurveyModel.js";
+import SurveyModel from "../Model/SurveyModel.js";
 
 export class SurveyRepository {
 

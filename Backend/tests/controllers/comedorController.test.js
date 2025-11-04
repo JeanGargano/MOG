@@ -1,4 +1,4 @@
-import { ComedorController } from "../../controller/ComedorController.js";
+import { ComedorController } from "../../Controller/ComedorController.js";
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
 describe("ComedorController", () => {

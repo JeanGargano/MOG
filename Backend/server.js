@@ -2,8 +2,8 @@
 
 import express from "express";
 import cors from "cors";
-import connectDB from "./dataBase/db.js";
-import routes from "./routes/routes.js";
+import connectDB from "./DataBase/db.js";
+import routes from "./Routes/routes.js";
 
 
 connectDB();

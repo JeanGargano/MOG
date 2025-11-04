@@ -1,4 +1,4 @@
-import { SurveyController } from "../../controller/SurveyController.js";
+import { SurveyController } from "../../Controller/SurveyController.js";
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
 describe("SurveyController", () => {

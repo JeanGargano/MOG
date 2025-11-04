@@ -6,7 +6,7 @@
  * encapsulating data access logic and maintaining domain independence.
  */
 
-import ComedorModel from "../model/ComedorModel.js";
+import ComedorModel from "../Model/ComedorModel.js";
 
 export class ComedorRepository {
 

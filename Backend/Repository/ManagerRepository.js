@@ -6,7 +6,7 @@
  * providing an abstraction layer between the service and the data model (`ManagerModel`).
  */
 
-import ManagerModel from "../model/ManagerModel.js";
+import ManagerModel from "../Model/ManagerModel.js";
 
 export class ManagerRepository {
 

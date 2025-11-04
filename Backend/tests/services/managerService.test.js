@@ -1,4 +1,4 @@
-import { ManagerService } from "../../service/ManagerService.js";
+import { ManagerService } from "../../Service/ManagerService.js";
 import bcrypt from "bcrypt";
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
 
