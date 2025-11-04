@@ -4,7 +4,7 @@ import {
   managerController,
   surveyController,
   comedorController,
-} from "../container.js"
+} from "../Container.js"
 
 // Router initialization
 const router = express.Router();
