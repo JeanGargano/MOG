@@ -27,7 +27,6 @@ export class SurveyService {
 
   /**
    * Retrieves a form from the Google Apps Script endpoint and returns the JSON.
-   * @returns {Promise<Object>} Returns the form data or error object
    */
   async get_form(id) {
     try {
@@ -57,13 +56,12 @@ export class SurveyService {
 
   /**
    * Migrates surveys received from a request to the database.
-   * @returns {Promise<Object>} Returns an object with migration status and number of surveys migrated
    */
   async migrate_surveys(surveys) {
     try {
       if (!Array.isArray(surveys) || surveys.length === 0) {
         console.log("No surveys to migrate.");
-        return { status: 400, error: "No surveys to migrate" };
+        throw new Error("No surveys to migrate");
       }
 
       const results = [];
@@ -75,7 +73,8 @@ export class SurveyService {
           completions: survey.completions,
         };
 
-        const result = await this.surveyRepository.save(separatedSurvey);
+        // Usa el método correcto del repositorio
+        const result = await this.surveyRepository.create_survey(separatedSurvey);
         results.push(result);
       }
 
@@ -95,11 +94,6 @@ export class SurveyService {
 
   /**
    * Converts survey data into an Excel file (.xlsx).
-   * 
-   * If no surveys are passed as parameter, retrieves them directly from the repository.
-   * Each survey includes its completions, respondents, and questions, which are dynamically
-   * broken down into columns within the Excel file.
-   * @returns {Promise<string>} Returns the full path of the generated Excel file
    */
   async convert_to_excel(surveysParam, fileName) {
     try {

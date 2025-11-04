@@ -10,18 +10,13 @@
  * and the service layer.
  */
 
-import SurveyModel from "../Model/SurveyModel.js";
+import SurveyModel from "../model/SurveyModel.js";
 
 export class SurveyRepository {
 
 
   /**
    * Saves a new survey or updates an existing one.
-   *
-   * If a survey with the same `id_formulario` already exists,
-   * new completions (realizaciones) are added to the existing array.
-   * Otherwise, a new document is created.
-   * @returns {Promise<Object>} Saved or updated survey document in MongoDB.
    */
   async save(data) {
     const { id_formulario, Realizaciones } = data;
@@ -48,9 +43,6 @@ export class SurveyRepository {
 
   /**
    * Retrieves all surveys stored in the database.
-   * Uses `.lean()` to return plain JavaScript objects instead of Mongoose documents,
-   * improving performance for read-only operations
-   * @returns {Promise<Array<Object>>} Array of surveys in JSON format.
    */
   async find_all() {
     return await SurveyModel.find({}).lean();

@@ -8,7 +8,7 @@
 
 import path from "path";
 import fs from "fs";
-import { Helper } from "../Helpers/Helpers.js";
+import { Helper } from "../helpers/Helpers.js";
 
 export class SurveyController {
   constructor(surveyService) {
@@ -19,10 +19,6 @@ export class SurveyController {
 
   /**
    * Endpoint to fetch a form from Google Apps Script.
-   * This method delegates the HTTP request to the service layer.
-   * @param {import("express").Request} req - HTTP request containing the form ID in `req.query.id`.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns the form data as JSON or an error message.
    */
   async get_form(req, res) {
     try {
@@ -53,17 +49,16 @@ export class SurveyController {
   /**
    * Migrates received survey data from the request body into the database
    * and generates an Excel file containing the stored data.
-   * @param {import("express").Request} req - HTTP request containing survey data in `req.body`.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns a success message, migrated count, and Excel download URL.
    */
   async migrate_surveys(req, res) {
     try {
-      const surveys = req && req.body;
+      const surveys = req.body;
 
+      // Validar que surveys existe y no está vacío
       if (
         !surveys ||
-        (Object.keys(survey).length === 0 && surveys.constructor === Object)
+        (Object.keys(surveys).length === 0 && surveys.constructor === Object) ||
+        !Array.isArray(surveys)
       ) {
         return res.status(400).json({
           error: "No survey responses were received in the request body",
@@ -77,6 +72,12 @@ export class SurveyController {
           .status(Number(result.status) || 400)
           .json({ error: result.error });
       }
+
+      // Si todo salió bien, retornar respuesta exitosa
+      return res.status(200).json({
+        message: result.message || "Surveys migrated successfully",
+        count: result.count
+      });
 
     } catch (error) {
       console.error("Error in SurveyController:", error);
@@ -94,9 +95,6 @@ export class SurveyController {
   /**
    * Serves Excel files from the `downloads` directory and deletes them
    * after download or automatically after 15 minutes.
-   * @param {import("express").Request} req - HTTP request that includes the `file` query parameter.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {void} Initiates file download and schedules deletion.
    */
   download_excel(req, res) {
     try {

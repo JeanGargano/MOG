@@ -1,16 +1,16 @@
 // File responsible for creating and wiring application instances (Dependency Injection)
 // Import Repository, Service and Controller classes
-import { ManagerRepository } from './Repository/ManagerRepository.js';
-import { ManagerService } from './Service/ManagerService.js';
-import { ManagerController } from './Controller/ManagerController.js';
+import { ManagerRepository } from "./repository/ManagerRepository.js";
+import { ManagerService } from "./service/ManagerService.js";
+import { ManagerController } from "./controller/ManagerController.js";
 
-import { SurveyRepository } from './Repository/SurveyRepository.js';
-import { SurveyService } from './Service/SurveyService.js';
-import { SurveyController } from './Controller/SurveyController.js';
+import { SurveyRepository } from "./repository/SurveyRepository.js";
+import { SurveyService } from "./service/SurveyService.js";
+import { SurveyController } from "./controller/SurveyController.js";
 
-import { ComedorRepository } from './Repository/ComedorRespository.js';
-import { ComedorService } from './Service/ComedorService.js';
-import { ComedorController } from './Controller/ComedorController.js';
+import { ComedorRepository } from "./repository/ComedorRespository.js";
+import { ComedorService } from "./service/ComedorService.js";
+import { ComedorController } from "./controller/ComedorController.js";
 
 
 const managerRepository = new ManagerRepository();

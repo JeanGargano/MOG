@@ -6,7 +6,7 @@
  * encapsulating data access logic and maintaining domain independence.
  */
 
-import ComedorModel from "../Model/ComedorModel.js";
+import ComedorModel from "../model/ComedorModel.js";
 
 export class ComedorRepository {
 
@@ -14,8 +14,6 @@ export class ComedorRepository {
 
   /**
    * Creates a new comedor record in the database.
-   * @param {Object} data - Comedor data to register.
-   * @returns {Promise<Object>} Created comedor document in the database.
    */
   async post_comedor(data) {
     try {
@@ -30,7 +28,6 @@ export class ComedorRepository {
 
   /**
    * Retrieves all comedores registered in the database.
-   * @returns {Promise<Array<Object>>} Array with all comedor documents.
    */
   async find_comedores() {
     return await ComedorModel.find({});
@@ -40,8 +37,6 @@ export class ComedorRepository {
 
   /**
    * Searches for multiple comedores by a list of identifiers (IDs).
-   * @param {Array<string>} ids - List of comedor IDs to search for.
-   * @returns {Promise<Array<Object>>} List of comedores matching the IDs.
    */
   async find_comedores_by_ids(ids) {
     return await ComedorModel.find({ _id: { $in: ids } });
@@ -52,8 +47,6 @@ export class ComedorRepository {
   /**
    * Searches for comedores whose name matches (totally or partially) the provided text.
    * Performs a **case-insensitive search** using regular expressions.
-   * @param {string} name - Partial or complete text of the comedor name to search for.
-   * @returns {Promise<Array<Object>>} List of comedores whose name matches the pattern.
    */
   async find_comedores_by_name(name) {
     return await ComedorModel.find({ nombre: new RegExp(name, "i") });

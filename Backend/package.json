@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node -r dotenv/config server.js",
     "dev": "nodemon -r dotenv/config server.js"
   },
@@ -22,5 +22,11 @@
     "mongodb": "^6.15.0",
     "mongoose": "^8.12.1",
     "mongose": "^0.0.2-security"
+  },
+  "devDependencies": {
+    "axios-mock-adapter": "^2.1.0",
+    "jest": "^30.2.0",
+    "mock-fs": "^5.5.0",
+    "supertest": "^7.1.4"
   }
 }

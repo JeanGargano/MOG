@@ -14,7 +14,6 @@ export class ManagerService {
 
   /**
    * Finds a manager by their identification number.
-   * @returns {Promise<Object>} Returns the found manager object.
    */
   async find_by_identification(identificacion) {
     if (!identificacion) {

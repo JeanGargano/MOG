@@ -4,7 +4,7 @@ import {
   managerController,
   surveyController,
   comedorController,
-} from "../Container.js";
+} from "../container.js"
 
 // Router initialization
 const router = express.Router();
@@ -78,8 +78,8 @@ router.get("/find_comedores", (req, res) =>
 );
 
 
-router.post("/get_comedores_by_ids", (req, res) =>
-  comedorController.get_comedores_by_ids(req, res)
+router.post("/find_comedores_by_ids", (req, res) =>
+  comedorController.find_comedores_by_ids(req, res)
 );
 
 

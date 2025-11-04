@@ -13,9 +13,6 @@ export class ManagerController {
 
   /**
    * Finds a manager in the database by their identification number.
-   * @param {import("express").Request} req - HTTP request object.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns the manager information if found.
    */
   async find_by_identification(req, res) {
     try {
@@ -30,9 +27,6 @@ export class ManagerController {
 
   /**
    * Creates a new manager in the database.
-   * @param {import("express").Request} req - HTTP request object containing manager data in `req.body`.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns a success message along with the created manager.
    */
   async create_manager(req, res) {
     try {
@@ -47,9 +41,6 @@ export class ManagerController {
 
   /**
    * Adds new fields or updates existing information for a manager.
-   * @param {import("express").Request} req - HTTP request object containing data to update.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns a success message along with the updated data.
    */
   async add_fields(req, res) {
     try {
@@ -65,9 +56,6 @@ export class ManagerController {
 
   /**
    * Authenticates (logs in) a manager in the system.
-   * @param {import("express").Request} req - HTTP request object containing the manager's credentials.
-   * @param {import("express").Response} res - HTTP response object.
-   * @returns {Promise<void>} Returns the authenticated manager data or an error if the credentials are invalid.
    */
   async login_manager(req, res) {
     try {

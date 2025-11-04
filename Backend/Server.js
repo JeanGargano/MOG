@@ -2,8 +2,8 @@
 
 import express from "express";
 import cors from "cors";
-import connectDB from "./DataBase/db.js";
-import routes from "./Routes/routes.js";
+import connectDB from "./dataBase/db.js";
+import routes from "./routes/routes.js";
 
 
 connectDB();
@@ -15,7 +15,6 @@ const PORT = 5000;
 app.use(cors()); 
 app.use(express.json()); 
 
-es
 app.use("/", routes);
 
 
