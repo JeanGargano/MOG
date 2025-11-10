@@ -35,7 +35,7 @@ export class SurveyService {
       }
 
       const url =
-        "https://script.google.com/macros/s/AKfycbwN76byYy3cpuzT64hKAw_YbrU51Pt5D6F8wpfslYYen-CPD6G5W9vx3OhgFIHXHvA0KA/exec";
+        "https://script.google.com/macros/s/AKfycbyMSF0JZFisVXvzbvcI3JLxCCXRD56mwcCsPa7GcEGxqXs46HdlODIDnhu3OyVYVbQt/exec";
 
       const response = await axios.get(url, { params: { id } });
 
