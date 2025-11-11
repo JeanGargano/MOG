@@ -31,8 +31,8 @@ describe("SurveyService", () => {
     const fakeResponse = { name: "Formulario A" };
     const formId = "123";
     
-    // El servicio llama a Google Apps Script, no a jotform
-    const url = "https://script.google.com/macros/s/AKfycbwN76byYy3cpuzT64hKAw_YbrU51Pt5D6F8wpfslYYen-CPD6G5W9vx3OhgFIHXHvA0KA/exec";
+    // El servicio llama a Google Apps Script
+    const url = "https://script.google.com/macros/s/AKfycbyMSF0JZFisVXvzbvcI3JLxCCXRD56mwcCsPa7GcEGxqXs46HdlODIDnhu3OyVYVbQt/exec";
     
     mock.onGet(url).reply(200, fakeResponse);
 
@@ -42,7 +42,7 @@ describe("SurveyService", () => {
 
   test("get_form maneja error de axios", async () => {
     const formId = "123";
-    const url = "https://script.google.com/macros/s/AKfycbwN76byYy3cpuzT64hKAw_YbrU51Pt5D6F8wpfslYYen-CPD6G5W9vx3OhgFIHXHvA0KA/exec";
+    const url = "https://script.google.com/macros/s/AKfycbyMSF0JZFisVXvzbvcI3JLxCCXRD56mwcCsPa7GcEGxqXs46HdlODIDnhu3OyVYVbQt/exec";
     
     mock.onGet(url).reply(500);
 
