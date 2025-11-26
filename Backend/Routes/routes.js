@@ -23,6 +23,10 @@ router.post("/migrate_surveys", (req, res) =>
   surveyController.migrate_surveys(req, res),
 );
 
+router.post("/migrate_and_export_individual", (req, res) =>
+  surveyController.migrate_and_export_individual(req, res),
+);
+
 router.get("/download_excel", (req, res) =>
   surveyController.download_excel(req, res),
 );
