@@ -4,7 +4,9 @@ import {
   managerController,
   surveyController,
   comedorController,
-} from "../Container.js"
+} from "../Container.js";
+
+import paisController from "../Controller/paisController.js";
 
 // Router initialization
 const router = express.Router();
@@ -15,23 +17,15 @@ const router = express.Router();
  * -----------------------------
  */
 
-router.get("/get_form", (req, res) =>
-  surveyController.get_form(req, res)
-);
-
+router.get("/get_form", (req, res) => surveyController.get_form(req, res));
 
 router.post("/migrate_surveys", (req, res) =>
-  surveyController.migrate_surveys(req, res)
+  surveyController.migrate_surveys(req, res),
 );
-
 
 router.get("/download_excel", (req, res) =>
-  surveyController.download_excel(req, res)
+  surveyController.download_excel(req, res),
 );
-
-
-
-
 
 /**
  * -----------------------------
@@ -40,26 +34,20 @@ router.get("/download_excel", (req, res) =>
  */
 
 router.get("/find_by_identification", (req, res) =>
-  managerController.find_by_identification(req, res)
+  managerController.find_by_identification(req, res),
 );
-
 
 router.post("/create_manager", (req, res) =>
-  managerController.create_manager(req, res)
+  managerController.create_manager(req, res),
 );
-
 
 router.post("/add_fields", (req, res) =>
-  managerController.add_fields(req, res)
+  managerController.add_fields(req, res),
 );
-
 
 router.post("/login_manager", (req, res) =>
-  managerController.login_manager(req, res)
+  managerController.login_manager(req, res),
 );
-
-
-
 
 /**
  * -----------------------------
@@ -67,26 +55,30 @@ router.post("/login_manager", (req, res) =>
  * -----------------------------
  */
 
-
 router.post("/post_comedor", (req, res) =>
-  comedorController.post_comedor(req, res)
+  comedorController.post_comedor(req, res),
 );
-
 
 router.get("/find_comedores", (req, res) =>
-  comedorController.find_comedores(req, res)
+  comedorController.find_comedores(req, res),
 );
-
 
 router.post("/find_comedores_by_ids", (req, res) =>
-  comedorController.find_comedores_by_ids(req, res)
+  comedorController.find_comedores_by_ids(req, res),
 );
-
-
 
 router.post("/find_comedores_by_name", (req, res) =>
-  comedorController.find_comedores_by_name(req, res)
+  comedorController.find_comedores_by_name(req, res),
 );
 
+/**
+ * -----------------------------
+ * País Endpoints
+ * -----------------------------
+ */
+router.get("/pais", paisController.listar);
+router.post("/pais", paisController.crear);
+router.put("/pais/:id", paisController.editar);
+router.delete("/pais/:id", paisController.eliminar);
 
 export default router;
