@@ -1,6 +1,6 @@
 /**
  * Service that manages operations related to surveys.
- * 
+ *
  * Includes functions to:
  * - Retrieve forms from Google Apps Script
  * - Migrate surveys from request body to database
@@ -17,13 +17,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const downloadsDir = path.join(__dirname, "..", "downloads");
 
-
 export class SurveyService {
   constructor(surveyRepository) {
     this.surveyRepository = surveyRepository;
   }
-
-
 
   /**
    * Retrieves a form from the Google Apps Script endpoint and returns the JSON.
@@ -52,8 +49,6 @@ export class SurveyService {
     }
   }
 
-
-
   /**
    * Migrates surveys received from a request to the database.
    */
@@ -67,14 +62,23 @@ export class SurveyService {
       const results = [];
 
       for (const survey of surveys) {
+        // Mapear las claves entrantes a las que espera el repositorio / modelo
         const separatedSurvey = {
-          name: survey.name,
-          form_id: survey.form_id,
-          completions: survey.completions,
+          // `SurveyModel` espera `nombre` como campo requerido
+          nombre: survey.name ?? survey.nombre ?? survey.title,
+          // id del formulario (el repositorio busca `id_formulario`)
+          id_formulario:
+            survey.form_id ?? survey.id_formulario ?? survey.formId,
+          // Realizaciones es la lista de completions/completions/responses
+          Realizaciones:
+            survey.completions ??
+            survey.Realizaciones ??
+            survey.responses ??
+            [],
         };
 
-        // Usa el método correcto del repositorio
-        const result = await this.surveyRepository.create_survey(separatedSurvey);
+        // Guardar usando el repositorio
+        const result = await this.surveyRepository.save(separatedSurvey);
         results.push(result);
       }
 
@@ -90,7 +94,233 @@ export class SurveyService {
     }
   }
 
+  /**
+   * Migrates surveys (same input as `migrate_surveys`) but additionally
+   * generates one Excel file per distinct `id_formulario` (survey id).
+   * Returns an array with objects containing the survey name and a
+   * downloadable URL for each generated file.
+   */
+  async migrate_and_export_individual(surveys) {
+    try {
+      if (!Array.isArray(surveys) || surveys.length === 0) {
+        console.log("No surveys to migrate.");
+        throw new Error("No surveys to migrate");
+      }
 
+      // Map to accumulate incoming survey data per id_formulario.
+      // We still save to the DB, but exports should use only the incoming
+      // `Realizaciones` (to avoid exporting old DB entries unintentionally).
+      const incomingByFormId = new Map();
+
+      for (const survey of surveys) {
+        const separatedSurvey = {
+          nombre: survey.name ?? survey.nombre ?? survey.title,
+          id_formulario:
+            survey.form_id ?? survey.id_formulario ?? survey.formId,
+          Realizaciones:
+            survey.completions ??
+            survey.Realizaciones ??
+            survey.responses ??
+            [],
+        };
+
+        // Save to DB (this may append realizaciones to existing document)
+        const saved = await this.surveyRepository.save(separatedSurvey);
+
+        // Determine canonical form id key
+        const key =
+          separatedSurvey.id_formulario ??
+          saved.id_formulario ??
+          saved._id?.toString();
+
+        // Ensure an entry exists and accumulate only the incoming Realizaciones
+        if (!incomingByFormId.has(key)) {
+          incomingByFormId.set(key, {
+            nombre: separatedSurvey.nombre ?? saved.nombre ?? key,
+            id_formulario: key,
+            Realizaciones: [],
+          });
+        }
+
+        const entry = incomingByFormId.get(key);
+        if (
+          Array.isArray(separatedSurvey.Realizaciones) &&
+          separatedSurvey.Realizaciones.length > 0
+        ) {
+          entry.Realizaciones.push(...separatedSurvey.Realizaciones);
+        }
+        incomingByFormId.set(key, entry);
+      }
+
+      // Ensure downloads directory exists
+      if (!fs.existsSync(downloadsDir)) {
+        fs.mkdirSync(downloadsDir, { recursive: true });
+      }
+
+      const results = [];
+
+      // For each distinct form id from the incoming payload, generate one Excel per `id_comedor`
+      for (const [formId, surveyDoc] of incomingByFormId.entries()) {
+        const safeBaseName = (surveyDoc.nombre ?? formId).toString();
+        const safeNameBase = safeBaseName
+          .trim()
+          .replace(/[^a-zA-Z0-9-_. ]/g, "")
+          .replace(/\s+/g, "_");
+
+        // Group realizaciones by id_comedor from incoming data
+        const byCanteen = new Map();
+        for (const realizacion of surveyDoc.Realizaciones || []) {
+          const comedorId =
+            realizacion.id_comedor ??
+            realizacion.canteen_id ??
+            "unknown_comedor";
+          if (!byCanteen.has(comedorId)) byCanteen.set(comedorId, []);
+          byCanteen.get(comedorId).push(realizacion);
+        }
+
+        // If there are no incoming realizaciones, still generate an empty file for the survey
+        if (byCanteen.size === 0) {
+          const now = new Date();
+          const ts = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}_${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
+          const filename = `${safeNameBase || formId}_${ts}.xlsx`;
+          const outPath = path.join(downloadsDir, filename);
+          await this._generate_excel_for_survey(surveyDoc, outPath);
+          const url = `/download_excel?file=${encodeURIComponent(filename)}`;
+          results.push({
+            nombre: surveyDoc.nombre ?? safeBaseName,
+            file: filename,
+            url,
+            comedor: null,
+          });
+          continue;
+        }
+
+        // Generate one file per canteen (based only on incoming realizaciones)
+        for (const [comedorId, realizaciones] of byCanteen.entries()) {
+          const surveySlice = Object.assign({}, surveyDoc, {
+            Realizaciones: realizaciones,
+          });
+
+          // Try to extract a friendly name for the comedor from the realizacion
+          const first =
+            realizaciones && realizaciones.length > 0 ? realizaciones[0] : null;
+          const comedorNombre =
+            (first &&
+              (first.nombre_comedor ??
+                first.nombreComedor ??
+                first.comedor ??
+                first.canteen_name ??
+                first.comedorNombre)) ||
+            String(comedorId);
+
+          const safeComedor = String(comedorNombre)
+            .toString()
+            .trim()
+            .replace(/[^a-zA-Z0-9-_\.]/g, "_");
+          const now = new Date();
+          const ts = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}_${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(now.getSeconds()).padStart(2, "0")}`;
+          const filename = `${safeNameBase || formId}_${safeComedor}_${ts}.xlsx`;
+          const outPath = path.join(downloadsDir, filename);
+
+          await this._generate_excel_for_survey(surveySlice, outPath);
+
+          const url = `/download_excel?file=${encodeURIComponent(filename)}`;
+          results.push({
+            nombre: surveyDoc.nombre ?? safeBaseName,
+            file: filename,
+            url,
+            comedor: comedorId,
+            comedorNombre,
+          });
+        }
+      }
+
+      return results;
+    } catch (err) {
+      console.error("Error migrating and exporting surveys:", err.message);
+      throw err;
+    }
+  }
+
+  /**
+   * Helper: generate an Excel file for a single saved survey document
+   * according to the schema used in `SurveyModel` (Spanish fields).
+   * - `survey.Realizaciones` -> array of realizations
+   * - each realization has `id_encargado`, `id_comedor`, `encuestados`
+   * - each encuestado has `nombreCompleto`, `preguntas` (with `pregunta`/`respuesta`)
+   */
+  async _generate_excel_for_survey(surveyDoc, outPath) {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Survey");
+
+      // Collect dynamic question headings
+      const allQuestions = new Set();
+
+      for (const realizacion of surveyDoc.Realizaciones || []) {
+        for (const encuestado of realizacion.encuestados || []) {
+          for (const pregunta of encuestado.preguntas || []) {
+            if (pregunta && pregunta.pregunta)
+              allQuestions.add(pregunta.pregunta);
+          }
+        }
+      }
+
+      const baseColumns = [
+        { header: "Survey Name", key: "nombre", width: 25 },
+        { header: "Form ID", key: "id_formulario", width: 20 },
+        { header: "Manager ID", key: "id_encargado", width: 20 },
+        { header: "Canteen ID", key: "id_comedor", width: 25 },
+        { header: "Canteen Name", key: "comedorNombre", width: 30 },
+        { header: "Respondent Name", key: "nombreCompleto", width: 30 },
+        { header: "Completion Date", key: "fechaRealizacion", width: 20 },
+      ];
+
+      const questionColumns = Array.from(allQuestions).map((q) => ({
+        header: q,
+        key: q,
+        width: 40,
+      }));
+
+      worksheet.columns = [...baseColumns, ...questionColumns];
+
+      for (const realizacion of surveyDoc.Realizaciones || []) {
+        for (const encuestado of realizacion.encuestados || []) {
+          const rowData = {
+            nombre: surveyDoc.nombre,
+            id_formulario: surveyDoc.id_formulario,
+            id_encargado: realizacion.id_encargado,
+            id_comedor: realizacion.id_comedor,
+            comedorNombre:
+              realizacion.nombre_comedor ??
+              realizacion.nombreComedor ??
+              realizacion.comedor ??
+              realizacion.canteen_name ??
+              realizacion.comedorNombre ??
+              "",
+            nombreCompleto: encuestado.nombreCompleto,
+            fechaRealizacion: encuestado.fechaRealizacion
+              ? new Date(encuestado.fechaRealizacion)
+              : "",
+          };
+
+          for (const pregunta of encuestado.preguntas || []) {
+            if (pregunta && pregunta.pregunta) {
+              rowData[pregunta.pregunta] = pregunta.respuesta ?? "";
+            }
+          }
+
+          worksheet.addRow(rowData);
+        }
+      }
+
+      await workbook.xlsx.writeFile(outPath);
+      console.log("Excel file generated for survey:", outPath);
+    } catch (err) {
+      console.error("Error generating Excel for survey:", err.message);
+      throw err;
+    }
+  }
 
   /**
    * Converts survey data into an Excel file (.xlsx).
