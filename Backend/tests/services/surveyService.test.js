@@ -15,7 +15,7 @@ describe("SurveyService", () => {
     mock = new MockAdapter(axios);
 
     surveyRepositoryMock = {
-      create_survey: jest.fn(),
+      save: jest.fn(),
       find_all: jest.fn(),
     };
 
@@ -65,7 +65,7 @@ describe("SurveyService", () => {
       }
     ];
 
-    surveyRepositoryMock.create_survey
+    surveyRepositoryMock.save
       .mockResolvedValueOnce({ id: "1", ...fakeSurveys[0] })
       .mockResolvedValueOnce({ id: "2", ...fakeSurveys[1] });
 
@@ -77,7 +77,7 @@ describe("SurveyService", () => {
       message: "Migration completed",
       count: 2
     });
-    expect(surveyRepositoryMock.create_survey).toHaveBeenCalledTimes(2);
+    expect(surveyRepositoryMock.save).toHaveBeenCalledTimes(2);
   });
 
   test("migrate_surveys lanza error si no hay encuestas", async () => {
