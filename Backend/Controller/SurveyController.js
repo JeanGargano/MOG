@@ -15,8 +15,6 @@ export class SurveyController {
     this.surveyService = surveyService;
   }
 
-  
-
   /**
    * Endpoint to fetch a form from Google Apps Script.
    */
@@ -25,9 +23,7 @@ export class SurveyController {
       const { id } = req.query;
 
       if (!id) {
-        return res
-          .status(400)
-          .json({ error: "Missing form ID parameter" });
+        return res.status(400).json({ error: "Missing form ID parameter" });
       }
 
       const form = await this.surveyService.get_form(id);
@@ -42,9 +38,6 @@ export class SurveyController {
       res.status(500).json({ error: "Failed to fetch the form" });
     }
   }
-
-
-
 
   /**
    * Migrates received survey data from the request body into the database
@@ -76,9 +69,8 @@ export class SurveyController {
       // Si todo salió bien, retornar respuesta exitosa
       return res.status(200).json({
         message: result.message || "Surveys migrated successfully",
-        count: result.count
+        count: result.count,
       });
-
     } catch (error) {
       console.error("Error in SurveyController:", error);
       return res.status(500).json({
@@ -88,9 +80,40 @@ export class SurveyController {
     }
   }
 
+  /**
+   * Migrates surveys and generates an Excel file per distinct survey (id_formulario).
+   * Returns an array with { nombre, file, url } so frontend can display download links.
+   */
+  async migrate_and_export_individual(req, res) {
+    try {
+      const surveys = req.body;
 
+      if (
+        !surveys ||
+        (Object.keys(surveys).length === 0 && surveys.constructor === Object) ||
+        !Array.isArray(surveys)
+      ) {
+        return res
+          .status(400)
+          .json({
+            error: "No survey responses were received in the request body",
+          });
+      }
 
+      const result =
+        await this.surveyService.migrate_and_export_individual(surveys);
 
+      return res.status(200).json({ files: result });
+    } catch (error) {
+      console.error(
+        "Error in migrate_and_export_individual (Controller):",
+        error,
+      );
+      return res
+        .status(500)
+        .json({ error: "Internal server error", details: error.message });
+    }
+  }
 
   /**
    * Serves Excel files from the `downloads` directory and deletes them
@@ -102,11 +125,7 @@ export class SurveyController {
       if (!file)
         return res.status(400).json({ error: "Missing 'file' parameter" });
 
-      const downloadsPath = path.join(
-        Helper.__dirname(),
-        "..",
-        "downloads",
-      );
+      const downloadsPath = path.join(Helper.__dirname(), "..", "downloads");
       const fullPath = path.join(downloadsPath, file);
 
       if (!fs.existsSync(fullPath)) {
@@ -131,17 +150,23 @@ export class SurveyController {
       });
 
       // Scheduled deletion after 15 minutes
-      setTimeout(() => {
-        if (fs.existsSync(fullPath)) {
-          fs.unlink(fullPath, (unlinkErr) => {
-            if (unlinkErr) {
-              console.error("Error deleting file during scheduled cleanup:", unlinkErr);
-            } else {
-              console.log("File deleted during scheduled cleanup:", fullPath);
-            }
-          });
-        }
-      }, 1000 * 60 * 15);
+      setTimeout(
+        () => {
+          if (fs.existsSync(fullPath)) {
+            fs.unlink(fullPath, (unlinkErr) => {
+              if (unlinkErr) {
+                console.error(
+                  "Error deleting file during scheduled cleanup:",
+                  unlinkErr,
+                );
+              } else {
+                console.log("File deleted during scheduled cleanup:", fullPath);
+              }
+            });
+          }
+        },
+        1000 * 60 * 15,
+      );
     } catch (err) {
       console.error("Error in downloadExcel:", err);
       res.status(500).json({ error: "Internal server error" });
