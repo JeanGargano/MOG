@@ -39,6 +39,16 @@ export class SurveyController {
     }
   }
 
+  async get_forms_list(req, res) {
+    try {
+      const formsList = await this.surveyService.get_forms_list();
+      res.status(200).json(formsList);
+    } catch (error) {
+      console.error("Error in get_forms_list (Controller):", error);
+      res.status(500).json({ error: "Failed to fetch forms list" });
+    }
+  }
+
   /**
    * Migrates received survey data from the request body into the database
    * and generates an Excel file containing the stored data.

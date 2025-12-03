@@ -31,6 +31,10 @@ router.get("/download_excel", (req, res) =>
   surveyController.download_excel(req, res),
 );
 
+router.get("/get_forms_list", (req, res) =>
+  surveyController.get_forms_list(req, res),
+);
+
 /**
  * -----------------------------
  * Manager Endpoints

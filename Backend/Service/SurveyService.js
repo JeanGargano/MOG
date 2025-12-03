@@ -49,6 +49,16 @@ export class SurveyService {
     }
   }
 
+  async get_forms_list() {
+    try {
+      const formsList = await this.surveyRepository.get_forms_list();
+      return formsList;
+    } catch (error) {
+      console.error("Error in get_forms_list (Service):", error);
+      throw error;
+    }
+  }
+
   /**
    * Migrates surveys received from a request to the database.
    */

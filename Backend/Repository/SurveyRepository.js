@@ -39,6 +39,10 @@ export class SurveyRepository {
     }
   }
 
+  async get_forms_list() {
+    return await SurveyModel.find({}, { id_formulario: 1, nombre: 1 }).lean();
+  }
+
 
 
   /**
