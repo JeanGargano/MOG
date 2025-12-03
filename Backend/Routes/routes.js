@@ -41,6 +41,10 @@ router.get("/find_by_identification", (req, res) =>
   managerController.find_by_identification(req, res),
 );
 
+router.get("/all_manager", (req, res) =>
+  managerController.all_manager(req, res),
+);
+
 router.post("/create_manager", (req, res) =>
   managerController.create_manager(req, res),
 );

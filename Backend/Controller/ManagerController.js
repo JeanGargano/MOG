@@ -23,6 +23,15 @@ export class ManagerController {
       res.status(404).json({ error: error.message });
     }
   }
+
+  async all_manager(req, res){
+    try{
+      const managers = await this.managerService.all_manager();
+      res.status(200).json(managers);
+    }catch(error){
+      res.status(500).json({ error: error.message });
+    }
+  }
   
 
   /**

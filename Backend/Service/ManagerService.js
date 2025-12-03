@@ -27,6 +27,11 @@ export class ManagerService {
     return manager;
   }
 
+  async all_manager(){
+    const managers = await this.managerRepository.all_manager();
+    return managers;
+  }
+
 
 
   /**

@@ -19,6 +19,10 @@ export class ManagerRepository {
     return await ManagerModel.findOne({ identificacion });
   }
 
+  async all_manager(){
+    return await ManagerModel.find();
+  }
+
 
 
   /**
